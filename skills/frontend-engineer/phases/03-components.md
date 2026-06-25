@@ -16,6 +16,8 @@ Every component MUST include:
 - Keyboard interaction support
 - Responsive behavior
 - Loading/disabled states where applicable
+- **No hardcoded user-facing strings** — labels, placeholders, `aria-label`s, and messages come from i18n keys (passed as props or resolved via the translation hook), never inline English (per Phase 2.5)
+- **RTL-safe** — use CSS logical properties (`margin-inline`, `padding-inline-start`, `inset-inline`, `text-align: start`), never hardcoded `left`/`right`, so the component works in both directions
 
 Required primitive components:
 
@@ -53,6 +55,7 @@ ui/
 ├── data-display/
 │   ├── avatar.tsx             # User avatar with fallback initials
 │   ├── card.tsx               # Card container with header/body/footer
+│   ├── image.tsx              # Optimized responsive image — framework optimizer (next/image or equiv): explicit width/height to reserve space (zero CLS), lazy by default, AVIF/WebP, REQUIRED alt (empty alt="" only for decorative)
 │   ├── table.tsx              # Data table with sorting, selection
 │   ├── empty-state.tsx        # Empty state with icon, title, action
 │   └── stat-card.tsx          # Metric display with trend indicator
@@ -115,7 +118,11 @@ features/
 │   ├── data-table-pagination.tsx
 │   └── column-def.ts            # Column definition helpers
 ├── forms/
-│   ├── form-field.tsx           # Form field wrapper with error handling
+│   ├── form.tsx                 # RHF <Form> wrapper + Zod resolver + error-summary integration
+│   ├── form-field.tsx           # Field wrapper: label + control + error, a11y wiring
+│   ├── form-error-summary.tsx   # Focusable summary listing invalid fields (a11y), linked to each
+│   ├── multi-step-form.tsx      # Wizard: per-step schema, progress, back/next, validate-before-advance
+│   ├── field-array.tsx          # Repeating field groups (useFieldArray) — add/remove/reorder
 │   ├── search-input.tsx         # Debounced search with suggestions
 │   ├── file-upload.tsx          # Drag-and-drop file upload
 │   ├── rich-text-editor.tsx     # WYSIWYG editor
@@ -131,6 +138,18 @@ features/
     └── search-command.tsx       # Global search (Cmd+K)
 ```
 
+## 3.4 Form System (production-grade)
+
+Forms are where real apps live — build them on a real form engine, not ad-hoc state:
+
+- **Engine:** `react-hook-form` + the **Zod resolver**, reusing the **same Zod schemas generated from OpenAPI** (Phase 4) so client and server validate identically. Validate on blur + submit (not every keystroke).
+- **Multi-step / wizard:** per-step schema, progress indicator, back/next that preserves state, validate-before-advance; the wizard owns aggregated state and submits once.
+- **Field arrays** (`useFieldArray`): add/remove/reorder repeating groups with stable keys.
+- **Async / server validation:** surface the backend's RFC 9457 `errors[]` (map `field`/`pointer` → form field) inline, and render a **focusable error summary** at the top on submit failure — focus moves to it, each entry links to its field (WCAG).
+- **Don't-lose-work:** debounced **autosave/draft** for long forms, plus an **unsaved-changes guard** (`beforeunload` + router navigation block).
+- **Accessibility:** programmatic label per field, `aria-invalid` + `aria-describedby` → its error, `aria-required`, errors announced via a live region.
+- **i18n:** labels, placeholders, and validation messages resolve from i18n keys; map Zod messages to keys (per Phase 2.5).
+
 ## Validation Loop
 
 Before moving to Phase 4:
@@ -139,6 +158,9 @@ Before moving to Phase 4:
 - ARIA roles and labels are correct (verified with axe-core)
 - All components are responsive at mobile/tablet/desktop breakpoints
 - Components use design tokens from Phase 2 (no hardcoded visual values)
+- **No hardcoded user-facing strings** (all via i18n keys); components are RTL-safe (logical properties)
+- `Image` primitive used for all imagery (explicit dimensions, lazy, modern formats, required alt) — no raw `<img>` for content images
+- Forms built on react-hook-form + Zod resolver with error summary, async/server-error mapping, and a11y wiring
 - Feature components integrate with the layout system
 
 ## Quality Bar
@@ -147,5 +169,7 @@ Before moving to Phase 4:
 - Every interactive component supports keyboard navigation
 - Every component passes axe-core accessibility checks
 - No component exceeds 200 lines (decompose if larger)
-- All visual values come from design tokens
+- All visual values come from design tokens; **all user-facing text from i18n keys**; layouts RTL-safe
+- Images use the optimized `Image` primitive (dimensions + lazy + modern format + alt)
+- Forms use react-hook-form + Zod with an accessible error summary and server-error mapping
 - Every component has at least one Storybook story

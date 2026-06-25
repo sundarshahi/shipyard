@@ -81,6 +81,22 @@ Security defaults are written into the first draft, not bolted on after the audi
 - No secrets in the client bundle — only `NEXT_PUBLIC_*` config values are exposed; credentials/tokens stay server-side (cross-ref `security-defaults.md`).
 - Auth/session cookies are `HttpOnly` + `Secure` + `SameSite=Lax|Strict` and carry a `__Host-`/`__Secure-` prefix; no auth tokens or PII in `localStorage` (enforced in Phase 4 auth).
 
+## 2.5 Localization (i18n) Foundation (EMIT — scaled to the Phase 1 i18n decision)
+
+Establish i18n at the foundation so no component is ever born with a hardcoded string. Scale to the Phase 1 `i18n-decision.md`: **multi-locale →** full provider + locale routing (Phase 4); **single-locale →** still externalize strings + `Intl` formatting so a second locale is a config change, not a rewrite.
+
+- **Library by framework:** `next-intl` (or `react-i18next`) for Next.js; `react-i18next` for Vite/Remix SPAs; Astro i18n / Nuxt i18n / Paraglide for the others. Wire the provider at the root layout.
+- **Message catalogs:** `frontend/app/messages/<locale>.json` — the **default-locale catalog is the canonical key set**. EMIT a `t()`/`useTranslations` accessor. **No hardcoded user-facing strings in components** — every display string, `aria-label`, placeholder, and error message resolves from a key. (Pseudo-locale tested in Phase 6.)
+- **Locale formatting:** numbers, dates, currency, and relative times go through `Intl.NumberFormat`/`DateTimeFormat`/`RelativeTimeFormat` keyed to the active locale — never hand-format.
+- **Direction (RTL):** set `<html dir>` from the active locale (`rtl` for `ar`/`he`/`fa`). Author layouts with **CSS logical properties** (`margin-inline`, `padding-inline-start`, `inset-inline`, `text-align: start`) so RTL works without per-component overrides.
+
+## 2.6 Font Loading & Web-Performance Foundation (EMIT)
+
+Performance is built in, not tuned at the end — these defaults feed the Phase 6 Core Web Vitals budget.
+
+- **Optimized font loading:** use the framework optimizer (`next/font` self-hosts, sets `font-display: swap`, preloads, and `size-adjust` to cut CLS) or self-hosted `@font-face` with `font-display: swap` + `<link rel="preload">` for the one critical font. Subset fonts; limit families/weights. Never block first paint on a webfont.
+- **Pairs with:** the `Image` primitive (Phase 3) and route-level code-splitting + waterfall-free data loading (Phase 4) to hit the budget gated in Phase 6.
+
 ## Validation Loop
 
 Before moving to Phase 3:
@@ -88,6 +104,8 @@ Before moving to Phase 3:
 - Light/dark themes render
 - Theme toggle works
 - Tailwind config extends with tokens
+- i18n provider wired; message catalog present; **no hardcoded user-facing strings**; `Intl` used for number/date/currency; `dir`/logical properties handle RTL (scaled to the Phase 1 i18n decision)
+- Fonts loaded via the optimizer with `font-display: swap` + preload + subsetting
 - CSP + security headers emitted (no `unsafe-inline`/`unsafe-eval`; Trusted Types `require-trusted-types-for 'script'` where supported); COOP/CORP `same-origin` set; HSTS `max-age>=15552000; includeSubDomains; preload`; `Cache-Control: no-store` on authenticated/sensitive responses
 - SRI `integrity` + `crossorigin` on every external/CDN `<script>`/`<link>` (or third-party scripts self-hosted); auth/session cookies carry a `__Host-`/`__Secure-` prefix
 - `lib/sanitize.ts` (DOMPurify) present; `react/no-danger` ESLint rule on
@@ -100,5 +118,7 @@ Before moving to Phase 3:
 - Typography scale is consistent
 - Spacing scale covers layout needs
 - No hardcoded visual values
+- **No hardcoded user-facing strings** — all display text resolves from the i18n message catalog; numbers/dates/currency via `Intl`; RTL handled with logical properties
+- Fonts loaded via the optimizer (`font-display: swap`, preload, subset) — no render-blocking webfont
 - This is a FUNCTIONAL foundation, not the final design
 - **`security-defaults checklist passes`** — CSP/security headers served (no `unsafe-inline`/`unsafe-eval`; Trusted Types directive where supported), COOP/CORP `same-origin` + HSTS `max-age>=15552000; includeSubDomains; preload` + `Cache-Control: no-store` on sensitive responses, SRI `integrity`+`crossorigin` on external scripts (or self-hosted), `__Host-`/`__Secure-` prefixed secure cookies, DOMPurify sanitizer in place with no unsanitized `dangerouslySetInnerHTML`, no secrets in the client bundle
