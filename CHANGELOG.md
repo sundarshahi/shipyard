@@ -17,6 +17,14 @@ All notable changes to **Shipyard**.
   classifies correctly).
 
 ### Added
+- **Gate-metric re-derivation** — the production-readiness gate no longer trusts
+  the agents' self-reported receipt metrics. `skills/shipyard/scripts/verify-gate.py`
+  independently re-derives **tests** (from JUnit XML) and **coverage** (from
+  Istanbul/Cobertura/lcov) from the build's ground-truth artifacts, verifies every
+  claimed artifact exists, and flags any receipt whose numbers contradict the
+  artifacts. `phases/gates.md` now gates on the derived values: a `mismatch`
+  (overstated pass count / coverage) or a missing artifact is a BLOCKING breach;
+  metrics with no parseable artifact fall back to the receipt tagged `[unverified]`.
 - **Scripts over prose** — two deterministic orchestrator procedures that were
   described in prose are now bundled scripts the orchestrator runs directly:
   `skills/shipyard/scripts/bootstrap-workspace.sh` (scaffold `Shipyard/` +
@@ -27,6 +35,10 @@ All notable changes to **Shipyard**.
   docs now call these instead of re-deriving them each run.
 
 ### Testing
+- **Gate re-derivation eval** — `test_gate_verification.py` drives `verify-gate.py`
+  against fixtures: it CONFIRMS a truthful receipt (`verified`, `trustworthy`),
+  CATCHES a lying one (tests/coverage `mismatch`, missing artifact flagged,
+  `trustworthy: false`), and reports `unverified` when no artifact exists.
 - **Bundled-script eval** — `test_shipyard_scripts.py` runs both helper scripts
   against throwaway fixtures and asserts their behavior (protocols deployed,
   metrics aggregated/deduplicated), so a script regression fails CI for free.

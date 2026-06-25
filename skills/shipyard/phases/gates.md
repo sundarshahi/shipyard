@@ -115,17 +115,30 @@ Print the pipeline dashboard (DEFINE ✓, BUILD ✓, HARDEN ✓, SHIP ✓ comple
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**Receipt verification before gate:**
-Read ALL receipts from `Shipyard/.orchestrator/receipts/`. For each:
-- Verify `artifacts` exist on disk
-- Extract the gate fields from the receipt's `metrics` object — `metrics.tests_passing`, `metrics.tests_failing`, `metrics.coverage_lines`, `metrics.coverage_branches`, `metrics.mutation_score`, `metrics.patch_coverage`, `metrics.contract_can_i_deploy`, `metrics.perf_baseline_regression` — and the compliance controls-present/missing status from the top-level `compliance` object (`compliance.controls_present`, `compliance.controls_missing`)
-- For Critical/High findings: verify the remediation chain is complete (finding receipt + remediation receipt + verification receipt)
-- If any receipt is missing, any artifact is missing, or any Critical finding lacks a verification receipt → flag to user before opening gate
+**Receipt verification before gate — RE-DERIVE, don't trust self-reports:**
+
+Do NOT take the agents' self-reported `metrics` at face value. Independently re-derive the gate metrics from the build's ground-truth artifacts:
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/shipyard/scripts/verify-gate.py" 2>/dev/null \
+  || python3 "${CLAUDE_SKILL_DIR}/scripts/verify-gate.py"
+```
+It reads ALL receipts, verifies each receipt's claimed `artifacts` exist on disk, and re-derives **tests** (from JUnit XML) and **coverage** (from Istanbul `coverage-summary.json` / Cobertura `coverage.xml` / `lcov.info`), returning JSON:
+- `tests` / `coverage` each carry `{claimed_*, derived_*, source, status}` where `status` is `verified` (derived matches the receipt), `mismatch` (derived CONTRADICTS the receipt), or `unverified` (no parseable artifact found).
+- `artifacts.missing` — claimed artifacts absent from disk.
+- `discrepancies` — human-readable list; `trustworthy` — false if any mismatch or missing artifact.
+
+Apply it as follows:
+- Use the **derived** value as the gate input wherever `status == verified` or `mismatch` (ground truth wins over the receipt).
+- A `mismatch` (a receipt that overstates pass count or coverage) is itself a **BLOCKING breach** — the build is not production-ready until the code is fixed so the artifacts agree, or an override receipt is logged. Surface the discrepancy verbatim.
+- Where `status == unverified` (no JUnit/coverage artifact emitted), fall back to the receipt's self-reported value but render it tagged `[unverified]` in the gate summary so the user knows it wasn't independently confirmed.
+- Still verify, from the receipts, the fields the script does not re-derive — `metrics.mutation_score`, `metrics.patch_coverage`, `metrics.contract_can_i_deploy`, `metrics.perf_baseline_regression`, and the compliance controls-present/missing status from the top-level `compliance` object (`compliance.controls_present`, `compliance.controls_missing`).
+- For Critical/High findings: verify the remediation chain is complete (finding receipt + remediation receipt + verification receipt).
+- If `verify-gate.py` reports `trustworthy: false`, any receipt is missing, or any Critical finding lacks a verification receipt → flag to the user before opening the gate.
 
 **Production-readiness gate evaluation (BLOCKING):**
-Read these from each receipt's `metrics` object and the top-level `compliance` object (there is NO separate `gate_metrics` object). A build may only be offered "production ready" when ALL of these are green:
-- **Tests** — `metrics.tests_failing == 0` and `metrics.tests_passing > 0`
-- **Coverage** — `metrics.coverage_lines`/`metrics.coverage_branches` (and `metrics.patch_coverage` for changed lines) meet the project threshold; `metrics.mutation_score` meets the mutation threshold (mutation + property tests are default-on)
+Evaluate against the RE-DERIVED metrics from `verify-gate.py` first, then the receipt-only fields above (there is NO separate `gate_metrics` object). A build may only be offered "production ready" when ALL of these are green:
+- **Tests** — re-derived `tests.derived_failing == 0` and `tests.derived_passing > 0`, and `tests.status != "mismatch"` (a self-report that contradicts the JUnit artifact is a breach)
+- **Coverage** — re-derived `coverage.derived_lines` (and `metrics.coverage_branches`/`metrics.patch_coverage` for changed lines) meet the project threshold with `coverage.status != "mismatch"`; `metrics.mutation_score` meets the mutation threshold (mutation + property tests are default-on)
 - **Performance** — `metrics.perf_baseline_regression == false` and `metrics.contract_can_i_deploy == true`; Core Web Vitals and p95 are within `performance-budget.yaml`
 - **Compliance** — every mandatory control for each in-scope framework is present (`compliance.controls_missing` is empty / count == 0)
 - **Architecture boundary** — no boundary violations (per `architecture-boundaries.md`)

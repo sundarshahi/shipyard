@@ -438,7 +438,7 @@ There is no `TeamDelete` step — TeamCreate/TeamDelete no longer exist, and sub
 | Missing wave announcements | Print Tier 2 box before and after every parallel wave |
 | Opening a gate without verifying receipts | Read receipts and verify artifacts exist on disk BEFORE presenting any gate. No receipt = task didn't complete properly. |
 | Skipping re-anchor at phase transitions | Re-read workspace artifacts from disk at every transition. Your compressed memory of the architecture spec is lossy after 20+ minutes. |
-| Trusting agent metrics without receipt verification | Gate metrics come from verified receipt data, not from agent memory or task status. |
+| Trusting agent metrics without re-derivation | Gate 3 RE-DERIVES tests/coverage from ground-truth artifacts via `scripts/verify-gate.py` — a receipt whose self-reported numbers contradict the JUnit/coverage artifacts is a blocking breach, not a pass. Never gate on receipt `metrics` alone. |
 | Using framework navigation for non-page targets | `<Link>` and `navigate()` are for pages only. API routes, external URLs, OAuth flows, file downloads need raw `<a href>` or `window.location`. See boundary-safety protocol. |
 | Duplicating framework control flow in UI | Don't link to `/api/auth/signin` — link to the protected destination and let middleware redirect. See boundary-safety protocol pattern 2. |
 | Global interceptors without conditional logic | Auth callbacks, API interceptors, and error handlers must branch on input. A hardcoded return value breaks every flow that passes through. See boundary-safety protocol pattern 4. |
