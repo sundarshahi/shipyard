@@ -90,7 +90,7 @@ These are not suggestions. The bold statement under each is law; the hard rules 
 
 **Run independent work streams concurrently. Never serialize what physics allows to parallelize.**
 
-*Why:* Running 15 agents in series when half of them are independent wastes the user's scarcest resource: time. Backend and frontend are independent once the architecture is locked; security audit and code review are independent of each other. Parallelism here isn't a performance tweak — it's a design principle that respects your time.
+*Why:* Running 19 agents in series when half of them are independent wastes the user's scarcest resource: time. Backend and frontend are independent once the architecture is locked; security audit and code review are independent of each other. Parallelism here isn't a performance tweak — it's a design principle that respects your time.
 
 **Hard rules:**
 - BUILD phase runs backend and frontend as concurrent agents. HARDEN phase runs security and code review concurrently.
@@ -120,7 +120,7 @@ These are not suggestions. The bold statement under each is law; the hard rules 
 
 **Hard rules:**
 - When an agent identifies a recurring pattern or domain-specific workflow not covered by existing skills, it writes a new skill or artifact in its workspace rather than improvising repeatedly.
-- Self-created skills follow the same structure and quality bar as the built-in 15. They are documented, tested, and reusable.
+- Self-created skills follow the same structure and quality bar as the built-in 19. They are documented, tested, and reusable.
 - Agents write domain-specific artifacts (style guides, API conventions, data dictionaries) into their respective suite directories for downstream agents to consume.
 
 ---
@@ -197,7 +197,7 @@ The eleven principles aren't independent rules bolted together — they form a s
 - **First-principles thinking produces production-ready output.** An agent that understands *why* a decision was made handles edge cases the spec never enumerated. Understanding beats compliance.
 - **Extreme ownership enables "on behalf of the user."** An agent that debugs its own failures and verifies its own output doesn't need to interrupt you. Ownership is what makes autonomy trustworthy.
 - **Mathematical rigor enables adaptive behavior.** When an agent can model a problem formally — quantify load, calculate cost, prove correctness — it adapts to changing requirements without guessing. The math transfers even when the specifics change.
-- **Self-extension keeps quality high at scale.** A system limited to what its original 15 agents cover would eventually emit generic output for novel domains. Self-extension holds the quality bar as the problem space grows.
+- **Self-extension keeps quality high at scale.** A system limited to what its original 19 agents cover would eventually emit generic output for novel domains. Self-extension holds the quality bar as the problem space grows.
 - **Minimal interaction enables efficiency.** Every question not asked is a pipeline that keeps moving. The three-gate model is the minimum set of human checkpoints for maximum autonomous throughput.
 - **Autonomous resilience closes the loop.** Self-healing means gate rejections and agent failures trigger bounded recovery instead of stopping the run; self-learning means each run leaves the system smarter — both disciplined so the cure never costs more than the disease.
 

@@ -198,7 +198,7 @@ Use the cost estimation table from the visual-identity protocol to look up the r
 9. **Research the domain** — use WebSearch before asking the user anything (skip if polymath already researched).
 
 10. **Create the task graph:**
-Create all tasks (T1–T13 plus the HARDEN-phase compliance task T6e) with dependencies (see Task Dependency Graph). Use TaskCreate for each, then TaskUpdate to set `addBlockedBy` relationships using the returned task IDs. The task graph is the orchestrator's single source of tracking — no team object is created; autonomous work is delegated to the named subagents (`agents/<name>.md`), each of which runs backgrounded in its own worktree per its own definition.
+Create all tasks (T1–T13 plus the DEFINE UX task T2b, the HARDEN-phase compliance task T6e, and the LAUNCH tasks T14–T16) with dependencies (see Task Dependency Graph). Skip T2b alongside T3b if `features.frontend: false`. Use TaskCreate for each, then TaskUpdate to set `addBlockedBy` relationships using the returned task IDs. The task graph is the orchestrator's single source of tracking — no team object is created; autonomous work is delegated to the named subagents (`agents/<name>.md`), each of which runs backgrounded in its own worktree per its own definition.
 
 11. **Begin Phase 1** — read `phases/define.md` and start immediately. Do NOT ask "should I proceed?"
 
