@@ -27,7 +27,9 @@ Produce tests in `frontend/tests/components/` mirroring the component directory 
 
 Configure Playwright with projects for Desktop Chrome, Firefox, Safari (WebKit), Mobile Chrome (Pixel 5), and Mobile Safari (iPhone 13). Enable trace-on-first-retry and screenshot-only-on-failure.
 
-Write E2E tests for every critical user flow from Phase 1: authentication (signup, login, logout, session expiry), onboarding, core CRUD operations, navigation and deep linking, admin operations. Use role-based test fixtures for multi-role flows.
+Write E2E tests for every critical user flow from Phase 1: authentication (signup, login, logout, session expiry), onboarding, core CRUD operations, navigation and deep linking, admin operations. Use role-based test fixtures for multi-role flows. **Extend `frontend/tests/e2e/smoke.spec.ts`** (the executed Phase-4b smoke) into this full suite — do not duplicate it.
+
+Add an **i18n / RTL render check**: render key pages under a pseudo-locale (catches hardcoded strings via untranslated/overflowing text) and one RTL locale (`ar`/`he`) and assert no clipped, overflowing, or mis-mirrored layout.
 
 Produce E2E tests in `frontend/tests/e2e/` and `frontend/playwright.config.ts`.
 
@@ -112,7 +114,8 @@ Verify the contracts established in Phase 2 (security) and Phase 4.6 (observabil
 
 Before concluding the frontend skill:
 - [ ] Every UI primitive has component tests covering all variants, states, and a11y
-- [ ] Every critical user flow has an E2E test
+- [ ] Every critical user flow has an E2E test (extending the Phase-4b `smoke.spec.ts`)
+- [ ] i18n verified: app renders under a pseudo-locale and an RTL locale with no untranslated strings or layout break
 - [ ] WCAG 2.1 AA with zero critical violations
 - [ ] Performance budget thresholds READ FROM `docs/architecture/performance-budget.yaml` (not hardcoded) and enforced as CI gates (Lighthouse CI + size-limit); DevOps wires the job
 - [ ] Visual regression baselines captured

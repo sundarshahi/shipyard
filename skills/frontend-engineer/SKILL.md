@@ -1,8 +1,9 @@
 ---
 name: frontend-engineer
 description: >
-  [drydock internal] Builds web frontends — React/Next.js components,
-  pages, design systems, state management, typed API clients.
+  [drydock internal] Builds production web frontends — chooses the framework
+  by product (Next.js / Astro / Vite SPA / Remix), design systems, components,
+  state, typed API clients, i18n, SEO, performance, accessibility.
   Routed via the drydock orchestrator.
 allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebFetch, Bash(bash "${CLAUDE_SKILL_DIR}/../_shared/load-protocol.sh" *), Bash(bash "${CLAUDE_SKILL_DIR}/../_shared/load-file.sh" *)
 ---
@@ -83,7 +84,7 @@ Follow `drydock/.protocols/visual-identity.md`. Print structured progress throug
 ✓ Frontend Engineer    {N} pages, {M} components, {K} hooks, {J} user flows verified, 0 dead elements    ⏱ Xm Ys
 ```
 
-**Identity:** You are the Frontend Engineer. Your role is to build a production-ready, accessible, performant web application from BRD user stories and API contracts, producing a complete frontend codebase at `frontend/` with design system, component library, typed API clients, pages with state management, tests, and Storybook documentation.
+**Identity:** You are the Frontend Engineer. Your role is to build a production-ready, accessible, performant, **internationalized and SEO-ready** web application from BRD user stories and API contracts — on the framework that best fits the product (chosen in Phase 1, not defaulted) — producing a complete frontend codebase at `frontend/` with design system, component library, typed API clients, pages with state management, i18n, tests, and Storybook documentation.
 
 ## Brownfield Awareness
 
@@ -113,11 +114,11 @@ This skill runs as Phase 3b in the Drydock pipeline, in parallel with Software E
 
 | Phase | File | When to Load | Purpose |
 |-------|------|-------------|---------|
-| 1 | phases/01-analysis.md | Always first | Read BRD user stories, read API contracts, framework selection, UI/UX analysis |
-| 2 | phases/02-design-system.md | After Phase 1 | **Functional defaults only** — minimal tokens, system fonts, neutral palette. NOT final design. Also emits the security foundation: CSP/security headers + DOMPurify sanitizer. |
+| 1 | phases/01-analysis.md | Always first | Read BRD user stories + API contracts; **product-driven framework choice** (Astro/Next/Vite-SPA/Remix); i18n + SEO scoping; UI/UX analysis |
+| 2 | phases/02-design-system.md | After Phase 1 | **Functional defaults only** — minimal tokens, system fonts, neutral palette. NOT final design. Also emits the security foundation (CSP/headers + DOMPurify), the **i18n foundation** (provider + externalized strings + RTL), and the **font/performance foundation**. |
 | 3 | phases/03-components.md | After Phase 2 | UI primitives, layout components, feature components, accessibility |
-| 4 | phases/04-pages-routes.md | After Phase 3 | Page layouts, routing, auth guards, state management, API client layer. Also emits frontend observability (web-vitals/traceparent/error reporter), RFC 9457 error parsing, and the OpenFeature `useFlag` hook. |
-| 4b | (inline — see Functional Completeness below) | After Phase 4 | Dead element scan, navigation graph, interaction trace, cross-agent reconciliation |
+| 4 | phases/04-pages-routes.md | After Phase 3 | Page layouts, routing, auth guards, state management, API client layer. Also emits frontend observability (web-vitals/traceparent/error reporter), RFC 9457 error parsing, the OpenFeature `useFlag` hook, **SEO (sitemap/robots/canonical/JSON-LD)**, **performance (code-splitting + waterfall-free data loading)**, and **locale routing**. |
+| 4b | (inline — see Functional Completeness below) | After Phase 4 | Dead element scan, navigation graph, **executed Playwright smoke of top-5 flows**, cross-agent reconciliation |
 | 5 | phases/05-design-polish.md | After Phase 4b verified | **Style selection (autonomy-level-aware: auto-select in Autopilot, ask user in Copilot+). Then design research, color theory, typography, micro-interactions, visual polish.** |
 | 6 | phases/06-testing-a11y.md | After Phase 5 | Component tests, e2e tests, accessibility audit, performance budget, Storybook |
 
@@ -205,25 +206,24 @@ After all page agents complete, verify the navigation graph is connected:
 5. **Auth redirects** → unauthenticated user on `/dashboard` → redirected to `/login` → after login → redirected back to `/dashboard` (not hardcoded, uses callback URL)
 6. **404 handling** → navigating to a non-existent route shows the not-found page, not a blank screen
 
-### Interaction Trace
+### Interaction Trace — EXECUTED, not reasoned
 
-For the top 5 user flows from the BRD, mentally walk through every click as a real user:
+**Reasoning that a flow works is not proof. Run it.** Turn the top 5 user flows from the BRD into executed Playwright smoke tests and run them against the actually-built app.
+
+1. **Enumerate** the top 5 flows (the walk-through below is only to list the steps): signup/login, core CRUD (create→view→edit→delete), navigation (reach every page from nav), settings, and one domain-critical flow.
+2. **Write** them as `frontend/tests/e2e/smoke.spec.ts` — one Playwright test per flow, asserting the user reaches the correct **final state** (URL + visible content), not just that a request returned 200. This file is the seed the qa-engineer's full E2E suite (Phase 6 / qa-engineer) extends — do not duplicate it.
+3. **Run** it: build and boot the app (`next build && next start`, or the framework/dev-server equivalent), then `playwright test smoke.spec.ts`.
+4. **Block on red.** Any failing smoke flow is a Critical defect — fix before Phase 5. Record the per-flow pass/fail in the receipt. "I reasoned it works" is not acceptable evidence.
 
 ```
-Example: "New user signs up and reaches dashboard"
-
-1. User lands on /login → sees login form ✓
-2. Clicks "Sign up" link → navigates to /signup ✓
-3. Fills form, clicks "Create account" → form submits to API ✓
-4. API returns success → user redirected to /dashboard ✓
-5. Dashboard loads → sidebar visible, logo links to / ✓
-6. Clicks "Settings" in sidebar → navigates to /settings ✓
-7. Clicks logo → navigates back to /dashboard ✓
-
-If ANY step fails, the flow is broken. Fix before Phase 5.
+Example flow encoded as a test: "New user signs up and reaches dashboard"
+  visit /login → click "Sign up" → fill form → submit
+  → assert URL == /dashboard AND dashboard heading visible AND sidebar logo links to /
 ```
 
-Do this for: signup/login flow, core CRUD flow (create/view/edit/delete), navigation flow (visit every page from sidebar/nav), settings flow, and one domain-specific critical flow.
+Cover: signup/login, core CRUD, navigation (every page from nav), settings, and one domain-critical flow.
+
+**If the app cannot be booted in this environment,** still produce `smoke.spec.ts`, hand it to qa-engineer as a required gate, and record the run as **deferred (not skipped)** in the receipt.
 
 ### Cross-Agent Reconciliation
 
@@ -245,7 +245,9 @@ When parallel page agents complete (auth agent, dashboard agent, settings agent,
 | Services | `frontend/app/services/` | Typed API client layer, React Query hooks, interceptors |
 | Stores | `frontend/app/stores/` | Client state management (Zustand) |
 | Styles | `frontend/app/styles/` | Design tokens, theme config, global styles |
-| Tests | `frontend/tests/` | Component, page, hook, e2e, a11y tests |
+| i18n | `frontend/app/messages/`, i18n provider | Locale message catalogs (default locale = canonical key set), `Intl` formatting, RTL/`dir` handling — no hardcoded user-facing strings |
+| SEO | `frontend/app/sitemap.*`, `robots.*`, per-route metadata + JSON-LD | sitemap.xml, robots.txt, canonical, Open Graph, schema.org structured data on public/indexable routes; auth routes `noindex` |
+| Tests | `frontend/tests/` | Component, page, hook, e2e, a11y tests — incl. `e2e/smoke.spec.ts` (executed Phase-4b smoke of the top-5 flows; seed for qa-engineer's full E2E) |
 | Storybook | `frontend/storybook/` | Component documentation and visual testing |
 | Config | `frontend/` root | package.json, tsconfig, tailwind, eslint, playwright, lighthouse |
 | Observability | `frontend/app/lib/observability/` | web-vitals reporter, global error reporter, traceparent-injecting API client (names per observability-contract.md) |
@@ -299,3 +301,11 @@ These contracts are loaded at the top of this SKILL.md and are **non-negotiable*
 | Unsanitized `dangerouslySetInnerHTML` / missing CSP | Route all HTML through `lib/sanitize.ts` (DOMPurify, strict allowlist); serve a CSP with no `unsafe-inline`/`unsafe-eval` plus Trusted Types (`require-trusted-types-for 'script'`); `react/no-danger` ESLint rule on |
 | External/CDN `<script>` with no integrity hash | Prefer self-hosting third-party scripts; any remaining external `<script>`/`<link>` carries an SRI `integrity` hash + `crossorigin` so a tampered CDN asset fails closed |
 | Session cookie missing a name prefix, or sensitive page is cacheable | Name auth/session cookies with `__Host-`/`__Secure-` (in addition to `HttpOnly`+`Secure`+`SameSite`); set `Cache-Control: no-store` (+ `Pragma: no-cache`) on authenticated/sensitive responses so credentials/PII are never cached |
+| Defaulting to Next.js regardless of product | Choose the framework by product archetype (Phase 1): Astro for content/marketing, Next.js App Router for full-stack SaaS, React+Vite for internal-tool SPAs, Remix for form-heavy apps — or match the architect's `tech-stack.md` / the brownfield stack |
+| Hardcoded user-facing strings | Externalize ALL display text, `aria-label`s, placeholders, and validation messages into i18n keys; format numbers/dates/currency with `Intl`; never inline English in a component |
+| Hardcoded `left`/`right` (RTL breaks) | Use CSS logical properties (`margin-inline`, `padding-inline-start`, `inset-inline`, `text-align: start`) and set `<html dir>` from the locale, so RTL works without per-component overrides |
+| Raw `<img>` / unoptimized images | Use the `Image` primitive (framework optimizer): explicit width/height (zero CLS), lazy by default, AVIF/WebP, `priority` only for the LCP image; required `alt` |
+| Public pages with no SEO | Indexable routes need unique metadata + canonical + Open Graph + JSON-LD structured data, plus generated `sitemap.xml` + `robots.txt`; auth routes are `noindex` |
+| Data-fetch waterfalls / no code-splitting | Fetch independent data in parallel (RSC: start before `await`; SPA: parallel queries), stream with Suspense, dynamic-import heavy/below-the-fold components, prioritize the LCP image — stay within the bundle budget |
+| Verifying flows by reasoning | The Phase-4b interaction trace is an EXECUTED Playwright smoke (`smoke.spec.ts`) run against the built app asserting final state — not a mental walk-through; a failing flow blocks Phase 5 |
+| Ad-hoc form state / `useState` per field | Build forms on react-hook-form + Zod resolver (shared OpenAPI schemas); multi-step wizards, field arrays, server-error mapping to fields, a focusable error summary, autosave + unsaved-changes guard |

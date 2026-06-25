@@ -264,6 +264,30 @@ export function useFlag<T>(key: string, defaultValue: T): T { /* OpenFeature cli
 - **SSR/edge safety.** Evaluate with a stable context on server and client so the rendered value matches across the SSR/CSR boundary (no flicker, no hydration error). Edge runtime must use the edge-safe provider entrypoint.
 - **Registry-driven.** Only consume keys declared in `config/feature-flags.yaml` (`{ key, type, owner, default, created, removal_by }`). Do not invent ad-hoc flag keys.
 
+## 4.8 SEO & Discoverability (the public/indexable routes from Phase 1.5)
+
+Marketing/blog/docs/pricing/public routes are not production-ready without discoverability. App routes behind auth get `noindex` — do NOT apply the below to them.
+
+- **Per-route metadata** via the framework metadata API (Next `generateMetadata`, Remix `meta`, Astro frontmatter): unique `<title>` + meta description, **canonical URL**, Open Graph + Twitter Card, `lang`/`og:locale`. No two indexable pages share a title/description.
+- **Structured data (JSON-LD):** emit the right schema.org types per page — `Organization`/`WebSite` on the root, `Product`, `Article`/`BlogPosting`, `BreadcrumbList`, `FAQPage` — for rich results.
+- **`sitemap.xml`** generated from the indexable-route list (with `hreflang` alternates if multi-locale) and **`robots.txt`** (allow indexable, disallow `/app`/`/api`/auth, link the sitemap).
+- **OG image per page** (static or generated). Behind-auth, duplicate, and filtered routes are `noindex`/`canonical`-collapsed.
+
+## 4.9 Performance: code-splitting & data loading (feeds the Phase 6 budget gate)
+
+Performance is engineered here, then enforced in Phase 6. The build fails the size/CWV budget if you skip this.
+
+- **Route-level code-splitting:** dynamic-import heavy or below-the-fold components (charts, rich editors, modals, maps) with a skeleton fallback; keep each route's initial JS within the per-entry `bundle` budget.
+- **No data waterfalls:** issue independent requests in **parallel** (RSC: start all fetches before `await`; SPA: parallel queries / prefetch in the route loader). Never serialize independent calls.
+- **Stream with Suspense:** stream the shell and suspend slow data (App Router / Remix `defer`) so first paint isn't blocked on the slowest query.
+- **LCP & images:** mark the LCP image `priority`/eager via the Phase 3 `Image` primitive; lazy-load the rest. **Prefetch** likely-next routes on hover/viewport.
+- **Bundle hygiene:** tree-shakeable imports, no giant barrel/heavy-date-lib imports; `@next/bundle-analyzer` (or `rollup-plugin-visualizer`) to diagnose — feeds the size-limit gate.
+
+## 4.10 Localization Routing (multi-locale builds only — per the Phase 1.5 i18n decision)
+
+- **Strategy:** locale path segment (`/en`, `/fr`) — preferred for SEO — or sub-domain/domain. Detect from `Accept-Language` + a persisted cookie, with a default-locale fallback; never 404 on a missing locale.
+- Emit **`hreflang`** alternates + a per-locale canonical; metadata is localized. Single-locale builds skip routing but keep the Phase 2 externalized strings + `Intl` formatting so adding a locale stays a config change.
+
 ## Validation Loop
 
 Before moving to Phase 5:
@@ -278,6 +302,9 @@ Before moving to Phase 5:
 - API client parses RFC 9457 `application/problem+json` and resolves copy from the shared error catalog (`trace_id` surfaced)
 - API client injects W3C `traceparent` on every request; web-vitals + global error reporter wired (4.6)
 - `useFlag` hook evaluates SSR/edge-safe with fail-static safe defaults from `config/feature-flags.yaml` (4.7)
+- Public/indexable routes emit per-route metadata + canonical + OG + JSON-LD; `sitemap.xml` + `robots.txt` generated; behind-auth routes `noindex` (4.8)
+- Heavy/below-the-fold components code-split; independent data fetched in parallel (no waterfalls); LCP image prioritized; initial route bundle within the `bundle` budget (4.9)
+- (multi-locale) locale routing + `hreflang` + localized metadata; (single-locale) strings still externalized (4.10)
 
 **Then run the Functional Verification Pass (see main SKILL.md):**
 
@@ -304,5 +331,7 @@ Before moving to Phase 5:
 - **Top 5 user flows verified** — walked through click-by-click, every step works end-to-end
 - **Errors are RFC 9457** — `application/problem+json` parsed, copy from shared error catalog, `trace_id` surfaced
 - **Browser trace started** — `traceparent` injected on every API call; web-vitals + global error boundary/reporter emit contract names
+- **SEO complete on public routes** — unique metadata + canonical + Open Graph + JSON-LD; `sitemap.xml` + `robots.txt` generated; auth routes `noindex`
+- **Performance engineered** — heavy components code-split, data fetched in parallel (no waterfalls), LCP image prioritized; initial bundle within budget (enforced in Phase 6)
 - **Flags fail-static** — `useFlag` SSR/edge-safe, returns registry safe default on provider error
 - **`security-defaults checklist passes`** — no secrets in the client bundle, secure cookies (`HttpOnly`+`Secure`+`SameSite`), no auth tokens in `localStorage`, no unsanitized `dangerouslySetInnerHTML`, input validated at the boundary (client validation is UX only)

@@ -2,6 +2,21 @@
 
 All notable changes to **Drydock**.
 
+## [2.4.0] — 2026-06-25
+
+Frontend production-grade upgrade. The `frontend-engineer` skill was already strong (atomic components, WCAG 2.1 AA, React Query, OpenAPI-typed clients, RFC 9457 errors, frontend observability, perf budgets, feature flags); this closes the remaining gaps to production-grade and makes the **framework choice product-driven** instead of a blanket Next.js default.
+
+### Added
+- **Product-driven framework selection** (`01-analysis.md`). Phase 0 is now a decision matrix: architect's `tech-stack.md` wins → brownfield matches existing → else choose by product archetype — **Astro** (content/marketing, SEO-critical), **Next.js App Router** (full-stack SaaS), **React + Vite** (internal-tool/admin SPA), **Remix/React Router v7** (form-heavy). The design system, a11y, observability, security, i18n, and testing standards are framework-stable; only routing/rendering/data-loading vary. Choice recorded in `framework-decision.md`.
+- **Internationalization (i18n)** end to end — foundation in `02-design-system.md` (provider + message catalogs + `Intl` formatting + RTL via `dir`/logical properties), no-hardcoded-strings + RTL-safe rule on every component (`03-components.md`), locale routing + `hreflang` (`04-pages-routes.md`), and a pseudo-locale + RTL render check (`06-testing-a11y.md`). Scales to the Phase-1 decision: multi-locale gets full routing; single-locale still externalizes strings so a second locale is a config change.
+- **Image & web-performance optimization** — an optimized `Image` primitive (explicit dimensions for zero CLS, lazy, AVIF/WebP, required `alt`), optimized font loading (`font-display: swap` + preload + subset), and a Phase-4 performance section: route-level code-splitting, waterfall-free parallel data loading, Suspense streaming, LCP prioritization, and bundle hygiene — all feeding the existing Phase-6 Core Web Vitals/size budget gate.
+- **SEO & discoverability** (`04-pages-routes.md`) — per-route metadata + canonical + Open Graph + schema.org **JSON-LD**, generated **`sitemap.xml`** and **`robots.txt`** for public/indexable routes; behind-auth routes `noindex`.
+- **Production-grade form system** (`03-components.md`) — react-hook-form + Zod resolver (reusing the OpenAPI-generated schemas), multi-step/wizard forms, field arrays, async/server-error mapping to fields, a focusable accessible error summary, autosave/draft, and an unsaved-changes guard.
+
+### Changed
+- **Functional verification is now EXECUTED, not reasoned.** Phase 4b's "interaction trace" was a *mental* walk-through; it is now an executed Playwright smoke (`frontend/tests/e2e/smoke.spec.ts`) that builds + boots the app and asserts each top-5 flow reaches its correct final state. A failing flow is a Critical defect that blocks Phase 5; the smoke spec seeds the qa-engineer's full E2E suite. If the app can't be booted in-environment, the spec is produced and handed to qa as a required gate, recorded as deferred (not skipped).
+- SKILL identity, phase index, output contract (i18n messages, SEO artifacts, smoke spec), and Common Mistakes updated for all of the above.
+
 ## [2.3.0] — 2026-06-25
 
 Production-grade security hardening. The audit (HARDEN) phase already covered OWASP Top 10 / API / LLM thoroughly; this release closes the **BUILD↔AUDIT asymmetry** — control families the security audit checks for are now written into the secure-by-default BUILD contract so builder agents ship them in the first draft instead of relying on HARDEN to retrofit. Grounded in an evidence-based gap analysis cross-referenced against the current standards (OWASP ASVS 5.0, API Security Top 10 2023, LLM Top 10 2025, OWASP Top 10 CI/CD Security Risks, SLSA v1.2).
