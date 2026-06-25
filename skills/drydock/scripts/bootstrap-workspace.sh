@@ -6,9 +6,9 @@
 # a multi-step file operation every run.
 #
 # Creates:
-#   Drydock/.protocols/                    (shared protocols, deployed below)
-#   Drydock/.orchestrator/receipts/        (gate receipts)
-#   Drydock/.orchestrator/overrides/       (gate override receipts)
+#   drydock/.protocols/                    (shared protocols, deployed below)
+#   drydock/.orchestrator/receipts/        (gate receipts)
+#   drydock/.orchestrator/overrides/       (gate override receipts)
 #
 # Protocol source resolution (first existing wins), mirroring the SKILL.md
 # loaders' belt-and-suspenders order:
@@ -24,9 +24,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-mkdir -p Drydock/.protocols
-mkdir -p Drydock/.orchestrator/receipts
-mkdir -p Drydock/.orchestrator/overrides
+mkdir -p drydock/.protocols
+mkdir -p drydock/.orchestrator/receipts
+mkdir -p drydock/.orchestrator/overrides
 
 PROTO_SRC=""
 for cand in \
@@ -41,9 +41,9 @@ for cand in \
 done
 
 if [ -n "$PROTO_SRC" ]; then
-  cp "$PROTO_SRC"/*.md Drydock/.protocols/ 2>/dev/null || true
-  count="$(find Drydock/.protocols -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')"
-  echo "✓ Workspace bootstrapped — deployed ${count} protocols to Drydock/.protocols/ (source: ${PROTO_SRC})"
+  cp "$PROTO_SRC"/*.md drydock/.protocols/ 2>/dev/null || true
+  count="$(find drydock/.protocols -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')"
+  echo "✓ Workspace bootstrapped — deployed ${count} protocols to drydock/.protocols/ (source: ${PROTO_SRC})"
 else
   echo "WARN: could not locate skills/_shared/protocols; directories created but protocols NOT deployed." >&2
   echo "      The orchestrator should write protocols from the embedded summaries in phases/full-build-setup.md." >&2

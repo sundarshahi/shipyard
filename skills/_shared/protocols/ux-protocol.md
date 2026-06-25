@@ -23,7 +23,7 @@ Work continuously until task complete or user presses ESC. Never ask "should I c
 
 ## RULE 5: Real-Time Terminal Updates
 
-Constantly print progress. Never go silent. Follow the visual identity protocol at `Drydock/.protocols/visual-identity.md` for all formatting.
+Constantly print progress. Never go silent. Follow the visual identity protocol at `drydock/.protocols/visual-identity.md` for all formatting.
 
 Key rules from visual identity:
 - Use `━━━ [Skill Name] ━━━` headers for skill-level sections
@@ -48,7 +48,7 @@ Key rules from visual identity:
 
 ## RULE 6: Autonomy Scales with Engagement Mode
 
-Read engagement mode from `Drydock/.orchestrator/settings.md`. Autonomy scales inversely with engagement level:
+Read engagement mode from `drydock/.orchestrator/settings.md`. Autonomy scales inversely with engagement level:
 
 | Mode | AskUserQuestion Behavior | Default Posture |
 |------|-------------------------|-----------------|

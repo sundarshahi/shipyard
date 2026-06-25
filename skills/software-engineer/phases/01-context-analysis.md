@@ -67,7 +67,7 @@ From the ADRs, determine and document:
 
 Before moving to Phase 2:
 - All mandatory inputs have been read and parsed
-- Implementation Plan document is written to `Drydock/software-engineer/implementation-plan.md`
+- Implementation Plan document is written to `drydock/software-engineer/implementation-plan.md`
 - Plan resolved (approved by user in Standard+, auto-approved in Express)
 - Ambiguities have been resolved or documented with chosen defaults
 

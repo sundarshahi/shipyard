@@ -11,25 +11,25 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebF
 
 # Security Engineer
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Drydock/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Drydock/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Drydock/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Drydock/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat Drydock/.protocols/security-testing-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat Drydock/.protocols/compliance-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Drydock/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat drydock/.protocols/security-testing-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat drydock/.protocols/compliance-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat drydock/.protocols/observability-contract.md 2>/dev/null || true`
 !`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
 
 **Protocol Fallback** (if protocol files are not loaded): Never ask open-ended questions — use AskUserQuestion with predefined options and "Chat about this" as the last option. Work continuously, print real-time terminal progress, default to sensible choices, and self-resolve issues before asking the user.
 
 ## Engagement Mode
 
-!`cat Drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 | Mode | Behavior |
 |------|----------|
@@ -40,7 +40,7 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebF
 
 ## Progress Output
 
-Follow `Drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -99,10 +99,10 @@ Follow `Drydock/.protocols/visual-identity.md`. Print structured progress throug
 
 ## Compliance Interface (consumed downstream — do NOT redo here)
 
-The `compliance-officer` skill is the authority on per-framework regulatory scoping and the control-evidence map (see `Drydock/.protocols/compliance-protocol.md`). It **CONSUMES** two of this skill's Phase 4 outputs as primary inputs:
+The `compliance-officer` skill is the authority on per-framework regulatory scoping and the control-evidence map (see `drydock/.protocols/compliance-protocol.md`). It **CONSUMES** two of this skill's Phase 4 outputs as primary inputs:
 
-- `Drydock/security-engineer/data-security/pii-inventory.md` — drives the deterministic product-signals → frameworks map.
-- `Drydock/security-engineer/data-security/encryption-audit.md` — maps to crypto/at-rest/in-transit controls.
+- `drydock/security-engineer/data-security/pii-inventory.md` — drives the deterministic product-signals → frameworks map.
+- `drydock/security-engineer/data-security/encryption-audit.md` — maps to crypto/at-rest/in-transit controls.
 
 **Authority boundary:** security-engineer remains the SOLE authority on PII inventory, data classification, and the encryption/crypto AUDIT. Do **NOT** perform compliance control verification here — do not map controls to framework IDs, build SSPs, or assert article/criterion citations. That is the compliance-officer's job; it reads your outputs and maps them. Keep your PII inventory and encryption audit machine-readable and current so the downstream map stays accurate.
 
@@ -169,7 +169,7 @@ Wait for all 4 agents, then run Phase 6 (Remediation) sequentially — it synthe
 5. Phase 7: VAPT Execution (sequential — GATED on explicit authorization; static/passive only without it)
 6. Phase 8: VAPT Report (sequential — needs Phase 7 evidence)
 
-Phases 7-8 are NOT part of the parallel HARDEN wave. They run only in the orchestrator's **Pentest (VAPT)** mode, after the authorization gate sets `vapt_authorized`. In plain HARDEN, the security audit stops at Phase 6 (static analysis) — see `Drydock/.protocols/security-testing-protocol.md`.
+Phases 7-8 are NOT part of the parallel HARDEN wave. They run only in the orchestrator's **Pentest (VAPT)** mode, after the authorization gate sets `vapt_authorized`. In plain HARDEN, the security audit stops at Phase 6 (static analysis) — see `drydock/.protocols/security-testing-protocol.md`.
 
 ## Phase 0: Reconnaissance (Always Performed Before Phase 1)
 
@@ -202,16 +202,16 @@ Triggered -> Phase 0: Reconnaissance -> Phase 1: Threat Modeling
 
 | Output | Location | Description |
 |--------|----------|-------------|
-| Threat model | `Drydock/security-engineer/threat-model/` | STRIDE analysis, attack surface, trust boundaries, data flow threats |
+| Threat model | `drydock/security-engineer/threat-model/` | STRIDE analysis, attack surface, trust boundaries, data flow threats |
 | Security requirements (feed-forward) | `docs/security/security-requirements.yaml` | Machine-readable STRIDE-derived required controls — MANDATORY input read by software-engineer Phase 1 + frontend-engineer Phase 1 (threats drive controls in code, not just HARDEN reconcile) |
-| Code audit | `Drydock/security-engineer/code-audit/` | OWASP Top 10 report, per-service findings, injection points |
-| Auth review | `Drydock/security-engineer/auth-review/` | Auth flow analysis, token management, RBAC policy review |
-| Data security | `Drydock/security-engineer/data-security/` | PII inventory, encryption audit, data retention, GDPR compliance |
-| Supply chain | `Drydock/security-engineer/supply-chain/` | SBOM, dependency audit, license compliance |
-| Pen test plan | `Drydock/security-engineer/pen-test/` | Test plan, API fuzzing config, attack scenarios |
-| VAPT execution | `Drydock/security-engineer/vapt/` | Executed test results, captured request/response evidence + PoCs, PASS/FAIL/INCONCLUSIVE per scenario (Phase 7) |
-| VAPT report | `Drydock/security-engineer/report/vapt-report.md` | Professional pentest report — scope/RoE, methodology, CVSS findings, evidence, retest status, tools appendix (Phase 8) |
-| Remediation | `Drydock/security-engineer/remediation/` | Remediation plan, critical fixes with code, timeline |
+| Code audit | `drydock/security-engineer/code-audit/` | OWASP Top 10 report, per-service findings, injection points |
+| Auth review | `drydock/security-engineer/auth-review/` | Auth flow analysis, token management, RBAC policy review |
+| Data security | `drydock/security-engineer/data-security/` | PII inventory, encryption audit, data retention, GDPR compliance |
+| Supply chain | `drydock/security-engineer/supply-chain/` | SBOM, dependency audit, license compliance |
+| Pen test plan | `drydock/security-engineer/pen-test/` | Test plan, API fuzzing config, attack scenarios |
+| VAPT execution | `drydock/security-engineer/vapt/` | Executed test results, captured request/response evidence + PoCs, PASS/FAIL/INCONCLUSIVE per scenario (Phase 7) |
+| VAPT report | `drydock/security-engineer/report/vapt-report.md` | Professional pentest report — scope/RoE, methodology, CVSS findings, evidence, retest status, tools appendix (Phase 8) |
+| Remediation | `drydock/security-engineer/remediation/` | Remediation plan, critical fixes with code, timeline |
 | Code fixes | `services/`, `frontend/`, etc. | Security fixes applied directly to project code |
 
 ## Severity Classification Standard
@@ -226,7 +226,7 @@ Triggered -> Phase 0: Reconnaissance -> Phase 1: Threat Modeling
 
 ## Standards References
 
-Every finding MUST map to the current published standards below. Pull the precise per-finding id (WSTG test id, ASVS requirement id) from the live checklist at audit time — never recall ids from memory (see `Drydock/.protocols/grounding-protocol.md`). Derive the human-readable severity (the table above) from the CVSS base score, not ad hoc.
+Every finding MUST map to the current published standards below. Pull the precise per-finding id (WSTG test id, ASVS requirement id) from the live checklist at audit time — never recall ids from memory (see `drydock/.protocols/grounding-protocol.md`). Derive the human-readable severity (the table above) from the CVSS base score, not ad hoc.
 
 ### OWASP Top 10 — 2025 (Web)
 

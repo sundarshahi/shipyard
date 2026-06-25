@@ -8,7 +8,7 @@ All notable changes to **Drydock**.
 - **Plugin renamed `shipyard` → `drydock`** ahead of the community-marketplace
   submission (the name `shipyard` was already taken by a different plugin). This
   changes the install name (`drydock`), the skill namespace (`drydock:<skill>`),
-  the `/drydock` command, the runtime workspace directory (`Drydock/`), and the
+  the `/drydock` command, the runtime workspace directory (`drydock/`), and the
   project config file (`.drydock.yaml`). The GitHub repository itself stays at
   `sundarshahi/shipyard`. Verified by the eval suite, `validate --strict`, and a
   live routing smoke test (`route='drydock:drydock'`, zero plugin errors).
@@ -36,7 +36,7 @@ All notable changes to **Drydock**.
   metrics with no parseable artifact fall back to the receipt tagged `[unverified]`.
 - **Scripts over prose** — two deterministic orchestrator procedures that were
   described in prose are now bundled scripts the orchestrator runs directly:
-  `skills/drydock/scripts/bootstrap-workspace.sh` (scaffold `Drydock/` +
+  `skills/drydock/scripts/bootstrap-workspace.sh` (scaffold `drydock/` +
   deploy all shared protocols, with `${CLAUDE_PLUGIN_ROOT}` → `${CLAUDE_SKILL_DIR}`
   → script-relative source resolution) and `skills/drydock/scripts/aggregate-cost.py`
   (sum effort/cost metrics across receipts, dedup artifacts, tolerate malformed
@@ -98,7 +98,7 @@ Dispatch-port + correctness release. The orchestration is now built entirely on 
 Enterprise-grade hardening release. Drydock now treats production-readiness as evidence-backed and enforceable: artifacts are generated (not described) and blocking gates verify them.
 
 ### Added
-- **Four new shared protocols**, deployed to `Drydock/.protocols/` at orchestrator bootstrap and loaded by the worker skills: `security-defaults.md` (security-by-default baseline), `observability-contract.md` (OTel traces/metrics/logs + RED/USE), `architecture-boundaries.md` (Clean Architecture / dependency-rule enforcement), and `compliance-protocol.md` (per-product regulatory mapping). These join `grounding-protocol.md` and `security-testing-protocol.md`.
+- **Four new shared protocols**, deployed to `drydock/.protocols/` at orchestrator bootstrap and loaded by the worker skills: `security-defaults.md` (security-by-default baseline), `observability-contract.md` (OTel traces/metrics/logs + RED/USE), `architecture-boundaries.md` (Clean Architecture / dependency-rule enforcement), and `compliance-protocol.md` (per-product regulatory mapping). These join `grounding-protocol.md` and `security-testing-protocol.md`.
 - **Compliance Officer skill** (`drydock:compliance-officer`) — the 15th agent. Scopes per-product regulatory frameworks (SOC 2, GDPR, HIPAA, PCI-DSS v4.0.1, CCPA/CPRA, ISO 27001, FedRAMP), maps mandatory controls to implementing artifacts, verifies controls exist in generated code/infra, and emits statutory evidence (SSP, DPIA, breach runbook) behind a blocking compliance gate.
 - **Compliance execution mode** — new orchestrator mode (now 12 total), invocable for regulated builds and as a gate input to production-readiness.
 - **Real secret-guard hook** — `hooks/secret-guard.sh`, wired as a `PreToolUse` hook in `hooks/hooks.json`. Blocks committing/writing secret files and scans staged diffs for credentials.

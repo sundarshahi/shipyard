@@ -27,7 +27,7 @@ When mode is **Full Build**, follow this EXACT sequence:
 bash "${CLAUDE_PLUGIN_ROOT}/skills/drydock/scripts/bootstrap-workspace.sh" 2>/dev/null \
   || bash "${CLAUDE_SKILL_DIR}/scripts/bootstrap-workspace.sh"
 ```
-It creates `Drydock/.protocols/`, `Drydock/.orchestrator/receipts/`, and `Drydock/.orchestrator/overrides/`, and copies every shared protocol from the plugin's `skills/_shared/protocols/` into `Drydock/.protocols/`. If it prints a `WARN` that it could not locate the protocols, fall back to writing each from the summaries in step 3.
+It creates `drydock/.protocols/`, `drydock/.orchestrator/receipts/`, and `drydock/.orchestrator/overrides/`, and copies every shared protocol from the plugin's `skills/_shared/protocols/` into `drydock/.protocols/`. If it prints a `WARN` that it could not locate the protocols, fall back to writing each from the summaries in step 3.
 
 3. **Shared protocols** (deployed by the script in step 2 — this table is the reference / fallback if the script could not locate the source):
 
@@ -48,7 +48,7 @@ It creates `Drydock/.protocols/`, `Drydock/.orchestrator/receipts/`, and `Drydoc
 | `architecture-boundaries.md` | Architecture boundary rules: module/service boundaries, dependency direction, layering, and the architecture-boundary gate enforced at Gate 3. Loads into architect/build/review agents. |
 | `compliance-protocol.md` | Compliance control mapping: framework scoping (SOC 2/HIPAA/GDPR/PCI/CCPA/ISO 27001/FedRAMP), mandatory controls-present/missing reporting, consumes security-engineer PII/encryption outputs. Loads into compliance-officer. |
 
-If the bootstrap script could not locate the plugin's `skills/_shared/protocols/` (it prints a `WARN`), write each protocol to `Drydock/.protocols/` from the summaries above.
+If the bootstrap script could not locate the plugin's `skills/_shared/protocols/` (it prints a `WARN`), write each protocol to `drydock/.protocols/` from the summaries above.
 
 4. **Codebase discovery — detect greenfield vs brownfield:**
 
@@ -100,7 +100,7 @@ If the bootstrap script could not locate the plugin's `skills/_shared/protocols/
 
    c. **Write `.drydock.yaml`** from discovered structure — map `paths.*` to actual directories found.
 
-   d. **Set brownfield context** — write to `Drydock/.orchestrator/codebase-context.md`:
+   d. **Set brownfield context** — write to `drydock/.orchestrator/codebase-context.md`:
    ```markdown
    # Codebase Context
    Mode: brownfield
@@ -135,7 +135,7 @@ AskUserQuestion(questions=[{
 }])
 ```
 
-Write the choice to `Drydock/.orchestrator/settings.md`:
+Write the choice to `drydock/.orchestrator/settings.md`:
 ```markdown
 # Pipeline Settings
 Engagement: [express|standard|thorough|meticulous]
@@ -164,7 +164,7 @@ AskUserQuestion(questions=[{
 }])
 ```
 
-Store all choices in `Drydock/.orchestrator/settings.md`:
+Store all choices in `drydock/.orchestrator/settings.md`:
 ```markdown
 # Pipeline Settings
 Engagement: [express|standard|thorough|meticulous]
@@ -185,10 +185,10 @@ Maximum parallelism with worktree isolation is the recommended default — paral
 
 Use the cost estimation table from the visual-identity protocol to look up the range based on mode + engagement.
 
-7. **Detect existing workspace** — if `Drydock/.orchestrator/` has prior state, offer to resume or restart via AskUserQuestion.
+7. **Detect existing workspace** — if `drydock/.orchestrator/` has prior state, offer to resume or restart via AskUserQuestion.
 
 8. **Polymath pre-flight check:**
-   - If `Drydock/polymath/handoff/context-package.md` exists → read it, pass to PM as pre-loaded context. Log: `✓ Polymath context loaded — skipping redundant discovery`
+   - If `drydock/polymath/handoff/context-package.md` exists → read it, pass to PM as pre-loaded context. Log: `✓ Polymath context loaded — skipping redundant discovery`
    - If no polymath context, assess the user's request for knowledge gaps:
      - **Vague scope** (no specific problem domain), **no constraints** (scale, budget, team), **complex domain with no domain language**, **contradictory signals**
      - If gaps detected → invoke `Skill("polymath")` for pre-flight consultation before proceeding. The polymath will research, clarify with the user, and write a context package when ready.

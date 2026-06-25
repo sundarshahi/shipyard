@@ -7,12 +7,12 @@ Load this mode when the user wants to understand the big picture of what was bui
 Read broadly before presenting — parallel reads across the entire workspace:
 
 ```
-Read("Drydock/product-manager/BRD/brd.md")
-Read("Drydock/solution-architect/working-notes.md")
-Read("Drydock/qa-engineer/test-plan.md")
-Read("Drydock/security-engineer/...")
-Read("Drydock/code-reviewer/review-report.md")
-Read("Drydock/sre/...")
+Read("drydock/product-manager/BRD/brd.md")
+Read("drydock/solution-architect/working-notes.md")
+Read("drydock/qa-engineer/test-plan.md")
+Read("drydock/security-engineer/...")
+Read("drydock/code-reviewer/review-report.md")
+Read("drydock/sre/...")
 Glob("services/**/*")
 Glob("frontend/**/*")
 Glob("docs/**/*")
@@ -20,8 +20,8 @@ Glob("docs/**/*")
 
 Also read polymath's own context:
 ```
-Read("Drydock/polymath/context/decisions.md")
-Read("Drydock/polymath/context/domain-research.md")
+Read("drydock/polymath/context/decisions.md")
+Read("drydock/polymath/context/domain-research.md")
 ```
 
 ## Synthesis Frameworks

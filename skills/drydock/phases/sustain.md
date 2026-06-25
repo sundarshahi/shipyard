@@ -39,9 +39,9 @@ TaskUpdate(taskId=t11_id, status="in_progress")
 TaskUpdate(taskId=t12_id, status="in_progress")
 ```
 
-- **`technical-writer` (T11)** — Delegate to the `technical-writer` subagent (agents/technical-writer.md — runs backgrounded in its own worktree per its definition). Task context: read ALL workspace folders at `Drydock/` for full project context; read all project deliverables (`api/`, `services/`, `frontend/`, `infrastructure/`, `tests/`, `docs/`); read protocols from `Drydock/.protocols/`; read `.drydock.yaml` for paths and preferences. Produce: API reference (from OpenAPI specs), developer guides, operational guide, architecture guide, contributing guide; if `features.documentation_site` is true, scaffold a Docusaurus site. Write docs to project root `docs/` and workspace artifacts to `Drydock/technical-writer/`. When complete, write a receipt JSON to `Drydock/.orchestrator/receipts/T11-technical-writer.json` with task, agent, phase, status, artifacts, metrics, effort, verification, then mark its task complete.
+- **`technical-writer` (T11)** — Delegate to the `technical-writer` subagent (agents/technical-writer.md — runs backgrounded in its own worktree per its definition). Task context: read ALL workspace folders at `drydock/` for full project context; read all project deliverables (`api/`, `services/`, `frontend/`, `infrastructure/`, `tests/`, `docs/`); read protocols from `drydock/.protocols/`; read `.drydock.yaml` for paths and preferences. Produce: API reference (from OpenAPI specs), developer guides, operational guide, architecture guide, contributing guide; if `features.documentation_site` is true, scaffold a Docusaurus site. Write docs to project root `docs/` and workspace artifacts to `drydock/technical-writer/`. When complete, write a receipt JSON to `drydock/.orchestrator/receipts/T11-technical-writer.json` with task, agent, phase, status, artifacts, metrics, effort, verification, then mark its task complete.
 
-- **`skill-maker` (T12)** — Delegate to the `skill-maker` subagent (agents/skill-maker.md — runs backgrounded in its own worktree per its definition). Task context: analyze the completed project for recurring patterns (API routes, DB queries, auth checks, deployment procedures, testing patterns, domain-specific workflows); read protocols from `Drydock/.protocols/`. Produce 3-5 project-specific skills as `SKILL.md` files; install them to `.claude/skills/` and write workspace artifacts to `Drydock/skill-maker/`. When complete, write a receipt JSON to `Drydock/.orchestrator/receipts/T12-skill-maker.json` with task, agent, phase, status, artifacts, metrics, effort, verification, then mark its task complete.
+- **`skill-maker` (T12)** — Delegate to the `skill-maker` subagent (agents/skill-maker.md — runs backgrounded in its own worktree per its definition). Task context: analyze the completed project for recurring patterns (API routes, DB queries, auth checks, deployment procedures, testing patterns, domain-specific workflows); read protocols from `drydock/.protocols/`. Produce 3-5 project-specific skills as `SKILL.md` files; install them to `.claude/skills/` and write workspace artifacts to `drydock/skill-maker/`. When complete, write a receipt JSON to `drydock/.orchestrator/receipts/T12-skill-maker.json` with task, agent, phase, status, artifacts, metrics, effort, verification, then mark its task complete.
 
 ## Worktree Merge-Back
 
@@ -63,7 +63,7 @@ TaskUpdate(taskId=t13_id, status="in_progress")
 
 ### Compound Learning
 
-Write to `Drydock/.orchestrator/compound-learnings.md`:
+Write to `drydock/.orchestrator/compound-learnings.md`:
 
 ```markdown
 ## Learning: [date] — [project name]
@@ -94,7 +94,7 @@ Write the following block to the project's `CLAUDE.md` (create if it doesn't exi
 ```markdown
 # Drydock Native
 
-This project was built with the Drydock plugin. The `Drydock/` directory contains architecture decisions, security findings, test plans, and receipts from the build pipeline.
+This project was built with the Drydock plugin. The `drydock/` directory contains architecture decisions, security findings, test plans, and receipts from the build pipeline.
 
 **At the start of every session, ask the user how they'd like to work.** Use AskUserQuestion:
 - Header: "Drydock Native Project"
@@ -132,7 +132,7 @@ AskUserQuestion(questions=[{
   "header": "Assembly",
   "options": [
     {"label": "Integrate all code (Recommended)", "description": "Copy services, frontend, infra to project root"},
-    {"label": "Keep in workspace only", "description": "Leave everything in Drydock/"},
+    {"label": "Keep in workspace only", "description": "Leave everything in drydock/"},
     {"label": "Let me choose what to copy", "description": "Select which components to integrate"},
     {"label": "Chat about this", "description": "Discuss integration strategy"}
   ],

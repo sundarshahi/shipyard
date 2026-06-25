@@ -47,7 +47,7 @@ Run the bundled aggregation script and render its JSON into the box above (deter
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/drydock/scripts/aggregate-cost.py" 2>/dev/null \
   || python3 "${CLAUDE_SKILL_DIR}/scripts/aggregate-cost.py"
 ```
-It reads every receipt in `Drydock/.orchestrator/receipts/` plus `Drydock/.orchestrator/rework-log.md` and emits `{agents, tool_calls, files_read, files_written, files_total, unique_artifacts, rework_cycles}` (malformed receipts skipped, artifacts deduplicated). Use those numbers directly for Agents / total tool calls / files / rework cycles.
+It reads every receipt in `drydock/.orchestrator/receipts/` plus `drydock/.orchestrator/rework-log.md` and emits `{agents, tool_calls, files_read, files_written, files_total, unique_artifacts, rework_cycles}` (malformed receipts skipped, artifacts deduplicated). Use those numbers directly for Agents / total tool calls / files / rework cycles.
 
 For **estimated tokens**, start from the cost-estimation table in the visual-identity protocol and scale up by the actual `tool_calls` if it exceeds the estimate range.
 

@@ -5,9 +5,9 @@ The architecture must fit the project's actual constraints. This phase gathers t
 ## Step 1: Read Existing Context
 
 Before asking ANY questions, read in parallel:
-1. `Drydock/polymath/handoff/context-package.md` — may contain scale, constraints, decisions
-2. `Drydock/product-manager/BRD/brd.md` — user stories, acceptance criteria, business rules
-3. `Drydock/.orchestrator/codebase-context.md` — brownfield context
+1. `drydock/polymath/handoff/context-package.md` — may contain scale, constraints, decisions
+2. `drydock/product-manager/BRD/brd.md` — user stories, acceptance criteria, business rules
+3. `drydock/.orchestrator/codebase-context.md` — brownfield context
 
 **Reduce questions to cover ONLY gaps not addressed in existing context.** If polymath or PM already established scale targets, do not re-ask.
 
@@ -238,7 +238,7 @@ After gathering inputs, DERIVE the architecture from constraints. The architectu
 
 **Compliance Impact** (ILLUSTRATIVE ONLY — directional architecture cues, NOT the authoritative map):
 
-> This table sketches the *shape* of the architectural change each regime tends to demand, to steer the fitness function. It is **not** the source of truth and intentionally omits specifics. The single source of truth for which frameworks are in scope and which controls are mandatory is the deterministic **product-signals → frameworks** map in `Drydock/.protocols/compliance-protocol.md`, materialized in the Phase 2 **Compliance & Controls** subsection (which designs the concrete controls in). Any specific scan cadence, breach-notification window, control id, article, or §-citation is **NOT** stated here and MUST be verified LIVE per `freshness-protocol.md` in that subsection — never from memory (the same BINDING freshness rule the Compliance & Controls subsection carries). compliance-officer later maps/verifies those controls to evidence.
+> This table sketches the *shape* of the architectural change each regime tends to demand, to steer the fitness function. It is **not** the source of truth and intentionally omits specifics. The single source of truth for which frameworks are in scope and which controls are mandatory is the deterministic **product-signals → frameworks** map in `drydock/.protocols/compliance-protocol.md`, materialized in the Phase 2 **Compliance & Controls** subsection (which designs the concrete controls in). Any specific scan cadence, breach-notification window, control id, article, or §-citation is **NOT** stated here and MUST be verified LIVE per `freshness-protocol.md` in that subsection — never from memory (the same BINDING freshness rule the Compliance & Controls subsection carries). compliance-officer later maps/verifies those controls to evidence.
 
 | Requirement | -> Architecture cue (illustrative) |
 |------------|------------------------|

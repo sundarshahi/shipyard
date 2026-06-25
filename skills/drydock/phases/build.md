@@ -42,11 +42,11 @@ Then print Wave B announcement and completion similarly. Each agent's completion
 ## Re-Anchor
 
 Before creating any tasks, re-read key artifacts from disk:
-- `Drydock/product-manager/BRD/brd.md`
-- `Drydock/solution-architect/system-design.md`
+- `drydock/product-manager/BRD/brd.md`
+- `drydock/solution-architect/system-design.md`
 - `docs/architecture/adr/*.md` (Glob to list, Read key ADRs)
 - `api/openapi/*.yaml` (Glob to list)
-- `Drydock/security-engineer/security-requirements.md` — the EARLY STRIDE-derived security-requirements artifact emitted by T6a in DEFINE/Wave A. This is a **mandatory BUILD input**: every BUILD delegation below MUST instruct its subagent to read it and treat its controls (authn/authz, input-validation, output-encoding, secrets handling per threat) as acceptance criteria, not optional advice.
+- `drydock/security-engineer/security-requirements.md` — the EARLY STRIDE-derived security-requirements artifact emitted by T6a in DEFINE/Wave A. This is a **mandatory BUILD input**: every BUILD delegation below MUST instruct its subagent to read it and treat its controls (authn/authz, input-validation, output-encoding, secrets handling per threat) as acceptance criteria, not optional advice.
 - `.orchestrator/receipts/T1-*.json`, `.orchestrator/receipts/T2-*.json`
 
 Use this freshly-read data when writing the delegation context below — not your compressed memory of DEFINE phase.
@@ -83,7 +83,7 @@ else:
   use_worktrees = True
 ```
 
-Store the worktree decision in `Drydock/.orchestrator/settings.md` by appending:
+Store the worktree decision in `drydock/.orchestrator/settings.md` by appending:
 ```
 Worktrees: [enabled|disabled]
 ```
@@ -92,16 +92,16 @@ Worktrees: [enabled|disabled]
 
 Launch backend and frontend together. Delegate the following to their subagents to run CONCURRENTLY (each is backgrounded + isolated in its own worktree per its definition, so there are no file race conditions):
 
-- `software-engineer` (T3a — agents/software-engineer.md) — Task context: Read architecture from `api/`, `schemas/`, `docs/architecture/`. Read protocols from `Drydock/.protocols/` (security-defaults.md, observability-contract.md, and architecture-boundaries.md are MANDATORY — write secure-by-default code, emit the contract's canonical metric/log/span names, and keep domain imports pointing inward at write time; do not defer these to the HARDEN audit). MANDATORY input: read `Drydock/security-engineer/security-requirements.md` (the EARLY STRIDE threat-model output) and implement its per-threat controls as acceptance criteria. Read `.drydock.yaml` for paths and preferences. Write services to project root: `services/`, `libs/shared/`. Write workspace artifacts to `Drydock/software-engineer/`. TDD enforced: write test → watch fail → implement → watch pass → refactor. When complete, write a receipt JSON to `Drydock/.orchestrator/receipts/T3a-software-engineer.json` with task, agent, phase, status, artifacts, metrics, effort, verification — the verification block MUST assert "security-defaults checklist passes" (the BUILD Quality Bar line from security-defaults.md) with per-rule pass/fail evidence — then mark its task complete.
+- `software-engineer` (T3a — agents/software-engineer.md) — Task context: Read architecture from `api/`, `schemas/`, `docs/architecture/`. Read protocols from `drydock/.protocols/` (security-defaults.md, observability-contract.md, and architecture-boundaries.md are MANDATORY — write secure-by-default code, emit the contract's canonical metric/log/span names, and keep domain imports pointing inward at write time; do not defer these to the HARDEN audit). MANDATORY input: read `drydock/security-engineer/security-requirements.md` (the EARLY STRIDE threat-model output) and implement its per-threat controls as acceptance criteria. Read `.drydock.yaml` for paths and preferences. Write services to project root: `services/`, `libs/shared/`. Write workspace artifacts to `drydock/software-engineer/`. TDD enforced: write test → watch fail → implement → watch pass → refactor. When complete, write a receipt JSON to `drydock/.orchestrator/receipts/T3a-software-engineer.json` with task, agent, phase, status, artifacts, metrics, effort, verification — the verification block MUST assert "security-defaults checklist passes" (the BUILD Quality Bar line from security-defaults.md) with per-rule pass/fail evidence — then mark its task complete.
 
-- `frontend-engineer` (T3b — agents/frontend-engineer.md; skip if `features.frontend` is false) — Task context: Read API contracts from `api/`. Read BRD user stories from `Drydock/product-manager/BRD/`. Read protocols from `Drydock/.protocols/` (security-defaults.md and observability-contract.md are MANDATORY — apply output-encoding/XSS-safe rendering and secrets handling at write time, and emit the contract's canonical client metric/log names). MANDATORY input: read `Drydock/security-engineer/security-requirements.md` (the EARLY STRIDE threat-model output) and implement its per-threat controls as acceptance criteria. Read `.drydock.yaml` for framework and styling preferences. Follow all 6 phases of the build process in order:
+- `frontend-engineer` (T3b — agents/frontend-engineer.md; skip if `features.frontend` is false) — Task context: Read API contracts from `api/`. Read BRD user stories from `drydock/product-manager/BRD/`. Read protocols from `drydock/.protocols/` (security-defaults.md and observability-contract.md are MANDATORY — apply output-encoding/XSS-safe rendering and secrets handling at write time, and emit the contract's canonical client metric/log names). MANDATORY input: read `drydock/security-engineer/security-requirements.md` (the EARLY STRIDE threat-model output) and implement its per-threat controls as acceptance criteria. Read `.drydock.yaml` for framework and styling preferences. Follow all 6 phases of the build process in order:
   - Phase 1: Analysis — read BRD, API contracts, select framework
   - Phase 2: Design System — functional defaults (tokens, theme, Tailwind)
   - Phase 3: Components — UI primitives first (sequential), then layout+feature (parallel)
   - Phase 4: Pages + Routing — parallel by route group, then functional verification (4b)
   - Phase 5: Design & Polish — Style selection is engagement-mode-aware: Express: auto-select best style for the domain, report choice, proceed. Standard+: ask user via AskUserQuestion (Creative | Elegance | High Tech | Corporate | Custom).
   - Phase 6: Testing & A11y — component tests, accessibility audit
-  Write frontend to project root: `frontend/`. Write workspace artifacts to `Drydock/frontend-engineer/`. When complete, write a receipt JSON to `Drydock/.orchestrator/receipts/T3b-frontend-engineer.json` with task, agent, phase, status, artifacts, metrics, effort, verification — the verification block MUST assert "security-defaults checklist passes" (the BUILD Quality Bar line from security-defaults.md) with per-rule pass/fail evidence — then mark its task complete.
+  Write frontend to project root: `frontend/`. Write workspace artifacts to `drydock/frontend-engineer/`. When complete, write a receipt JSON to `drydock/.orchestrator/receipts/T3b-frontend-engineer.json` with task, agent, phase, status, artifacts, metrics, effort, verification — the verification block MUST assert "security-defaults checklist passes" (the BUILD Quality Bar line from security-defaults.md) with per-rule pass/fail evidence — then mark its task complete.
 
 Track the dispatch:
 
@@ -120,7 +120,7 @@ T4 begins containerization as soon as backend is done, even if frontend is still
 TaskUpdate(taskId=t4_id, status="in_progress")
 ```
 
-Then delegate to the `devops` subagent (agents/devops.md — runs backgrounded in its own worktree per its definition). Task context: Read services from `services/`. Read architecture from `docs/architecture/`. Read `.drydock.yaml` for paths and preferences. Write Dockerfiles per service and `docker-compose.yml` at project root. Write workspace artifacts to `Drydock/devops/containers/`. Validate: `docker build` succeeds for each service, `docker-compose up` starts all. When complete, write a receipt JSON to `Drydock/.orchestrator/receipts/T4-devops.json` with task, agent, phase, status, artifacts, metrics, effort, verification — then mark its task complete.
+Then delegate to the `devops` subagent (agents/devops.md — runs backgrounded in its own worktree per its definition). Task context: Read services from `services/`. Read architecture from `docs/architecture/`. Read `.drydock.yaml` for paths and preferences. Write Dockerfiles per service and `docker-compose.yml` at project root. Write workspace artifacts to `drydock/devops/containers/`. Validate: `docker build` succeeds for each service, `docker-compose up` starts all. When complete, write a receipt JSON to `drydock/.orchestrator/receipts/T4-devops.json` with task, agent, phase, status, artifacts, metrics, effort, verification — then mark its task complete.
 
 ## Worktree Merge-Back
 
@@ -156,10 +156,10 @@ Bash("osv-scanner --recursive --format json . 2>/dev/null || true")
 Bash("npm audit --audit-level=high --json 2>/dev/null || true")  # per Node package
 
 # 2. Secret scan — committed/staged credentials
-Bash("gitleaks detect --no-banner --redact --report-format json --report-path Drydock/.orchestrator/build-gate-gitleaks.json 2>/dev/null || true")
+Bash("gitleaks detect --no-banner --redact --report-format json --report-path drydock/.orchestrator/build-gate-gitleaks.json 2>/dev/null || true")
 
 # 3. SAST — code-level Critical/High patterns
-Bash("semgrep --config auto --severity ERROR --json --output Drydock/.orchestrator/build-gate-semgrep.json . 2>/dev/null || true")
+Bash("semgrep --config auto --severity ERROR --json --output drydock/.orchestrator/build-gate-semgrep.json . 2>/dev/null || true")
 ```
 
 **Parse and DECIDE — this step is NOT wrapped in `|| true`.** The scans above run (and tolerate a missing binary) with `|| true`, but the gate decision must be a real, non-swallowed evaluation. After the scans, parse the emitted JSON with `jq` to count Critical/High across all three classes, then branch:
@@ -167,33 +167,33 @@ Bash("semgrep --config auto --severity ERROR --json --output Drydock/.orchestrat
 ```python
 # osv-scanner: count vulnerabilities reported across all packages.
 # (write its JSON first; the inline scan above streams to stdout, so re-run to a file or capture it)
-Bash("osv-scanner --recursive --format json . > Drydock/.orchestrator/build-gate-osv.json 2>/dev/null || true")
+Bash("osv-scanner --recursive --format json . > drydock/.orchestrator/build-gate-osv.json 2>/dev/null || true")
 osv_vulns = Bash(
   "jq '[.results[]?.packages[]?.vulnerabilities[]?] | length' "
-  "Drydock/.orchestrator/build-gate-osv.json 2>/dev/null || echo 0"
+  "drydock/.orchestrator/build-gate-osv.json 2>/dev/null || echo 0"
 ).strip()
 
 # semgrep: count ERROR-severity results (Critical/High code patterns)
 semgrep_errors = Bash(
   "jq '[.results[]? | select(.extra.severity==\"ERROR\")] | length' "
-  "Drydock/.orchestrator/build-gate-semgrep.json 2>/dev/null || echo 0"
+  "drydock/.orchestrator/build-gate-semgrep.json 2>/dev/null || echo 0"
 ).strip()
 
 # gitleaks: ANY hit is a blocking secret leak
 gitleaks_hits = Bash(
-  "jq 'length' Drydock/.orchestrator/build-gate-gitleaks.json 2>/dev/null || echo 0"
+  "jq 'length' drydock/.orchestrator/build-gate-gitleaks.json 2>/dev/null || echo 0"
 ).strip()
 
 total_blocking = int(osv_vulns or 0) + int(semgrep_errors or 0) + int(gitleaks_hits or 0)
 
 if total_blocking > 0:
     # Gate FAILS — write the failed receipt and loop to remediation (do NOT advance to HARDEN).
-    write Drydock/.orchestrator/receipts/Tbuild-security-gate.json with:
+    write drydock/.orchestrator/receipts/Tbuild-security-gate.json with:
       status: "failed", per-tool counts (osv_vulns / semgrep_errors / gitleaks_hits),
       and the Critical/High finding list (file:line + rule id) extracted from the same JSON.
     # Feed each finding back to the owning BUILD subagent as a fix task (self-debug → re-scan),
     # then re-run this gate. The build wave is blocked until total_blocking == 0
-    # (or each remaining finding carries an override receipt under Drydock/.orchestrator/overrides/).
+    # (or each remaining finding carries an override receipt under drydock/.orchestrator/overrides/).
 else:
     # Gate PASSES — write Tbuild-security-gate.json with status: "passed" and the zeroed counts.
 ```
@@ -205,7 +205,7 @@ Notes on running the gate:
 - If a scanner binary is unavailable, record it as `skipped: <tool> not installed` in the gate result (do NOT silently pass) and fall back to the next tool in its class (osv-scanner ↔ npm audit). A class with zero available scanners is a gate WARNING surfaced to the user, not a silent pass.
 
 **FAIL the BUILD wave on any Critical or High finding** from any of the three classes. Failure handling:
-1. Write `Drydock/.orchestrator/receipts/Tbuild-security-gate.json` with `status: failed`, the per-tool counts, and the Critical/High finding list (file:line + rule id).
+1. Write `drydock/.orchestrator/receipts/Tbuild-security-gate.json` with `status: failed`, the per-tool counts, and the Critical/High finding list (file:line + rule id).
 2. Feed each Critical/High finding back to the owning BUILD subagent as an immediate fix task (self-debug, re-scan), mirroring the standard BUILD self-debug → retry loop. Do NOT advance to HARDEN with an open Critical/High from this gate.
 3. Only when the gate is clean (or remaining findings carry a logged "accepted with justification" override receipt) write `status: passed` and proceed.
 
@@ -219,7 +219,7 @@ When all BUILD tasks complete:
 3. **Verify receipts:** Read all BUILD receipts from `.orchestrator/receipts/` (T3a, T3b, T4) plus `Tbuild-security-gate.json`. Verify all listed artifacts exist on disk, and verify each BUILD agent receipt's verification block asserts **"security-defaults checklist passes"** — a missing or failing assertion is treated as a BUILD failure, not a warning.
 4. **Re-anchor:** Re-read from disk before transitioning to HARDEN:
    - Directory listing of `services/`, `frontend/`, `libs/shared/` (what was actually built)
-   - `Drydock/solution-architect/system-design.md` (architecture reference for HARDEN agents)
+   - `drydock/solution-architect/system-design.md` (architecture reference for HARDEN agents)
 5. Verify all services compile and start
 6. Verify docker-compose brings up the full stack
 7. Log BUILD completion to workspace

@@ -2,7 +2,7 @@
 
 ## Objective
 
-Perform STRIDE threat analysis for every service in the system, map the complete attack surface, define trust boundaries, and annotate data flow diagrams with threat overlays. Generate all outputs in `Drydock/security-engineer/threat-model/`. The security-engineer is the SOLE AUTHORITY on STRIDE threat modeling -- no other skill performs this analysis.
+Perform STRIDE threat analysis for every service in the system, map the complete attack surface, define trust boundaries, and annotate data flow diagrams with threat overlays. Generate all outputs in `drydock/security-engineer/threat-model/`. The security-engineer is the SOLE AUTHORITY on STRIDE threat modeling -- no other skill performs this analysis.
 
 ## Context Bridge
 
@@ -15,7 +15,7 @@ Read Phase 0 (Reconnaissance) outputs. You should already know every service, it
 - Data schemas -- `schemas/` (ERD, migrations, data flow diagrams)
 - Implementation code -- `services/`, `frontend/` (controllers, middleware, routes)
 - Infrastructure configs -- `infrastructure/` (Terraform, K8s manifests)
-- Prior pipeline artifacts -- any existing `Drydock/` outputs from other skills
+- Prior pipeline artifacts -- any existing `drydock/` outputs from other skills
 
 If any inputs are missing, note the gap and flag it as an incomplete audit area in the output.
 
@@ -104,7 +104,7 @@ Write `docs/security/security-requirements.yaml`:
 # in the code they write; HARDEN reconciles, it does not introduce these for the first time.
 version: 1
 generated_by: security-engineer
-generated_from: Drydock/security-engineer/threat-model/stride-analysis.md
+generated_from: drydock/security-engineer/threat-model/stride-analysis.md
 controls:
   - id: SR-001
     stride: Spoofing            # one of S/T/R/I/D/E
@@ -122,13 +122,13 @@ Rules:
 - One row per Critical/High STRIDE threat that a BUILD control can satisfy (authn/authz, input validation, output encoding, rate limiting, audit logging, encryption-in-use). Medium/Low threats MAY be included but are not blocking.
 - `requirement` must be a concrete, codeable control — not "be secure". Tie it to the exact `service`/`surface` from reconnaissance (same quality bar as the threat matrix).
 - `owner` routes the control: backend controls → `software-engineer`, browser/client controls (output encoding, CSP, client-side auth state) → `frontend-engineer`.
-- A `required` control may only become `accepted` via a logged "accepted with justification" override receipt (see `Drydock/.protocols/conflict-resolution.md` / `receipt-protocol.md`) — never silently dropped.
+- A `required` control may only become `accepted` via a logged "accepted with justification" override receipt (see `drydock/.protocols/conflict-resolution.md` / `receipt-protocol.md`) — never silently dropped.
 
 **Downstream contract:** BUILD Phase 1 reads `docs/security/security-requirements.yaml` and treats every `status: required` row owned by that agent as a non-optional implementation input. HARDEN (Phase 2 Code Audit) reconciles the shipped code against this same file — a `required` control with no implementing code path is a finding, not a fresh recommendation.
 
 ## Output Deliverables
 
-Write all outputs to `Drydock/security-engineer/threat-model/`:
+Write all outputs to `drydock/security-engineer/threat-model/`:
 
 | File | Contents |
 |------|----------|

@@ -2,20 +2,20 @@
 
 ## Objective
 
-Render the compliance verdict. Verify that every MANDATORY in-scope control is present (status `Met` with a verified artifact). A mandatory control that is `Missing` is a **BLOCKING** finding that feeds the HARDEN remediation chain — exactly like a Critical security finding. The only ways to clear a block are: remediate to `Met`, or record an explicit **"accepted with justification"** override receipt. Generate outputs in `Drydock/compliance-officer/gate/`, then write the skill receipt.
+Render the compliance verdict. Verify that every MANDATORY in-scope control is present (status `Met` with a verified artifact). A mandatory control that is `Missing` is a **BLOCKING** finding that feeds the HARDEN remediation chain — exactly like a Critical security finding. The only ways to clear a block are: remediate to `Met`, or record an explicit **"accepted with justification"** override receipt. Generate outputs in `drydock/compliance-officer/gate/`, then write the skill receipt.
 
 ## Context Bridge
 
 Read:
-- `Drydock/compliance-officer/evidence/control-evidence-map.md` (Phase 4) — the per-control status map.
-- `Drydock/compliance-officer/implementation/gaps.md` (Phase 3) — Partial/Missing findings + owning agents.
-- `Drydock/compliance-officer/control-matrix/` (Phase 2) — which controls are mandatory and their `[verified]`/`[unverified]` tags.
+- `drydock/compliance-officer/evidence/control-evidence-map.md` (Phase 4) — the per-control status map.
+- `drydock/compliance-officer/implementation/gaps.md` (Phase 3) — Partial/Missing findings + owning agents.
+- `drydock/compliance-officer/control-matrix/` (Phase 2) — which controls are mandatory and their `[verified]`/`[unverified]` tags.
 
 ## Workflow
 
 ### Step 1: Verify Verification Integrity
 
-A control may only drive a BLOCKING decision if its id is `[verified]` (confirmed live this session). Per `Drydock/.protocols/compliance-protocol.md`, an `[unverified]` control id may NOT block — list it separately as "verify before gating" rather than blocking on an id that might be hallucinated. Confirm every mandatory control in the evidence map carries a `[verified]` id and a non-empty status.
+A control may only drive a BLOCKING decision if its id is `[verified]` (confirmed live this session). Per `drydock/.protocols/compliance-protocol.md`, an `[unverified]` control id may NOT block — list it separately as "verify before gating" rather than blocking on an id that might be hallucinated. Confirm every mandatory control in the evidence map carries a `[verified]` id and a non-empty status.
 
 ### Step 2: Classify Each Mandatory Control
 
@@ -31,7 +31,7 @@ A `Met` with an empty implementing-artifact field is invalid — downgrade to `M
 
 ### Step 3: Emit BLOCKING Findings → HARDEN Remediation
 
-For every Missing/Partial mandatory control, emit a finding into the remediation chain (`Drydock/.protocols/conflict-resolution.md`: findings → tasks → fix → re-verify). Each finding records:
+For every Missing/Partial mandatory control, emit a finding into the remediation chain (`drydock/.protocols/conflict-resolution.md`: findings → tasks → fix → re-verify). Each finding records:
 - Control id (live-verified) + framework + the requirement.
 - What is missing / incomplete.
 - The owning agent who must implement it (security-engineer / devops / solution-architect / software-engineer — compliance-officer does NOT implement).
@@ -43,7 +43,7 @@ The orchestrator routes these like Critical/High findings; after fixes, re-run P
 
 When the user/owner consciously accepts a Missing mandatory control instead of remediating, record an explicit override — silent skips are forbidden. Use AskUserQuestion (predefined options, never open-ended) to capture the decision, then write an override receipt:
 
-`Drydock/.orchestrator/receipts/Tcomp-compliance-officer-accept-<controlid>.json`
+`drydock/.orchestrator/receipts/Tcomp-compliance-officer-accept-<controlid>.json`
 
 ```json
 {
@@ -51,7 +51,7 @@ When the user/owner consciously accepts a Missing mandatory control instead of r
   "agent": "compliance-officer",
   "phase": "HARDEN",
   "status": "complete",
-  "artifacts": ["Drydock/compliance-officer/gate/compliance-gate.md"],
+  "artifacts": ["drydock/compliance-officer/gate/compliance-gate.md"],
   "metrics": { "control_accepted": 1 },
   "acceptance": {
     "control_id": "<live-verified id>",
@@ -74,9 +74,9 @@ The gate is **PASS** only when every mandatory in-scope control is `Met`, `N/A`,
 
 ### Step 6: Write the Skill Receipt (LAST action)
 
-After all gate files exist and are verified on disk, write the completion receipt per `Drydock/.protocols/receipt-protocol.md` to:
+After all gate files exist and are verified on disk, write the completion receipt per `drydock/.protocols/receipt-protocol.md` to:
 
-`Drydock/.orchestrator/receipts/Tcomp-compliance-officer.json`
+`drydock/.orchestrator/receipts/Tcomp-compliance-officer.json`
 
 Populate the **TOP-LEVEL `compliance` object** — this is the gate evidence the orchestrator reads:
 
@@ -97,14 +97,14 @@ Then populate `metrics` with the remaining real counts (`controls_total`, `contr
 
 ## Output Deliverables
 
-Write to `Drydock/compliance-officer/gate/`:
+Write to `drydock/compliance-officer/gate/`:
 
 | File | Contents |
 |------|----------|
 | `compliance-gate.md` | Verdict (PASS / BLOCKED), per-framework Met/Partial/Missing/Accepted counts, the BLOCKING list, and any accepted overrides with residual risk + expiry |
 | `remediation-handoff.md` | The Missing/Partial mandatory controls formatted as remediation findings (control, gap, owning agent, acceptance criteria) |
 
-Plus, in `Drydock/.orchestrator/receipts/`: the completion receipt `Tcomp-compliance-officer.json` and any `Tcomp-compliance-officer-accept-<controlid>.json` override receipts.
+Plus, in `drydock/.orchestrator/receipts/`: the completion receipt `Tcomp-compliance-officer.json` and any `Tcomp-compliance-officer-accept-<controlid>.json` override receipts.
 
 ## Validation
 

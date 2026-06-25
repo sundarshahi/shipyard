@@ -102,7 +102,7 @@ A control marked `Met` with an empty Implementing-artifact field is invalid — 
 
 ## Authority Boundary (no double-work)
 
-- **security-engineer** remains the SOLE authority on PII inventory, data classification, and the encryption/crypto AUDIT. compliance-officer READS those outputs (`Drydock/security-engineer/data-security/`) and maps them to controls — it does NOT re-run the PII scan or re-audit encryption.
+- **security-engineer** remains the SOLE authority on PII inventory, data classification, and the encryption/crypto AUDIT. compliance-officer READS those outputs (`drydock/security-engineer/data-security/`) and maps them to controls — it does NOT re-run the PII scan or re-audit encryption.
 - **solution-architect** owns data-residency and architecture decisions; compliance-officer flags a residency/control GAP as a finding, it does not change the architecture.
 - **devops** owns infra controls (KMS, IAM, logging pipelines); compliance-officer points the evidence map at devops artifacts.
 - **product-manager** owns the product scope that drives the signals map; compliance-officer reads it, confirms ambiguous signals, and does not redefine requirements.

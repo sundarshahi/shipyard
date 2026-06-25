@@ -5,7 +5,7 @@ WHAT THIS GUARDS / WHY IT MATTERS
 ---------------------------------
 The orchestrator delegates two deterministic procedures to bundled scripts
 instead of re-deriving them in prose every run:
-  - scripts/bootstrap-workspace.sh : scaffold Drydock/ + deploy shared protocols
+  - scripts/bootstrap-workspace.sh : scaffold drydock/ + deploy shared protocols
   - scripts/aggregate-cost.py       : sum effort/cost metrics across receipts
 
 If either script silently breaks (bad path resolution, a botched copy, an
@@ -50,7 +50,7 @@ def _check_bootstrap(failures: list[str]) -> None:
         base = Path(tmp) / "Drydock"
         for d in (".protocols", ".orchestrator/receipts", ".orchestrator/overrides"):
             if not (base / d).is_dir():
-                failures.append(f"bootstrap did not create Drydock/{d}")
+                failures.append(f"bootstrap did not create drydock/{d}")
         deployed = sorted(p.name for p in (base / ".protocols").glob("*.md"))
         if deployed != expected:
             failures.append(

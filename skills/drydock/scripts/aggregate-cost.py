@@ -7,8 +7,8 @@ the orchestrator re-summing effort fields from memory (lossy, error-prone), it
 runs this script and renders the returned JSON into the final summary box.
 
 Reads:
-  Drydock/.orchestrator/receipts/*.json   — one receipt per completed task
-  Drydock/.orchestrator/rework-log.md      — gate rework cycles (optional)
+  drydock/.orchestrator/receipts/*.json   — one receipt per completed task
+  drydock/.orchestrator/rework-log.md      — gate rework cycles (optional)
 
 Each receipt may carry an `effort` object {files_read, files_written,
 tool_calls} and an `artifacts` list. Missing/garbage fields are treated as zero

@@ -19,14 +19,14 @@ description: >
 
 !`git status 2>/dev/null || echo "No git repo detected"`
 !`cat CLAUDE.md 2>/dev/null || echo "No CLAUDE.md found"`
-!`ls Drydock/ 2>/dev/null || echo "No existing workspace"`
+!`ls drydock/ 2>/dev/null || echo "No existing workspace"`
 !`cat .drydock.yaml 2>/dev/null || echo "No config file — defaults apply"`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Drydock/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Drydock/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat Drydock/.protocols/compliance-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat drydock/.protocols/compliance-protocol.md 2>/dev/null || true`
 
 <IMPORTANT>
 This skill ENHANCES Claude Code's development capabilities. Without it, Claude Code produces code files. With it, Claude Code produces complete production-ready systems — architecture, tested code, security audit, CI/CD, and documentation.
@@ -141,7 +141,7 @@ For non-Full-Build modes, use the lightweight execution flows below. For Full Bu
 ## Mode Execution (Non-Full-Build)
 
 All modes share these behaviors:
-- Bootstrap workspace + protocols: run `bash "${CLAUDE_PLUGIN_ROOT}/skills/drydock/scripts/bootstrap-workspace.sh"` (fallback `"${CLAUDE_SKILL_DIR}/scripts/bootstrap-workspace.sh"`) — it creates the workspace dirs and deploys all shared protocols to `Drydock/.protocols/`. Same script as Full Build step 2 (see `phases/full-build-setup.md`).
+- Bootstrap workspace + protocols: run `bash "${CLAUDE_PLUGIN_ROOT}/skills/drydock/scripts/bootstrap-workspace.sh"` (fallback `"${CLAUDE_SKILL_DIR}/scripts/bootstrap-workspace.sh"`) — it creates the workspace dirs and deploys all shared protocols to `drydock/.protocols/`. Same script as Full Build step 2 (see `phases/full-build-setup.md`).
 - Read `.drydock.yaml` for path overrides
 - Read existing workspace state if present
 - Engagement mode + parallelism: ask ONLY if mode involves 3+ skills. For 1-2 skill modes, use Standard engagement + Sequential execution (overhead of asking isn't worth it).
@@ -197,7 +197,7 @@ When mode is **Full Build**, read `${CLAUDE_PLUGIN_ROOT}/skills/drydock/phases/f
 
 ## User Experience Protocol
 
-Follow the shared UX Protocol at `Drydock/.protocols/ux-protocol.md` and the visual identity at `Drydock/.protocols/visual-identity.md`. Key rules:
+Follow the shared UX Protocol at `drydock/.protocols/ux-protocol.md` and the visual identity at `drydock/.protocols/visual-identity.md`. Key rules:
 1. **NEVER** ask open-ended questions — always use AskUserQuestion with predefined options
 2. **"Chat about this"** always last option
 3. **Recommended option first** with `(Recommended)` suffix
@@ -259,13 +259,13 @@ Skill(skill="product-manager")
 
 **Subagent delegation** — for parallel, autonomous, background work. Delegate in natural language to the named subagent shipped at `agents/<name>.md` (auto-discovered). Each autonomous worker — `software-engineer`, `frontend-engineer`, `qa-engineer`, `security-engineer`, `code-reviewer`, `compliance-officer`, `devops`, `sre`, `technical-writer`, `skill-maker`, `data-scientist` — declares `background: true` and (for most) `isolation: worktree` in its own frontmatter and invokes the matching `drydock:<name>` skill in its body. So you do NOT pass `subagent_type`/`isolation`/`background`/`mode` and you do NOT restate "you are X / invoke the skill" — just carry the task-specific context:
 
-> Delegate to the `software-engineer` subagent (`agents/software-engineer.md` — runs backgrounded in its own worktree per its definition). Task context: read the architecture at `docs/architecture/`, implement the assigned service(s) into `services/`, write its receipt to `Drydock/.orchestrator/receipts/<Txx>-software-engineer.json`, then mark its task complete.
+> Delegate to the `software-engineer` subagent (`agents/software-engineer.md` — runs backgrounded in its own worktree per its definition). Task context: read the architecture at `docs/architecture/`, implement the assigned service(s) into `services/`, write its receipt to `drydock/.orchestrator/receipts/<Txx>-software-engineer.json`, then mark its task complete.
 
 A subagent may parallelize internally up to 3 concurrent FOREGROUND sub-tasks for genuinely independent work; no unbounded or background nested fan-out.
 
 ## Conflict Resolution
 
-Follow the shared protocol at `Drydock/.protocols/conflict-resolution.md`.
+Follow the shared protocol at `drydock/.protocols/conflict-resolution.md`.
 
 | Artifact | Sole Authority | Others Must NOT |
 |----------|---------------|-----------------|
@@ -306,12 +306,12 @@ When HARDEN skills find Critical/High issues:
 | T11: Tech Writer | ALL workspace + project | `docs/` | `technical-writer/` |
 | T12: Skill Maker | ALL workspace | `.claude/skills/` | `skill-maker/` |
 
-**Deliverables** go to project root (respecting `.drydock.yaml` path overrides). **Workspace artifacts** go to `Drydock/<skill-name>/`.
+**Deliverables** go to project root (respecting `.drydock.yaml` path overrides). **Workspace artifacts** go to `drydock/<skill-name>/`.
 
 ## Workspace Architecture
 
 ```
-Drydock/
+drydock/
 ├── .protocols/              # Shared protocols (written at bootstrap)
 ├── .orchestrator/           # Pipeline state via TaskList
 ├── product-manager/         # BRD, research

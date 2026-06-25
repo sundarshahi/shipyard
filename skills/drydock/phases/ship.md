@@ -36,16 +36,16 @@ On PARALLEL #6 completion:
 
 - **devops** owns infrastructure provisioning, CI/CD, monitoring setup — does NOT define SLOs
 - **sre** owns SLO/SLI definitions, error budgets, runbooks, chaos engineering — does NOT provision infrastructure
-- See `Drydock/.protocols/conflict-resolution.md`
+- See `drydock/.protocols/conflict-resolution.md`
 
 ## Re-Anchor
 
 Before creating SHIP tasks, re-read key artifacts from disk:
-- `Drydock/security-engineer/findings/` (security findings for remediation)
-- `Drydock/code-reviewer/findings/critical.md`, `high.md` (including HIGH architecture-boundary violations)
-- `Drydock/compliance-officer/` control-evidence map (missing mandatory controls)
-- `Drydock/qa-engineer/` results (failing tests, sub-threshold coverage, perf regression)
-- `Drydock/solution-architect/system-design.md` (architecture for infra)
+- `drydock/security-engineer/findings/` (security findings for remediation)
+- `drydock/code-reviewer/findings/critical.md`, `high.md` (including HIGH architecture-boundary violations)
+- `drydock/compliance-officer/` control-evidence map (missing mandatory controls)
+- `drydock/qa-engineer/` results (failing tests, sub-threshold coverage, perf regression)
+- `drydock/solution-architect/system-design.md` (architecture for infra)
 - Directory listing of `services/`, `infrastructure/` (what exists)
 - All HARDEN receipts from `.orchestrator/receipts/` (T5, T6a, T6b, Tcomp) — including their gate/metric fields
 
@@ -53,7 +53,7 @@ Use this freshly-read data when writing the delegation context below.
 
 ## PARALLEL #5: T7 + T8
 
-Read `Drydock/.orchestrator/settings.md` to check if `Worktrees: enabled`. Worktree isolation lives in each subagent's definition frontmatter (`isolation: worktree`); if worktrees are disabled in settings, note that the merge-back step below is skipped.
+Read `drydock/.orchestrator/settings.md` to check if `Worktrees: enabled`. Worktree isolation lives in each subagent's definition frontmatter (`isolation: worktree`); if worktrees are disabled in settings, note that the merge-back step below is skipped.
 
 Delegate the following to their subagents to run CONCURRENTLY (each is backgrounded + isolated in its own worktree per its definition):
 
@@ -63,10 +63,10 @@ Delegate the following to their subagents to run CONCURRENTLY (each is backgroun
   - Read architecture: docs/architecture/
   - Read implementation: services/, frontend/
   - Read .drydock.yaml for paths and preferences.
-  - Read protocols from: Drydock/.protocols/
+  - Read protocols from: drydock/.protocols/
   - Generate: Terraform/Pulumi, K8s manifests (if microservices), CI/CD pipelines, monitoring dashboards.
   - Write to project root: infrastructure/, .github/workflows/
-  - Write workspace artifacts to: Drydock/devops/
+  - Write workspace artifacts to: drydock/devops/
   - DO NOT define SLOs — add placeholder: "SLO thresholds defined by SRE."
   - DO NOT write runbooks — SRE writes runbooks to docs/runbooks/.
   - Generate GitHub Actions workflow templates first for CI/CD. Embed in CI the SAME scanners the BUILD-EXIT security gate ran (osv-scanner/npm audit, gitleaks, semgrep --config auto) so CI enforces exactly what BUILD enforced.
@@ -75,17 +75,17 @@ Delegate the following to their subagents to run CONCURRENTLY (each is backgroun
     - hadolint on every Dockerfile
     - tflint AND terraform validate on all Terraform/IaC (run terraform init -backend=false first as needed)
     Any error from actionlint, hadolint, tflint, or terraform validate FAILS the T7 receipt — set status: failed, do NOT mark the task completed, self-debug and re-run until clean (or escalate after retries).
-  - When complete, write a receipt JSON to Drydock/.orchestrator/receipts/T7-devops.json with task, agent, phase, status, artifacts, metrics, effort, verification. The verification block MUST record the lint result per tool (actionlint, hadolint, tflint, terraform validate) as pass/fail with error counts — a non-clean lint means status: failed. Then mark task T7 as completed.
+  - When complete, write a receipt JSON to drydock/.orchestrator/receipts/T7-devops.json with task, agent, phase, status, artifacts, metrics, effort, verification. The verification block MUST record the lint result per tool (actionlint, hadolint, tflint, terraform validate) as pass/fail with error counts — a non-clean lint means status: failed. Then mark task T7 as completed.
 
 - **`software-engineer` -> T8 (Remediation — fix HARDEN findings).**
   `TaskUpdate(taskId=t8_id, status="in_progress")`, then delegate to the `software-engineer` subagent (agents/software-engineer.md — runs backgrounded in its own worktree per its definition).
   Task context:
-  - Read HARDEN findings from workspace: Drydock/security-engineer/, code-reviewer/, qa-engineer/, compliance-officer/
+  - Read HARDEN findings from workspace: drydock/security-engineer/, code-reviewer/, qa-engineer/, compliance-officer/
   - Fix the full BLOCKING set from HARDEN (not just security): security Critical/High, ANY failing test, sub-threshold coverage/patch-coverage, p95/error-rate perf regression beyond tolerance, every MISSING mandatory compliance control, and every HIGH architecture-boundary violation. Lower-severity / non-mandatory items are documented, not fixed here.
   - For each finding: (1) Read the affected file, (2) Apply the fix, (3) Run affected tests to verify no regressions, (4) Re-scan the affected code.
   - If findings persist after 2 fix-rescan cycles → document and escalate.
   - Medium/Low findings: document but do not block.
-  - When complete, write a receipt JSON to Drydock/.orchestrator/receipts/T8-remediation.json with task, agent, phase, status, artifacts (files modified), metrics (findings_fixed, findings_remaining), effort, verification. Then mark task T8 as completed.
+  - When complete, write a receipt JSON to drydock/.orchestrator/receipts/T8-remediation.json with task, agent, phase, status, artifacts (files modified), metrics (findings_fixed, findings_remaining), effort, verification. Then mark task T8 as completed.
 
 Track both: the two `TaskUpdate(... status="in_progress")` calls above stay; mark each task completed via its receipt as the subagents finish.
 
@@ -99,23 +99,23 @@ Delegate the following to their subagents to run CONCURRENTLY (each is backgroun
   `TaskUpdate(taskId=t9_id, status="in_progress")`, then delegate to the `sre` subagent (agents/sre.md — runs backgrounded in its own worktree per its definition). The `sre` subagent is the SOLE authority on SLO definitions, error budgets, runbooks, and capacity planning.
   Task context:
   - Read all prior outputs: architecture, implementation, infrastructure, HARDEN findings.
-  - Read protocols from: Drydock/.protocols/
+  - Read protocols from: drydock/.protocols/
   - Perform production readiness review (checklist).
   - Define SLIs/SLOs per service, error budgets, burn-rate alerts.
   - Design chaos engineering scenarios and game-day playbook.
   - Write runbooks to project root: docs/runbooks/
-  - Write workspace artifacts to: Drydock/sre/
-  - When complete, write a receipt JSON to Drydock/.orchestrator/receipts/T9-sre.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark task T9 as completed.
+  - Write workspace artifacts to: drydock/sre/
+  - When complete, write a receipt JSON to drydock/.orchestrator/receipts/T9-sre.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark task T9 as completed.
 
 - **`data-scientist` -> T10 (only if LLM/ML usage detected — see above).**
   `TaskUpdate(taskId=t10_id, status="in_progress")`, then delegate to the `data-scientist` subagent (agents/data-scientist.md — runs backgrounded in its own worktree per its definition).
   Task context:
   - Read implementation for LLM/ML usage patterns (imports, API calls, prompts).
-  - Read protocols from: Drydock/.protocols/
+  - Read protocols from: drydock/.protocols/
   - Optimize: prompt engineering, token usage, semantic caching, fallback chains.
   - Design: A/B testing infrastructure, experiment framework, data pipeline.
-  - Write workspace artifacts to: Drydock/data-scientist/
-  - When complete, write a receipt JSON to Drydock/.orchestrator/receipts/T10-data-scientist.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark task T10 as completed.
+  - Write workspace artifacts to: drydock/data-scientist/
+  - When complete, write a receipt JSON to drydock/.orchestrator/receipts/T10-data-scientist.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark task T10 as completed.
 
 Track both: the `TaskUpdate(... status="in_progress")` calls above stay; mark each task completed via its receipt as the subagents finish.
 

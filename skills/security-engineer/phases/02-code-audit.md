@@ -2,17 +2,17 @@
 
 ## Objective
 
-Systematically audit the entire codebase against the **OWASP Top 10 (2025 edition)**, plus the **OWASP API Security Top 10 (2023)** and — when LLM/ML usage is present — the **OWASP Top 10 for LLM Applications (2025)**. security-engineer is the SOLE AUTHORITY on OWASP code review -- no other skill performs OWASP analysis. Every finding must reference specific files, lines, and code patterns, and carry the per-finding standards tag block (see SKILL.md "Standards References"). Generate all outputs in `Drydock/security-engineer/code-audit/`.
+Systematically audit the entire codebase against the **OWASP Top 10 (2025 edition)**, plus the **OWASP API Security Top 10 (2023)** and — when LLM/ML usage is present — the **OWASP Top 10 for LLM Applications (2025)**. security-engineer is the SOLE AUTHORITY on OWASP code review -- no other skill performs OWASP analysis. Every finding must reference specific files, lines, and code patterns, and carry the per-finding standards tag block (see SKILL.md "Standards References"). Generate all outputs in `drydock/security-engineer/code-audit/`.
 
 > **OWASP 2025 relabel:** the Web steps below were authored against the 2021 list; their ids are mapped to the 2025 edition inline. Key 2021→2025 changes: SSRF (old A10) is folded into **A01:2025** Broken Access Control; "Vulnerable & Outdated Components" (old A06) is expanded into **A03:2025** Software Supply Chain Failures; Security Misconfiguration moved up to **A02:2025**; and a NEW **A10:2025 Mishandling of Exceptional Conditions** (fail-open states, insecure error/exception handling) is added — see Step 10b. The per-vulnerability test guidance is unchanged; only category ids are remapped.
 
 ## Context Bridge
 
-Read Phase 1 outputs from `Drydock/security-engineer/threat-model/` before beginning. The STRIDE analysis and attack surface map tell you WHERE to focus. Start with endpoints and code paths that scored Critical or High in the threat matrix.
+Read Phase 1 outputs from `drydock/security-engineer/threat-model/` before beginning. The STRIDE analysis and attack surface map tell you WHERE to focus. Start with endpoints and code paths that scored Critical or High in the threat matrix.
 
 ## Inputs
 
-- Phase 1 threat model -- `Drydock/security-engineer/threat-model/`
+- Phase 1 threat model -- `drydock/security-engineer/threat-model/`
 - Implementation code -- `services/`, `frontend/` (controllers, middleware, data access layers, utilities)
 - API specs -- `api/` (OpenAPI, gRPC proto) for expected behavior comparison
 - Test suites -- `tests/` for coverage gap analysis
@@ -182,7 +182,7 @@ If no LLM/ML usage is detected, record "N/A — no LLM/ML usage found" and skip.
 
 ## Output Deliverables
 
-Write all outputs to `Drydock/security-engineer/code-audit/`:
+Write all outputs to `drydock/security-engineer/code-audit/`:
 
 | File | Contents |
 |------|----------|

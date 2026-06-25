@@ -154,7 +154,7 @@ After Gate 2 (architecture approved), the orchestrator reads the architecture ou
 
 Each subtask is dispatched as a natural-language delegation to the matching subagent. For a backend service subtask:
 
-> Delegate to the `software-engineer` subagent (`agents/software-engineer.md` — runs backgrounded in its own worktree per its definition). Task context: implement the `{service_name}` service. Read the architecture at `docs/architecture/` and the API contract at `api/openapi/{service}.yaml`; write output to `services/{service_name}/`. When done, write receipt `Drydock/.orchestrator/receipts/T3a-software-engineer.json` and mark its task complete.
+> Delegate to the `software-engineer` subagent (`agents/software-engineer.md` — runs backgrounded in its own worktree per its definition). Task context: implement the `{service_name}` service. Read the architecture at `docs/architecture/` and the API contract at `api/openapi/{service}.yaml`; write output to `services/{service_name}/`. When done, write receipt `drydock/.orchestrator/receipts/T3a-software-engineer.json` and mark its task complete.
 
 The subagent may parallelize internally up to 3 concurrent FOREGROUND sub-tasks for genuinely independent work (e.g. multiple services). Do not pass `isolation`/`background`/`mode` — those live in the subagent's frontmatter.
 

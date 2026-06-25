@@ -2,16 +2,16 @@
 
 ## Objective
 
-Inventory every piece of sensitive data in the system and verify encryption at rest and in transit. security-engineer is the SOLE AUTHORITY on the PII inventory, data classification, and the encryption AUDIT at the application layer. It does NOT own regulatory framework scoping or requirement→control mapping — the **compliance-officer** owns GDPR/CCPA/SOC2/etc. scoping, the mandatory-control matrix, and the control-evidence map (per `Drydock/.protocols/conflict-resolution.md` + `Drydock/.protocols/compliance-protocol.md`). This phase produces the PII inventory plus a **non-authoritative compliance posture note** that compliance-officer CONSUMES; it does not render the compliance verdict. Generate all outputs in `Drydock/security-engineer/data-security/`.
+Inventory every piece of sensitive data in the system and verify encryption at rest and in transit. security-engineer is the SOLE AUTHORITY on the PII inventory, data classification, and the encryption AUDIT at the application layer. It does NOT own regulatory framework scoping or requirement→control mapping — the **compliance-officer** owns GDPR/CCPA/SOC2/etc. scoping, the mandatory-control matrix, and the control-evidence map (per `drydock/.protocols/conflict-resolution.md` + `drydock/.protocols/compliance-protocol.md`). This phase produces the PII inventory plus a **non-authoritative compliance posture note** that compliance-officer CONSUMES; it does not render the compliance verdict. Generate all outputs in `drydock/security-engineer/data-security/`.
 
 ## Context Bridge
 
-Read Phase 3 outputs from `Drydock/security-engineer/auth-review/`. Token management findings feed directly into data security -- tokens are sensitive data. Also reference Phase 2 code audit findings for A04:2025 (Cryptographic Failures) as the starting point for encryption analysis.
+Read Phase 3 outputs from `drydock/security-engineer/auth-review/`. Token management findings feed directly into data security -- tokens are sensitive data. Also reference Phase 2 code audit findings for A04:2025 (Cryptographic Failures) as the starting point for encryption analysis.
 
 ## Inputs
 
-- Phase 2 code audit -- `Drydock/security-engineer/code-audit/` (A04:2025 cryptographic findings)
-- Phase 3 auth review -- `Drydock/security-engineer/auth-review/`
+- Phase 2 code audit -- `drydock/security-engineer/code-audit/` (A04:2025 cryptographic findings)
+- Phase 3 auth review -- `drydock/security-engineer/auth-review/`
 - Data schemas -- `schemas/` (ERD, migrations, data models)
 - Implementation code -- data access layers, ORM models, API response serializers
 - Infrastructure configs -- database encryption settings, backup configs
@@ -107,7 +107,7 @@ Verify enforcement:
 
 This step does NOT render a compliance verdict and does NOT scope frameworks or map requirements to controls — **compliance-officer owns that** (framework scoping, the mandatory-control matrix, the control-evidence map, and the blocking compliance gate). What this phase produces is a *posture note*: the data-handling facts the compliance-officer needs, plus an OBSERVED implementation status for each privacy-relevant capability the PII inventory and encryption audit already surfaced. Mark each capability Present / Partial / Absent / Not Applicable based on what the code actually does — leave the requirement→article mapping and the pass/fail call to compliance-officer.
 
-**Do NOT state regulatory article numbers, §-citations, or statutory clocks from memory.** Per `Drydock/.protocols/freshness-protocol.md` + `grounding-protocol.md`, any specific article/clock MUST be verified LIVE against the official source this session (cite the eur-lex / official-register URL + the quoted span + the access date, tag `[verified]`); otherwise leave the article cell blank and tag the row `[unverified]`. The deterministic requirement→control map lives in `compliance-protocol.md`, not here.
+**Do NOT state regulatory article numbers, §-citations, or statutory clocks from memory.** Per `drydock/.protocols/freshness-protocol.md` + `grounding-protocol.md`, any specific article/clock MUST be verified LIVE against the official source this session (cite the eur-lex / official-register URL + the quoted span + the access date, tag `[verified]`); otherwise leave the article cell blank and tag the row `[unverified]`. The deterministic requirement→control map lives in `compliance-protocol.md`, not here.
 
 **Privacy-capability posture (observed from PII inventory + encryption audit):**
 
@@ -144,7 +144,7 @@ Audit how the codebase handles secrets:
 
 ### Step 7: Cross-Check Logger Redaction Deny-List Against Data Classification
 
-The `software-engineer` wires a PII redaction deny-list **into the logger itself** (see `skills/software-engineer/phases/03-cross-cutting.md` "PII-safe log redaction" and the PII-safe rules in `Drydock/.protocols/observability-contract.md`). That deny-list is only correct if it covers **every field the data classification marks as PII/Confidential/Restricted**. Verify the two agree — a classified field absent from the deny-list is a leak waiting to happen.
+The `software-engineer` wires a PII redaction deny-list **into the logger itself** (see `skills/software-engineer/phases/03-cross-cutting.md` "PII-safe log redaction" and the PII-safe rules in `drydock/.protocols/observability-contract.md`). That deny-list is only correct if it covers **every field the data classification marks as PII/Confidential/Restricted**. Verify the two agree — a classified field absent from the deny-list is a leak waiting to happen.
 
 For each field in the PII inventory (Step 1) with `Classification` ∈ {Confidential, Restricted} or `Logged = should be No`:
 - Confirm the field name (and its common aliases/serialized keys) appears in the logger deny-list (pino `redact` paths / structlog processor / logback masking — whichever the codebase uses).
@@ -155,7 +155,7 @@ Record the result as a coverage table (`Classified field` · `In deny-list?` · 
 
 ## Output Deliverables
 
-Write all outputs to `Drydock/security-engineer/data-security/`:
+Write all outputs to `drydock/security-engineer/data-security/`:
 
 | File | Contents |
 |------|----------|

@@ -11,7 +11,7 @@ Thanks for helping improve Drydock. This plugin is a coordinated set of orchestr
 
 - `.claude-plugin/plugin.json` — plugin manifest (name, version, keywords).
 - `skills/<name>/SKILL.md` — one directory per orchestrated skill. Frontmatter must include `name` and `description`.
-- `skills/_shared/protocols/` — protocol SOURCE files. The orchestrator copies these to `Drydock/.protocols/` at bootstrap; that copied path is what worker-skill loaders read at runtime, not this source directory.
+- `skills/_shared/protocols/` — protocol SOURCE files. The orchestrator copies these to `drydock/.protocols/` at bootstrap; that copied path is what worker-skill loaders read at runtime, not this source directory.
 - `skills/_shared/templates/` — config and scaffold templates.
 - `hooks/` — `hooks.json` plus the hook scripts it wires (e.g. `secret-guard.sh`).
 

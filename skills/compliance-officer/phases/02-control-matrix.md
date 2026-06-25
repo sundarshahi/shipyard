@@ -2,15 +2,15 @@
 
 ## Objective
 
-For every in-scope framework, emit a per-framework control matrix listing the mandatory controls — built from the STABLE family skeleton in the pinned catalog, with every specific control id, article number, criterion, and §-citation **verified LIVE against the official source this session**. No control id is recalled from memory. Generate outputs in `Drydock/compliance-officer/control-matrix/`.
+For every in-scope framework, emit a per-framework control matrix listing the mandatory controls — built from the STABLE family skeleton in the pinned catalog, with every specific control id, article number, criterion, and §-citation **verified LIVE against the official source this session**. No control id is recalled from memory. Generate outputs in `drydock/compliance-officer/control-matrix/`.
 
 ## Context Bridge
 
-Read Phase 1 scoping (`Drydock/compliance-officer/scoping/frameworks.md`) — the in-scope framework set + pinned editions. Build a matrix only for in-scope frameworks. The catalog SKELETON (control families / article groups / TSC categories) is in `Drydock/.protocols/compliance-protocol.md`; this phase fills it with live-verified ids.
+Read Phase 1 scoping (`drydock/compliance-officer/scoping/frameworks.md`) — the in-scope framework set + pinned editions. Build a matrix only for in-scope frameworks. The catalog SKELETON (control families / article groups / TSC categories) is in `drydock/.protocols/compliance-protocol.md`; this phase fills it with live-verified ids.
 
 ## Runtime-Freshness Rule (BINDING — do not skip)
 
-Per `Drydock/.protocols/compliance-protocol.md`, `Drydock/.protocols/freshness-protocol.md`, and `Drydock/.protocols/grounding-protocol.md`:
+Per `drydock/.protocols/compliance-protocol.md`, `drydock/.protocols/freshness-protocol.md`, and `drydock/.protocols/grounding-protocol.md`:
 
 - **NEVER write a control id, article number, criterion, §-citation, or requirement sentence from memory.** Verify each LIVE this session before it enters the matrix.
 - Use WebSearch/WebFetch against **official sources only**, and cite URL + verbatim quoted span + retrieval date for each:
@@ -65,7 +65,7 @@ End each matrix file with counts by tag (e.g. `42 [verified], 0 [inferred], 3 [u
 
 ## Output Deliverables
 
-Write to `Drydock/compliance-officer/control-matrix/`:
+Write to `drydock/compliance-officer/control-matrix/`:
 
 | File | Contents |
 |------|----------|

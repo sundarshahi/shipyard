@@ -188,7 +188,7 @@ Invoke any skill directly with its `drydock:<skill>` name, or let the orchestrat
 ## Workspace Structure (created per project)
 
 ```
-Drydock/
+drydock/
 ├── .protocols/        # shared protocols deployed at bootstrap
 ├── .orchestrator/     # pipeline state + receipts
 ├── product-manager/

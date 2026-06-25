@@ -2,35 +2,35 @@
 
 ## Objective
 
-Aggregate every finding from the full engagement -- Phases 1-6 (threat model, code audit, auth, data, supply-chain analysis, and remediation planning) and Phase 7 (live VAPT execution evidence) -- into a single professional, client-deliverable penetration test report at `Drydock/security-engineer/report/vapt-report.md`. The report assembles the seven industry-standard sections: Engagement Scope & Rules of Engagement, Methodology, Executive Summary, a CVSS-backed Risk Rating Matrix, Per-Finding Writeups with the full standards tag block and retest status, Confirmed vs Needs-Verification buckets, and an Appendix. This phase produces no new testing -- it assembles, scores, and presents evidence already captured. Honor `grounding-protocol.md` (no fabricated CVE/CVSS; tag every claim) and `security-testing-protocol.md` (CVSS discipline; Confirmed vs Needs-Verification separation).
+Aggregate every finding from the full engagement -- Phases 1-6 (threat model, code audit, auth, data, supply-chain analysis, and remediation planning) and Phase 7 (live VAPT execution evidence) -- into a single professional, client-deliverable penetration test report at `drydock/security-engineer/report/vapt-report.md`. The report assembles the seven industry-standard sections: Engagement Scope & Rules of Engagement, Methodology, Executive Summary, a CVSS-backed Risk Rating Matrix, Per-Finding Writeups with the full standards tag block and retest status, Confirmed vs Needs-Verification buckets, and an Appendix. This phase produces no new testing -- it assembles, scores, and presents evidence already captured. Honor `grounding-protocol.md` (no fabricated CVE/CVSS; tag every claim) and `security-testing-protocol.md` (CVSS discipline; Confirmed vs Needs-Verification separation).
 
 ## Context Bridge
 
 Read ALL prior phase outputs as the source material -- do not re-analyze or re-test, only aggregate and present:
 
-- `Drydock/security-engineer/threat-model/` (Phase 1 -- attack surface, STRIDE)
-- `Drydock/security-engineer/code-audit/` (Phase 2 -- OWASP Web/API/LLM findings with `file:line`)
-- `Drydock/security-engineer/auth-review/` (Phase 3)
-- `Drydock/security-engineer/data-security/` (Phase 4)
-- `Drydock/security-engineer/supply-chain/` (Phase 5 -- SBOM, dependency CVEs)
-- `Drydock/security-engineer/remediation/` (Phase 6 -- finding inventory, fixes, timeline)
-- `Drydock/security-engineer/vapt/` (Phase 7 -- executed results, captured request/response evidence + PoCs, PASS/FAIL/INCONCLUSIVE matrix, `authorization-receipt.json`)
+- `drydock/security-engineer/threat-model/` (Phase 1 -- attack surface, STRIDE)
+- `drydock/security-engineer/code-audit/` (Phase 2 -- OWASP Web/API/LLM findings with `file:line`)
+- `drydock/security-engineer/auth-review/` (Phase 3)
+- `drydock/security-engineer/data-security/` (Phase 4)
+- `drydock/security-engineer/supply-chain/` (Phase 5 -- SBOM, dependency CVEs)
+- `drydock/security-engineer/remediation/` (Phase 6 -- finding inventory, fixes, timeline)
+- `drydock/security-engineer/vapt/` (Phase 7 -- executed results, captured request/response evidence + PoCs, PASS/FAIL/INCONCLUSIVE matrix, `authorization-receipt.json`)
 
 The static findings tell you WHAT was suspected; the Phase 7 execution evidence tells you what was CONFIRMED. A static finding without an execution reproduction stays in the Needs-Verification bucket and never carries Critical/High as if confirmed.
 
 ## Inputs
 
-- Phase 7 VAPT execution -- `Drydock/security-engineer/vapt/results.md`, `vapt/evidence/<scenario>.md`, `vapt/scan-output/*.sarif`, `vapt/authorization-receipt.json`
-- Phase 6 remediation plan -- `Drydock/security-engineer/remediation/` (unified finding IDs, prioritization, fixes)
+- Phase 7 VAPT execution -- `drydock/security-engineer/vapt/results.md`, `vapt/evidence/<scenario>.md`, `vapt/scan-output/*.sarif`, `vapt/authorization-receipt.json`
+- Phase 6 remediation plan -- `drydock/security-engineer/remediation/` (unified finding IDs, prioritization, fixes)
 - Phases 1-5 reports -- the per-phase output directories listed above
-- Authorization receipt -- `Drydock/.orchestrator/receipts/` (authorization reference, scope allowlist, RoE, testing window)
+- Authorization receipt -- `drydock/.orchestrator/receipts/` (authorization reference, scope allowlist, RoE, testing window)
 - Standards references -- the `## Standards References` section of `skills/security-engineer/SKILL.md` (OWASP Web 2025 / API 2023 / LLM 2025 ids, ASVS 5.0.0 levels, WSTG v4.2 ids, CVSS 4.0 policy)
 
 ## Workflow
 
 ### Step 1: Assemble Engagement Scope & Rules of Engagement (Section 1)
 
-Open `vapt/authorization-receipt.json` and the authorization receipt in `Drydock/.orchestrator/receipts/`. Reproduce verbatim, not from memory:
+Open `vapt/authorization-receipt.json` and the authorization receipt in `drydock/.orchestrator/receipts/`. Reproduce verbatim, not from memory:
 
 - Authorized target allowlist (hosts / domains / IPs / API base URLs that were in scope)
 - Out-of-scope assets explicitly excluded
@@ -131,7 +131,7 @@ Sort every finding into two clearly labeled buckets:
 
 ## Output Deliverables
 
-Write the report to `Drydock/security-engineer/report/`:
+Write the report to `drydock/security-engineer/report/`:
 
 | File | Contents |
 |------|----------|
