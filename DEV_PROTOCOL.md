@@ -10,7 +10,7 @@ This document is the operational counterpart to [VISION.md](VISION.md). VISION d
 
 ### What We Are
 
-A **compound intelligence system** — 15 specialized agents coordinated by a single orchestrator — that transforms Claude Code from producing raw code into delivering production-ready systems. One plugin install gives users architecture, tested code, security audit, CI/CD, and documentation.
+A **compound intelligence system** — 19 specialized agents coordinated by a single orchestrator — that transforms Claude Code from producing raw code into delivering production-ready systems. One plugin install gives users architecture, UX design, tested code, security audit, CI/CD, documentation, and go-to-market.
 
 ### What We Are Not
 
@@ -31,11 +31,11 @@ These are the capabilities that define the system. Protect them in every change.
 | **Boundary safety** | 6 structural patterns for system boundary bugs, derived from real deployment. | A codified, reusable set of boundary-bug patterns is uncommon — these were distilled from real production failures. |
 | **Constraint-driven architecture** | Architecture derived from YOUR scale, budget, team, compliance — not templates. | Template-based architecture applies the same shape regardless of constraints. We derive from first principles. |
 | **Functional completeness** | Dead Element Rule — any button/link/form that renders but does nothing is a Critical bug, not a TODO. | Most frontend generation produces structure, not verified behavior; non-functional UI ships as "done." |
-| **Autonomy levels** | Autopilot/Copilot/Checkpoint/Manual — propagated to all 15 agents, controlling decision-surfacing depth. | Few systems offer granular, per-agent control over how much gets surfaced to the user. |
+| **Autonomy levels** | Autopilot/Copilot/Checkpoint/Manual — propagated to all 19 agents, controlling decision-surfacing depth. | Few systems offer granular, per-agent control over how much gets surfaced to the user. |
 | **Worktree isolation** | Each parallel agent runs in its own git worktree — zero file race conditions. Auto-detect dirty state, auto-commit or fallback. Merge branches back after each wave. | Parallel-agent systems often lack auto-detection/fallback and merge-back orchestration around their isolation. |
 | **Self-healing gates** | Gate rejection loops back to the relevant agent for rework (max 2 cycles), re-verifies, re-presents. Pipeline never dead-ends on rejection. | Gate rejection typically stops the pipeline; bounded rework loops are rare. |
 | **Cost dashboard** | Effort tracking in every receipt (files_read, files_written, tool_calls). Pre-pipeline cost estimate. Final summary aggregates across all agents. | Most systems give no token-spend visibility — users fly blind on cost. |
-| **Harmonization protocol** | Recurring discipline to detect and fix design conflicts across 15 skills, 14 protocols, and 11 principles. Conflict matrix, authority hierarchy, autonomy level consistency checks. | Multi-agent systems accumulate contradictions silently, with no self-consistency mechanism. |
+| **Harmonization protocol** | Recurring discipline to detect and fix design conflicts across 19 skills, 14 protocols, and 11 principles. Conflict matrix, authority hierarchy, autonomy level consistency checks. | Multi-agent systems accumulate contradictions silently, with no self-consistency mechanism. |
 
 **Rule: Any new feature must either strengthen an existing differentiator or introduce a new one. Features that merely match what others already do are low priority.**
 
@@ -222,7 +222,7 @@ Protocols are expensive — they add to every loading agent's context. Gate care
 2. **Applies broadly.** If it only affects 2-3 skills, put it in those skills, not a shared protocol.
 3. **Cannot be expressed as a Common Mistakes entry.** If a 2-line table row captures it, don't write a protocol.
 4. Add the file to `skills/_shared/protocols/`
-5. Add `!`cat` loading line to every skill that needs it (all 15 for a core protocol; the relevant subset for a domain protocol)
+5. Add `!`cat` loading line to every skill that needs it (all 19 for a core protocol; the relevant subset for a domain protocol)
 6. Add to the orchestrator's protocol table
 7. Document in CHANGELOG
 
@@ -262,7 +262,7 @@ Multi-skill modes: 1-2 gates depending on the mode.
 
 ### Autonomy Level Propagation
 
-The user selects Autopilot/Copilot/Checkpoint/Manual once at pipeline start. This propagates to all 15 agents via `settings.md` and controls:
+The user selects Autopilot/Copilot/Checkpoint/Manual once at pipeline start. This propagates to all 19 agents via `settings.md` and controls:
 - How many decisions are surfaced
 - How deep interviews go
 - How much discovery happens
@@ -297,7 +297,7 @@ These observations come from research into the broader AI-agent coding ecosystem
 | **Plan before code** | Forcing a planning / TDD step before implementation reduces rework and surface-level bugs. | Our PM + Architect DEFINE phase serves the same purpose at a higher level. Lightweight modes could borrow a simpler single-developer planning UX. |
 | **Modular install** | Letting users install only what they need keeps systems lean and composable. | Our execution modes are the modularity equivalent — run only the relevant skills instead of the whole pipeline. |
 | **Annotated, shareable planning** | Reviewable plan artifacts make collaboration and sign-off easier. | Our Solution Architect produces ADRs. Making architecture artifacts more shareable/reviewable is a direction worth exploring. |
-| **Breadth of skills** | Large skill libraries cover many niches. | We favor depth over breadth — 15 agents that actually coordinate beats a large pile of un-coordinated skills. Don't chase breadth. |
+| **Breadth of skills** | Large skill libraries cover many niches. | We favor depth over breadth — 19 agents that actually coordinate beats a large pile of un-coordinated skills. Don't chase breadth. |
 
 ### What the Ecosystem Gets Wrong
 
@@ -375,10 +375,10 @@ Every feature that adds information to the pipeline has a context cost. Be aware
 
 ```
 Feature costs context:
-  +protocol stack × 15 agents      = protocol loading overhead (fixed, acceptable)
+  +protocol stack × 19 agents      = protocol loading overhead (fixed, acceptable)
   +1 rework cycle                  = ~10-30K tokens (bounded by max 2 cycles)
   +1 compound learning entry       = ~500 tokens (acceptable)
-  +1 new core protocol             = ~2K tokens × 15 agents = ~30K per run (expensive — gate carefully)
+  +1 new core protocol             = ~2K tokens × 19 agents = ~38K per run (expensive — gate carefully)
   +1 new phase per skill           = ~5K tokens per invocation (moderate — justify it)
 ```
 
@@ -388,7 +388,7 @@ Feature costs context:
 
 ## 8. Harmonization Protocol
 
-A system with 15 skills, 14 protocols, 5 phase dispatchers, and 11 governing principles will accumulate design conflicts through normal iteration. New features get bolted on. Principles evolve. Agent prompts drift from their SKILL.md definitions. What was coherent at v2.0 develops contradictions by v2.4.
+A system with 19 skills, 14 protocols, 6 phase dispatchers, and 11 governing principles will accumulate design conflicts through normal iteration. New features get bolted on. Principles evolve. Agent prompts drift from their SKILL.md definitions. What was coherent at v2.0 develops contradictions by v2.4.
 
 **Harmonization is not a one-time fix — it is a recurring discipline.**
 
@@ -417,7 +417,7 @@ Run these checks during every harmonization pass. Each row is a potential confli
 | **VISION vs DEV_PROTOCOL** | A VISION principle's hard rules vs DEV_PROTOCOL's operational rules | Re-read both documents. Every DEV_PROTOCOL rule should trace to a VISION principle. Orphaned rules in DEV_PROTOCOL need justification or removal. |
 | **Autonomy level tables** | Different skills defining Autopilot/Copilot/Checkpoint/Manual differently | Grep all skills for autonomy level tables. All must use the same behavioral spectrum. Autopilot is always fully autonomous. Manual always surfaces every decision. |
 | **Phase dependencies** | Phase N assumes output from Phase N-1 that might not exist in certain modes | Trace the data flow: what does Phase 3 read that Phase 2 writes? What if Autopilot skipped a Phase 2 question? |
-| **Cross-reference counts** | A doc claims a count that no longer matches reality | Grep for all numeric claims about the system and verify against actual counts: **15 agents, 14 protocols, 11 principles, 3 gates.** |
+| **Cross-reference counts** | A doc claims a count that no longer matches reality | Grep for all numeric claims about the system and verify against actual counts: **19 agents (15 isolated subagents + orchestrator + 3 in-context planning skills), 14 protocols, 11 principles, 3 gates, 6 phase dispatchers.** |
 
 ### Authority Hierarchy
 
@@ -495,10 +495,10 @@ When implementing a change, run through these questions in order:
      YES → Strongly justify. Every interruption has a cost.
      NO → Proceed. Improvements that don't interrupt are always welcome.
 
-4. Does this change affect all 15 agents?
+4. Does this change affect all 19 agents?
    YES → Is it truly universal?
      NO → Put it in the specific skills, not a shared protocol.
-     YES → Protocol it. Update all 15 skills.
+     YES → Protocol it. Update all 19 skills.
 
 5. Can this be expressed as a Common Mistakes table entry instead of a protocol/phase?
    YES → Use the table. 2 lines beats 50 lines.

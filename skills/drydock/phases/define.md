@@ -1,6 +1,6 @@
 # DEFINE Phase — Dispatcher
 
-This phase manages tasks T1 (Product Manager) and T2 (Solution Architect). Sequential execution with Gate 1 and Gate 2.
+This phase manages tasks T1 (Product Manager), T2 (Solution Architect), and T2b (UX Designer). T1 → Gate 1 → T2 + T2b (parallel) → Gate 2. T1 and T2 are sequential, gated; T2b (UX) launches alongside T2 once the BRD is approved — it depends on the BRD, not the architecture.
 
 ## Visual Output
 
@@ -55,6 +55,24 @@ Present Gate 1 using the orchestrator's gate pattern. On approval, unblock T2.
 If user selects "I have changes" → iterate on BRD, re-present Gate 1.
 If user selects "Show BRD details" → display BRD, re-present Gate 1.
 
+## T2b: UX Designer — Design-System Spec (parallel with T2)
+
+**Conditional — skip if `.drydock.yaml` has `features.frontend: false`** (no UI to design). When skipped, `TaskUpdate(taskId=t2b_id, status="completed")` and move on.
+
+Once Gate 1 passes, the UX Designer needs only the approved BRD, so it runs **alongside the architect (T2)**. The Solution Architect runs in-context (it interviews the user); the UX Designer runs **backgrounded in its own worktree per its definition** (`agents/ux-designer.md`), so launch it first, then start T2 — the two overlap.
+
+```python
+TaskUpdate(taskId=t2b_id, status="in_progress")
+```
+
+Delegate to the `ux-designer` subagent (carry task context only — the agent declares background/isolation and invokes its own skill):
+
+> Read the approved BRD at `drydock/product-manager/BRD/` (user stories, personas, constraints). Produce the UX deliverables — UX research synthesis, information architecture, the **design-system specification** (design tokens, type scale, WCAG-AA color, component specs with all states, motion), interaction/flow specs, and the usability/accessibility checklist. Write deliverables to `docs/design/` and workspace artifacts to `drydock/ux-designer/`. The design-system spec is a **mandatory input for frontend-engineer (T3b) in BUILD** — frontend implements this spec, it does not re-author it. When complete, write a receipt to `drydock/.orchestrator/receipts/T2b-ux-designer.json` and mark its task complete.
+
+If a frontend already exists (brownfield), it produces a UX audit + improvement spec instead of greenfield IA.
+
+**On completion:** the receipt lands at `.orchestrator/receipts/T2b-ux-designer.json` and the task is marked complete. If T2b is still running when Gate 2 is reached, that is fine — its spec only needs to land before BUILD's frontend work (T3b) starts; if T3b is reached before the spec exists, T3b blocks on it rather than building without the design system.
+
 ## T2: Solution Architect — Architecture
 
 ```python
@@ -84,12 +102,13 @@ Present Gate 2 using the orchestrator's gate pattern. On approval, proceed to BU
 ## Handoff to BUILD
 
 After Gate 2 approval:
-1. **Verify receipts:** Read `drydock/.orchestrator/receipts/T1-product-manager.json` and `T2-solution-architect.json`. Verify all listed artifacts exist on disk.
+1. **Verify receipts:** Read `drydock/.orchestrator/receipts/T1-product-manager.json`, `T2-solution-architect.json`, and (unless frontend is disabled) `T2b-ux-designer.json`. Verify all listed artifacts exist on disk. If T2b is still in progress, let it finish before starting BUILD's frontend work (T3b) — T3b consumes the design-system spec.
 2. **Re-anchor:** Re-read from disk before transitioning:
    - `drydock/product-manager/BRD/brd.md`
    - `drydock/solution-architect/system-design.md`
    - `docs/architecture/adr/*.md` (list files)
    - `api/openapi/*.yaml` (list files)
+   - `docs/design/` (design-system spec — list files; frontend implements this)
    - `.orchestrator/settings.md`
 3. Verify architecture outputs exist at project root (`api/`, `schemas/`, `docs/architecture/`)
 4. Log decisions to `drydock/.orchestrator/decisions-log.md`

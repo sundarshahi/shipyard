@@ -2,7 +2,7 @@
 
 ## Task Dependency Graph — Two-Wave Parallel Execution
 
-Dynamic task generation with two-wave parallelism. The orchestrator reads the architecture output (number of services, pages, modules) and generates tasks accordingly — one Agent per work unit.
+Dynamic task generation with two-wave parallelism at its core (Wave A: build + analysis; Wave B: execution against code). The orchestrator reads the architecture output (number of services, pages, modules) and generates tasks accordingly — one Agent per work unit. Two smaller parallel groups bracket the core: in DEFINE, the UX Designer (T2b) runs alongside the architect (T2); after Gate 3, the LAUNCH wave (T14–T16) runs the three go-to-market agents in parallel.
 
 ### Wave Announcements
 
@@ -57,7 +57,11 @@ Between phases and waves, print a concise `→` transition line:
 ```
 T1: product-manager (BRD)
     ↓ [GATE 1]
-T2: solution-architect (Architecture)
+┌────────────── DEFINE: design + architecture (parallel, both need only the BRD) ──┐
+│  T2:  solution-architect (Architecture) ── in-context (interviews user)          │
+│  T2b: ux-designer (design-system spec) ─── backgrounded; skip if no frontend     │
+│       hands the spec in `docs/design/` to frontend-engineer (T3b) in BUILD       │
+└──────────────────────────────────────────────────────────────────────────────────┘
     ↓ [GATE 2]
     ↓ parallelism preference
 ┌────────────── WAVE A: BUILD + ANALYSIS (all parallel) ──────────────┐
@@ -92,16 +96,26 @@ T8: remediation (HARDEN fixes) ────┘ PARALLEL
     ↓
 T9b: sre (chaos + capacity) ──────┐
 T10: data-scientist (conditional) ─┘ PARALLEL
-    ↓ [GATE 3]
+    ↓ [GATE 3 — production readiness]
+┌────────────── LAUNCH: go-to-market (parallel, after Gate 3) ────────┐
+│  T14: growth-marketer  — positioning + launch plan + site copy/SEO  │
+│  T15: sales-strategist — pricing + collateral + trust pack          │
+│                          (consumes T14 positioning + T6c/T6e evidence)│
+│  T16: customer-success — onboarding + support + retention           │
+│                          (consumes T14; help center refined in SUSTAIN)│
+└──────────────────────────────────────────────────────────────────────┘
+    ↓
 T11: technical-writer (spawns N: API ref / dev guide / ops guide) ──┐
 T12: skill-maker ──────────────────────────────────────────────────┘ PARALLEL
     ↓
-T13: Compound Learning + Assembly
+T13: Compound Learning + Assembly   (customer-success carries into SUSTAIN)
 ```
+
+> **Phase order note.** The canonical pipeline is DEFINE → BUILD → HARDEN → SHIP → **LAUNCH** → SUSTAIN. LAUNCH (T14–T16) runs after Gate 3; SUSTAIN (T11–T13) follows. customer-success (T16) bootstraps its help center from the best-available docs (API specs, READMEs) at LAUNCH and refines it once the technical-writer docs (T11) land in SUSTAIN — that doc dependency is soft, so it does not block LAUNCH.
 
 **Standard mode:** Collapses waves — Wave A runs build only, Wave B runs all harden sequentially. No internal skill parallelism.
 
-**Sequential mode:** One task at a time. Original 13-task serial execution.
+**Sequential mode:** One task at a time. The full task list (T1, T2, T2b, T3a/T3b, T4a/T4b, T5a/T5b, T6a–T6e, T7–T13, T14–T16) run serially in pipeline order.
 
 ### Task Dependencies (Maximum Parallelism)
 
@@ -113,8 +127,9 @@ Create tasks with TaskCreate, then set dependencies with TaskUpdate using the re
 |------|-----------|-------|
 | T1 | — | First task, no blockers |
 | T2 | T1 | Needs BRD |
+| T2b | T1 | UX Designer — design-system spec; runs parallel with T2 (needs only the BRD). Conditional: skip if `features.frontend: false`. Hands `docs/design/` spec to T3b |
 | T3a | T2 | Backend — spawns 1 Agent per service from architecture |
-| T3b | T2 | Frontend — spawns 1 Agent per page group from BRD |
+| T3b | T2, T2b | Frontend — spawns 1 Agent per page group from BRD; implements the T2b design-system spec if present |
 | T4a | T2 | DevOps analysis — Dockerfiles + CI skeleton |
 | T5a | T2 | QA test plan — from BRD + architecture |
 | T6a | T2 | Security threat model — STRIDE from architecture |
@@ -143,14 +158,23 @@ Create tasks with TaskCreate, then set dependencies with TaskUpdate using the re
 | T12 | T9b | Skills — needs all prior output |
 | T13 | T11, T12 | Final step |
 
+**LAUNCH tasks** — go-to-market, run in parallel after Gate 3 (production-ready). Dispatch in `phases/launch.md`. Standalone **Launch (GTM)** mode requires an already-shipped/described product:
+
+| Task | Blocked By | Notes |
+|------|-----------|-------|
+| T14 | Gate 3 | Growth Marketer — positioning, launch plan, site copy + SEO briefs, funnels. Needs BRD + shipped product |
+| T15 | T14, T6c, T6e | Sales Strategist — pricing, collateral, sales process; turns T14 positioning + the security (T6c) / compliance (T6e) evidence into a buyer trust pack |
+| T16 | T14 | Customer Success — onboarding, support ops, retention; consumes T14 analytics. Help-center docs (T11) are a soft input refined in SUSTAIN; carries into SUSTAIN |
+
 ### Dynamic Task Generation
 
-After Gate 2 (architecture approved), the orchestrator reads the architecture output to determine work units:
+After Gate 1 (BRD approved), the UX Designer (T2b) launches alongside the architect (T2) — both need only the BRD. After Gate 2 (architecture approved), the orchestrator reads the architecture output to determine work units:
 
 1. **Count services** — Read `docs/architecture/` service list or `api/` specs. For each service, create a subtask under T3a.
 2. **Count pages** — Read BRD user stories. Group into page clusters (auth, dashboard, settings, etc.). For each group, create a subtask under T3b.
 3. **Generate Wave A TaskList** — All T3a subtasks + T3b subtasks + T4a + T5a + T6a + T6b + T9a. No cross-dependencies.
 4. **On Wave A completion** — Generate Wave B TaskList with dependencies on Wave A outputs.
+5. **On Gate 3 pass (LAUNCH)** — Generate the LAUNCH TaskList: T14 + T15 + T16, dispatched in parallel per `phases/launch.md`.
 
 Each subtask is dispatched as a natural-language delegation to the matching subagent. For a backend service subtask:
 
@@ -160,6 +184,7 @@ The subagent may parallelize internally up to 3 concurrent FOREGROUND sub-tasks 
 
 ### Conditional Tasks
 
-- **T3b (Frontend):** Skip if `.drydock.yaml` has `features.frontend: false`
+- **T2b (UX Designer) and T3b (Frontend):** Skip both if `.drydock.yaml` has `features.frontend: false` — no UI to design or build.
 - **T10 (Data Scientist):** Auto-detect by scanning for `openai`, `anthropic`, `langchain`, `transformers`, `torch`, `tensorflow` imports. If not detected and `features.ai_ml: false`, mark as completed immediately.
+- **T14–T16 (LAUNCH):** Run in a Full Build after Gate 3, or standalone via **Launch (GTM)** mode. The standalone mode requires an already-shipped/described product and presents a GTM-plan gate first.
 

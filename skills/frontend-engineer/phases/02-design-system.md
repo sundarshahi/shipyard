@@ -4,7 +4,9 @@
 
 Establish the **minimum viable design system** so components can be built and wired. This is NOT the final design — this is defaults that work. The real design research and polish happens in Phase 5 after everything is functional.
 
-Do NOT spend time on color theory, trend research, or visual polish here. Use sensible defaults. Get to working components fast.
+> **If a UX design-system spec exists at `docs/design/`** (produced by the ux-designer agent in DEFINE), it is the **source of truth** — implement its design tokens, type scale, WCAG-AA color, component specs, states, and motion directly instead of inventing defaults. Phase 5 then becomes spec conformance + polish rather than from-scratch design research. If no spec exists (frontend-only build, or UX was skipped), generate the sensible defaults below.
+
+Do NOT spend time on color theory, trend research, or visual polish here. Use sensible defaults (or the UX spec if present). Get to working components fast.
 
 ## 2.1 Design Tokens (Defaults)
 
