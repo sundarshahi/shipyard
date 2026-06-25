@@ -41,15 +41,15 @@ Then print Wave B announcement and completion similarly. Each agent's completion
 
 ## Re-Anchor
 
-Before creating any agent tasks, re-read key artifacts from disk:
+Before creating any tasks, re-read key artifacts from disk:
 - `Shipyard/product-manager/BRD/brd.md`
 - `Shipyard/solution-architect/system-design.md`
 - `docs/architecture/adr/*.md` (Glob to list, Read key ADRs)
 - `api/openapi/*.yaml` (Glob to list)
-- `Shipyard/security-engineer/security-requirements.md` — the EARLY STRIDE-derived security-requirements artifact emitted by T6a in DEFINE/Wave A. This is a **mandatory BUILD input**: every BUILD agent prompt below MUST instruct the agent to read it and treat its controls (authn/authz, input-validation, output-encoding, secrets handling per threat) as acceptance criteria, not optional advice.
+- `Shipyard/security-engineer/security-requirements.md` — the EARLY STRIDE-derived security-requirements artifact emitted by T6a in DEFINE/Wave A. This is a **mandatory BUILD input**: every BUILD delegation below MUST instruct its subagent to read it and treat its controls (authn/authz, input-validation, output-encoding, secrets handling per threat) as acceptance criteria, not optional advice.
 - `.orchestrator/receipts/T1-*.json`, `.orchestrator/receipts/T2-*.json`
 
-Use this freshly-read data when writing agent task prompts below — not your compressed memory of DEFINE phase.
+Use this freshly-read data when writing the delegation context below — not your compressed memory of DEFINE phase.
 
 ## Pre-Flight
 
@@ -90,57 +90,24 @@ Worktrees: [enabled|disabled]
 
 ## PARALLEL #1: T3a + T3b
 
-Spawn backend and frontend agents simultaneously as background Agents.
-When `use_worktrees` is True, add `isolation="worktree"` to each Agent call. Each agent gets its own isolated copy of the repo — no file race conditions.
+Launch backend and frontend together. Delegate the following to their subagents to run CONCURRENTLY (each is backgrounded + isolated in its own worktree per its definition, so there are no file race conditions):
+
+- `software-engineer` (T3a — agents/software-engineer.md) — Task context: Read architecture from `api/`, `schemas/`, `docs/architecture/`. Read protocols from `Shipyard/.protocols/` (security-defaults.md, observability-contract.md, and architecture-boundaries.md are MANDATORY — write secure-by-default code, emit the contract's canonical metric/log/span names, and keep domain imports pointing inward at write time; do not defer these to the HARDEN audit). MANDATORY input: read `Shipyard/security-engineer/security-requirements.md` (the EARLY STRIDE threat-model output) and implement its per-threat controls as acceptance criteria. Read `.shipyard.yaml` for paths and preferences. Write services to project root: `services/`, `libs/shared/`. Write workspace artifacts to `Shipyard/software-engineer/`. TDD enforced: write test → watch fail → implement → watch pass → refactor. When complete, write a receipt JSON to `Shipyard/.orchestrator/receipts/T3a-software-engineer.json` with task, agent, phase, status, artifacts, metrics, effort, verification — the verification block MUST assert "security-defaults checklist passes" (the BUILD Quality Bar line from security-defaults.md) with per-rule pass/fail evidence — then mark its task complete.
+
+- `frontend-engineer` (T3b — agents/frontend-engineer.md; skip if `features.frontend` is false) — Task context: Read API contracts from `api/`. Read BRD user stories from `Shipyard/product-manager/BRD/`. Read protocols from `Shipyard/.protocols/` (security-defaults.md and observability-contract.md are MANDATORY — apply output-encoding/XSS-safe rendering and secrets handling at write time, and emit the contract's canonical client metric/log names). MANDATORY input: read `Shipyard/security-engineer/security-requirements.md` (the EARLY STRIDE threat-model output) and implement its per-threat controls as acceptance criteria. Read `.shipyard.yaml` for framework and styling preferences. Follow all 6 phases of the build process in order:
+  - Phase 1: Analysis — read BRD, API contracts, select framework
+  - Phase 2: Design System — functional defaults (tokens, theme, Tailwind)
+  - Phase 3: Components — UI primitives first (sequential), then layout+feature (parallel)
+  - Phase 4: Pages + Routing — parallel by route group, then functional verification (4b)
+  - Phase 5: Design & Polish — Style selection is engagement-mode-aware: Express: auto-select best style for the domain, report choice, proceed. Standard+: ask user via AskUserQuestion (Creative | Elegance | High Tech | Corporate | Custom).
+  - Phase 6: Testing & A11y — component tests, accessibility audit
+  Write frontend to project root: `frontend/`. Write workspace artifacts to `Shipyard/frontend-engineer/`. When complete, write a receipt JSON to `Shipyard/.orchestrator/receipts/T3b-frontend-engineer.json` with task, agent, phase, status, artifacts, metrics, effort, verification — the verification block MUST assert "security-defaults checklist passes" (the BUILD Quality Bar line from security-defaults.md) with per-rule pass/fail evidence — then mark its task complete.
+
+Track the dispatch:
 
 ```python
-# T3a: Backend Engineering
 TaskUpdate(taskId=t3a_id, status="in_progress")
-Agent(
-  prompt="""You are the Backend Engineer.
-Use the Skill tool to invoke 'shipyard:software-engineer' to load your complete methodology and follow it.
-Read architecture from: api/, schemas/, docs/architecture/
-Read protocols from: Shipyard/.protocols/ (security-defaults.md, observability-contract.md, and architecture-boundaries.md are MANDATORY — write secure-by-default code, emit the contract's canonical metric/log/span names, and keep domain imports pointing inward at write time; do not defer these to the HARDEN audit).
-MANDATORY input: read Shipyard/security-engineer/security-requirements.md (the EARLY STRIDE threat-model output) and implement its per-threat controls as acceptance criteria.
-Read .shipyard.yaml for paths and preferences.
-Write services to project root: services/, libs/shared/
-Write workspace artifacts to: Shipyard/software-engineer/
-TDD enforced: write test → watch fail → implement → watch pass → refactor.
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T3a-software-engineer.json with task, agent, phase, status, artifacts, metrics, effort, verification. The receipt's verification block MUST assert "security-defaults checklist passes" (the BUILD Quality Bar line from security-defaults.md) with per-rule pass/fail evidence. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Remove this line if use_worktrees is False
-)
-
-# T3b: Frontend Engineering (skip if features.frontend is false)
-TaskUpdate(taskId=t3b_id, status="in_progress")
-Agent(
-  prompt="""You are the Frontend Engineer.
-Read API contracts from: api/
-Read BRD user stories from: Shipyard/product-manager/BRD/
-Read protocols from: Shipyard/.protocols/ (security-defaults.md and observability-contract.md are MANDATORY — apply output-encoding/XSS-safe rendering and secrets handling at write time, and emit the contract's canonical client metric/log names).
-MANDATORY input: read Shipyard/security-engineer/security-requirements.md (the EARLY STRIDE threat-model output) and implement its per-threat controls as acceptance criteria.
-Read .shipyard.yaml for framework and styling preferences.
-
-Use the Skill tool to invoke 'shipyard:frontend-engineer'. This loads your complete SKILL.md with a 6-phase build process. You MUST follow all 6 phases in order:
-  Phase 1: Analysis — read BRD, API contracts, select framework
-  Phase 2: Design System — functional defaults (tokens, theme, Tailwind)
-  Phase 3: Components — UI primitives first (sequential), then layout+feature (parallel)
-  Phase 4: Pages + Routing — parallel by route group, then functional verification (4b)
-  Phase 5: Design & Polish — Style selection is engagement-mode-aware:
-    Express: auto-select best style for the domain, report choice, proceed.
-    Standard+: ask user via AskUserQuestion (Creative | Elegance | High Tech | Corporate | Custom).
-  Phase 6: Testing & A11y — component tests, accessibility audit
-
-Write frontend to project root: frontend/
-Write workspace artifacts to: Shipyard/frontend-engineer/
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T3b-frontend-engineer.json with task, agent, phase, status, artifacts, metrics, effort, verification. The receipt's verification block MUST assert "security-defaults checklist passes" (the BUILD Quality Bar line from security-defaults.md) with per-rule pass/fail evidence. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Remove this line if use_worktrees is False
-)
+TaskUpdate(taskId=t3b_id, status="in_progress")  # skip if features.frontend is false
 ```
 
 ## PARALLEL #2: T4 Starts When T3a Completes
@@ -148,34 +115,21 @@ When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T3b-front
 T4 begins containerization as soon as backend is done, even if frontend is still building:
 
 ```python
-# Wait for T3a completion (check TaskList or receive agent result)
-# If T3a used worktree: merge its branch first so T4 sees the code
+# Wait for T3a completion (check TaskList for the software-engineer task status)
+# If T3a ran in a worktree: merge its branch first so T4 sees the code
 TaskUpdate(taskId=t4_id, status="in_progress")
-Agent(
-  prompt="""You are the DevOps Containerization Engineer.
-Use the Skill tool to invoke 'shipyard:devops' to load your complete methodology and follow it.
-Read services from: services/
-Read architecture from: docs/architecture/
-Read .shipyard.yaml for paths and preferences.
-Write Dockerfiles per service, docker-compose.yml at project root.
-Write workspace artifacts to: Shipyard/devops/containers/
-Validate: docker build succeeds for each service, docker-compose up starts all.
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T4-devops.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Remove this line if use_worktrees is False
-)
 ```
+
+Then delegate to the `devops` subagent (agents/devops.md — runs backgrounded in its own worktree per its definition). Task context: Read services from `services/`. Read architecture from `docs/architecture/`. Read `.shipyard.yaml` for paths and preferences. Write Dockerfiles per service and `docker-compose.yml` at project root. Write workspace artifacts to `Shipyard/devops/containers/`. Validate: `docker build` succeeds for each service, `docker-compose up` starts all. When complete, write a receipt JSON to `Shipyard/.orchestrator/receipts/T4-devops.json` with task, agent, phase, status, artifacts, metrics, effort, verification — then mark its task complete.
 
 ## Worktree Merge-Back
 
-If worktrees were used, merge each agent's branch back to the working branch after the wave completes:
+If worktrees were used, merge each subagent's worktree branch back to the working branch after the wave completes:
 
 ```python
-# For each completed agent that used a worktree:
-# The Agent result includes the worktree branch name.
-# Merge each branch in sequence (should be conflict-free — agents write to different directories).
+# For each completed subagent that ran in a worktree (isolation: worktree per its definition):
+# Each subagent edits an isolated worktree branch that must be merged back.
+# Merge each branch in sequence (should be conflict-free — subagents write to different directories).
 for branch in worktree_branches:
   Bash(f"git merge --no-ff {branch} -m 'shipyard: merge {branch}'")
   Bash(f"git branch -d {branch}")  # Clean up merged branch
@@ -237,7 +191,7 @@ if total_blocking > 0:
     write Shipyard/.orchestrator/receipts/Tbuild-security-gate.json with:
       status: "failed", per-tool counts (osv_vulns / semgrep_errors / gitleaks_hits),
       and the Critical/High finding list (file:line + rule id) extracted from the same JSON.
-    # Feed each finding back to the owning BUILD agent as a fix task (self-debug → re-scan),
+    # Feed each finding back to the owning BUILD subagent as a fix task (self-debug → re-scan),
     # then re-run this gate. The build wave is blocked until total_blocking == 0
     # (or each remaining finding carries an override receipt under Shipyard/.orchestrator/overrides/).
 else:
@@ -252,7 +206,7 @@ Notes on running the gate:
 
 **FAIL the BUILD wave on any Critical or High finding** from any of the three classes. Failure handling:
 1. Write `Shipyard/.orchestrator/receipts/Tbuild-security-gate.json` with `status: failed`, the per-tool counts, and the Critical/High finding list (file:line + rule id).
-2. Feed each Critical/High finding back to the owning BUILD agent as an immediate fix task (self-debug, re-scan), mirroring the standard BUILD self-debug → retry loop. Do NOT advance to HARDEN with an open Critical/High from this gate.
+2. Feed each Critical/High finding back to the owning BUILD subagent as an immediate fix task (self-debug, re-scan), mirroring the standard BUILD self-debug → retry loop. Do NOT advance to HARDEN with an open Critical/High from this gate.
 3. Only when the gate is clean (or remaining findings carry a logged "accepted with justification" override receipt) write `status: passed` and proceed.
 
 This gate is a BLOCKING quality bar on the same footing as failing tests — a Critical/High here stops BUILD, it is not merely "flagged".

@@ -21,12 +21,12 @@ description: >
 !`cat CLAUDE.md 2>/dev/null || echo "No CLAUDE.md found"`
 !`ls Shipyard/ 2>/dev/null || echo "No existing workspace"`
 !`cat .shipyard.yaml 2>/dev/null || echo "No config file — defaults apply"`
-!`cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
 
 <IMPORTANT>
 This skill ENHANCES Claude Code's development capabilities. Without it, Claude Code produces code files. With it, Claude Code produces complete production-ready systems — architecture, tested code, security audit, CI/CD, and documentation.
@@ -134,7 +134,7 @@ All modes share these behaviors:
 - Read `.shipyard.yaml` for path overrides
 - Read existing workspace state if present
 - Engagement mode + parallelism: ask ONLY if mode involves 3+ skills. For 1-2 skill modes, use Standard engagement + Sequential execution (overhead of asking isn't worth it).
-- **Cleanup:** After mode completion (or gate rejection), run `TeamDelete(team_name="shipyard")` if a team was created. Never leave orphaned agents.
+- **Cleanup:** After mode completion (or gate rejection), no team teardown is required. Delegated subagents finish on their own and their worktrees auto-clean; just merge back any worktree branches a wave produced (see phase dispatchers) before reading their outputs.
 
 ### Non-Full-Build Visual Output
 
@@ -404,7 +404,7 @@ mkdir -p Shipyard/.orchestrator/overrides/
 |---------------|---------|
 | `ux-protocol.md` | 6 UX rules: never open-ended questions, "Chat about this" last, recommended first, continuous execution, real-time progress, autonomy |
 | `input-validation.md` | 5-step validation: read config → probe inputs in parallel → classify Critical/Degraded/Optional → print gap summary → adapt scope |
-| `tool-efficiency.md` | Parallel tool calls, smart_outline before Read, Glob not find, Grep not grep, config-aware paths |
+| `tool-efficiency.md` | Parallel tool calls, use Grep to locate structure + Read with offset/limit (and Glob to find files) instead of reading whole files blindly, Glob not find, Grep not grep, config-aware paths |
 | `conflict-resolution.md` | Authority hierarchy, dedup by file:line (keep highest severity), HARDEN→BUILD feedback loops (2 cycle max) |
 | `visual-identity.md` | Visual design language: container hierarchy (Tier 1/2/3), icon vocabulary, progress patterns, gate ceremonies, wave announcements, completion summaries, timing |
 | `freshness-protocol.md` | Temporal sensitivity: volatility tiers (Critical/High/Medium/Stable), WebSearch triggers for outdated data (model IDs, versions, pricing, CVEs), search-then-implement pattern |
@@ -566,11 +566,8 @@ Use the cost estimation table from the visual-identity protocol to look up the r
 
 9. **Research the domain** — use WebSearch before asking the user anything (skip if polymath already researched).
 
-10. **Create team and task graph:**
-```python
-TeamCreate(team_name="shipyard")
-```
-Create all tasks (T1–T13 plus the HARDEN-phase compliance task T6e) with dependencies (see Task Dependency Graph). Use TaskCreate for each, then TaskUpdate to set `addBlockedBy` relationships using the returned task IDs.
+10. **Create the task graph:**
+Create all tasks (T1–T13 plus the HARDEN-phase compliance task T6e) with dependencies (see Task Dependency Graph). Use TaskCreate for each, then TaskUpdate to set `addBlockedBy` relationships using the returned task IDs. The task graph is the orchestrator's single source of tracking — no team object is created; autonomous work is delegated to the named subagents (`agents/<name>.md`), each of which runs backgrounded in its own worktree per its own definition.
 
 11. **Begin Phase 1** — read `phases/define.md` and start immediately. Do NOT ask "should I proceed?"
 
@@ -930,15 +927,11 @@ After Gate 2 (architecture approved), the orchestrator reads the architecture ou
 3. **Generate Wave A TaskList** — All T3a subtasks + T3b subtasks + T4a + T5a + T6a + T6b + T9a. No cross-dependencies.
 4. **On Wave A completion** — Generate Wave B TaskList with dependencies on Wave A outputs.
 
-Each subtask is dispatched as:
-```python
-Agent(
-  prompt="You are the Software Engineer. Implement the {service_name} service. Read architecture at docs/architecture/ and API contract at api/openapi/{service}.yaml. Follow skills/software-engineer/phases/02-service-implementation.md. Write output to services/{service_name}/.",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True
-)
-```
+Each subtask is dispatched as a natural-language delegation to the matching subagent. For a backend service subtask:
+
+> Delegate to the `software-engineer` subagent (`agents/software-engineer.md` — runs backgrounded in its own worktree per its definition). Task context: implement the `{service_name}` service. Read the architecture at `docs/architecture/` and the API contract at `api/openapi/{service}.yaml`; write output to `services/{service_name}/`. When done, write receipt `Shipyard/.orchestrator/receipts/T3a-software-engineer.json` and mark its task complete.
+
+The subagent may parallelize internally up to 3 concurrent FOREGROUND sub-tasks for genuinely independent work (e.g. multiple services). Do not pass `isolation`/`background`/`mode` — those live in the subagent's frontmatter.
 
 ### Conditional Tasks
 
@@ -975,20 +968,16 @@ Each phase loads its dispatcher file for task management and agent spawning.
 
 ### Agent Dispatch Methods
 
-**Skill Tool** — for sequential, user-interactive tasks (PM interview, gate approvals):
+**Skill Tool** — for sequential, user-interactive tasks that run approval gates in the main context (PM interview, architect, polymath gate companion):
 ```python
 Skill(skill="product-manager")
 ```
 
-**Agent Tool** — for parallel, background tasks:
-```python
-Agent(
-  prompt="You are the Backend Engineer. Read architecture at...",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True
-)
-```
+**Subagent delegation** — for parallel, autonomous, background work. Delegate in natural language to the named subagent shipped at `agents/<name>.md` (auto-discovered). Each autonomous worker — `software-engineer`, `frontend-engineer`, `qa-engineer`, `security-engineer`, `code-reviewer`, `compliance-officer`, `devops`, `sre`, `technical-writer`, `skill-maker`, `data-scientist` — declares `background: true` and (for most) `isolation: worktree` in its own frontmatter and invokes the matching `shipyard:<name>` skill in its body. So you do NOT pass `subagent_type`/`isolation`/`background`/`mode` and you do NOT restate "you are X / invoke the skill" — just carry the task-specific context:
+
+> Delegate to the `software-engineer` subagent (`agents/software-engineer.md` — runs backgrounded in its own worktree per its definition). Task context: read the architecture at `docs/architecture/`, implement the assigned service(s) into `services/`, write its receipt to `Shipyard/.orchestrator/receipts/<Txx>-software-engineer.json`, then mark its task complete.
+
+A subagent may parallelize internally up to 3 concurrent FOREGROUND sub-tasks for genuinely independent work; no unbounded or background nested fan-out.
 
 ## Conflict Resolution
 
@@ -1173,20 +1162,17 @@ At every phase transition, re-read key workspace artifacts FROM DISK before crea
 
 ## Pipeline Cleanup
 
-**Immediately after printing the final summary**, clean up the team:
+**Immediately after printing the final summary**, finalize the workspace. There is no team to tear down: delegated subagents finish on their own, and any `isolation: worktree` subagent's worktree auto-cleans once its branch has been merged back. So cleanup is simply:
 
-```python
-TeamDelete(team_name="shipyard")
-```
+- Merge back any outstanding subagent worktree branches from the last wave into the working branch (see the phase dispatchers' merge-back instructions) so their outputs land before assembly.
+- Confirm the task graph is fully resolved via `TaskList` — every task `complete` (or explicitly skipped). No `in_progress` task should remain.
 
-This shuts down all agents and frees resources. Do NOT leave agents idle — the pipeline is complete, there is no further work.
-
-**This step is MANDATORY.** Without it, agents remain alive indefinitely consuming resources. The cleanup must happen regardless of:
+There is no `TeamDelete` step — TeamCreate/TeamDelete no longer exist, and subagents are not long-lived team members. This applies regardless of:
 - Which execution mode was used (Full Build, Feature, Harden, etc.)
 - Whether the pipeline succeeded or was cancelled at a gate
 - Whether the user approved or rejected the final gate
 
-**If the user rejects at any gate** (Gate 1, 2, or 3), also run `TeamDelete` before stopping. Never leave orphaned agents.
+**If the user rejects at any gate** (Gate 1, 2, or 3), simply stop after merging back any completed worktree branches — in-flight subagents finish or are abandoned on their own and their worktrees auto-clean. There are no orphaned team agents to delete.
 
 ## Common Mistakes
 
@@ -1212,7 +1198,6 @@ This shuts down all agents and frees resources. Do NOT leave agents idle — the
 | Skipping pipeline dashboard reprint | Dashboard reprints at every phase transition and gate |
 | Using emoji for status | Unicode symbols only (`● ○ ✓ ✗ ⧖`) — no emoji |
 | Missing wave announcements | Print Tier 2 box before and after every parallel wave |
-| Not calling TeamDelete after completion | ALWAYS run `TeamDelete(team_name="shipyard")` after final summary or gate rejection. Orphaned agents idle forever. |
 | Opening a gate without verifying receipts | Read receipts and verify artifacts exist on disk BEFORE presenting any gate. No receipt = task didn't complete properly. |
 | Skipping re-anchor at phase transitions | Re-read workspace artifacts from disk at every transition. Your compressed memory of the architecture spec is lossy after 20+ minutes. |
 | Trusting agent metrics without receipt verification | Gate metrics come from verified receipt data, not from agent memory or task status. |
@@ -1220,8 +1205,8 @@ This shuts down all agents and frees resources. Do NOT leave agents idle — the
 | Duplicating framework control flow in UI | Don't link to `/api/auth/signin` — link to the protected destination and let middleware redirect. See boundary-safety protocol pattern 2. |
 | Global interceptors without conditional logic | Auth callbacks, API interceptors, and error handlers must branch on input. A hardcoded return value breaks every flow that passes through. See boundary-safety protocol pattern 4. |
 | Testing individual hops but not full user journeys | Auth test that checks "token issued" but never checks "user lands on dashboard" misses the real bugs. E2E must trace complete cross-system flows. |
-| Running parallel agents without worktree isolation | When parallelism is Maximum, use `isolation="worktree"` on all Agent calls. Agents sharing a working directory risk file race conditions. Skip worktrees only if repo is dirty and user declines auto-commit. |
-| Not merging worktree branches after wave completes | After each parallel wave, merge all worktree branches back to the working branch before the next phase reads their outputs. See phase dispatchers for merge-back instructions. |
+| Re-specifying isolation/background at delegation time | Worktree isolation and backgrounding live in each subagent's frontmatter (`agents/<name>.md`), not at the call site. Don't pass `isolation`/`background`/`mode` — just delegate in natural language to the named subagent. Most autonomous workers already declare `isolation: worktree`. |
+| Not merging subagent worktree branches after wave completes | After each parallel wave, merge all subagent worktree branches back to the working branch before the next phase reads their outputs. `isolation: worktree` subagents edit an isolated branch that must be merged back. See phase dispatchers for merge-back instructions. |
 | Stopping pipeline on gate rejection | Gates are self-healing. On rejection, loop back to the relevant agent for rework (max 2 cycles), re-verify, re-present. Only stop if user explicitly cancels or rework limit reached. |
 | Not tracking rework cycles | Log every rework cycle to `.orchestrator/rework-log.md` with gate number, concerns, and changes. Rework count appears in gate ceremony header and final summary. |
 | Missing effort tracking in receipts | Every receipt must include an `effort` field with files_read, files_written, tool_calls. These aggregate into the cost dashboard in the final summary. |

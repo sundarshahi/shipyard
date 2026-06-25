@@ -23,94 +23,30 @@ Use this freshly-read data when writing agent task prompts below.
 
 ## PARALLEL #3 + #4: T5 + T6a + T6b + T6e
 
-All four start together:
+All four start together.
 
-Read `Shipyard/.orchestrator/settings.md` to check if `Worktrees: enabled`. If enabled, add `isolation="worktree"` to each Agent call below.
+Read `Shipyard/.orchestrator/settings.md` to check if `Worktrees: enabled`. The `qa-engineer`, `security-engineer`, `code-reviewer`, and `compliance-officer` subagents each run backgrounded in their own worktree per their definitions (agents/qa-engineer.md, agents/security-engineer.md, agents/code-reviewer.md, agents/compliance-officer.md); if worktrees are enabled, their branches are merged back after the wave (see Worktree Merge-Back below).
 
-```python
-# T5: QA Testing
-TaskUpdate(taskId=t5_id, status="in_progress")
-Agent(
-  prompt="""You are the QA Engineer.
-Use the Skill tool to invoke 'shipyard:qa-engineer' to load your complete methodology and follow it.
-Read implementation: services/, frontend/ (if exists), api/
-Read protocols from: Shipyard/.protocols/
-Read .shipyard.yaml for paths.tests and paths.services.
-Write tests to project root: tests/
-Write workspace artifacts to: Shipyard/qa-engineer/
-Run integration, e2e, and performance tests.
-Distinguish test bugs (fix immediately) from implementation bugs (log as findings).
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T5-qa-engineer.json with task, agent, phase, status, artifacts, metrics, effort, verification. The receipt's `metrics` object MUST include these gate fields, every value taken from REAL tool output (test runner, coverage tool, mutation tool, contract check, perf runner) — never estimated or recalled: `tests_passing` (int), `tests_failing` (int), `coverage_lines` (float %), `coverage_branches` (float %), `mutation_score` (float %), `patch_coverage` (float %), `perf_baseline_regression` (bool — true if node tests/performance/compare-baseline.js shows a p95/error-rate regression past budget), `contract_can_i_deploy` (bool). These mirror Gate 3's required keys; the orchestrator reads them as `metrics.*` to enforce production-readiness, so a missing or fabricated field blocks the gate. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Omit if Worktrees: disabled
-)
+Mark all four tasks in progress, then delegate the wave:
 
-# T6a: Security Audit (SOLE OWASP AUTHORITY)
-TaskUpdate(taskId=t6a_id, status="in_progress")
-Agent(
-  prompt="""You are the Security Engineer — SOLE authority on OWASP, STRIDE, PII, encryption.
-Use the Skill tool to invoke 'shipyard:security-engineer' to load your complete methodology and follow it.
-No other skill performs security review. This is YOUR exclusive domain.
-Read all implementation code: services/, frontend/, infrastructure/
-Read protocols from: Shipyard/.protocols/
-Perform STRIDE threat modeling + OWASP Top 10 (2025) audit + dependency scan.
-Load and honor Shipyard/.protocols/grounding-protocol.md and Shipyard/.protocols/security-testing-protocol.md.
-This is HARDEN (static) mode: run security phases 1-6 ONLY. Do NOT run phases 07-vapt-execution or 08-vapt-report here — live/active testing requires the explicit authorization gate enforced by the orchestrator's Pentest (VAPT) mode (it sets vapt_authorized after the gate).
-Every finding must carry file:line evidence and the standards tag block (CVSS/CWE/OWASP 2025/WSTG/ASVS); no fabricated CVE/CVSS; tag every claim [verified]/[inferred]/[unverified].
-Write findings to: Shipyard/security-engineer/
-Auto-fix Critical/High issues with regression tests.
-Document Medium/Low for remediation plan.
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T6a-security-engineer.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Omit if Worktrees: disabled
-)
-
-# T6b: Code Review (NO OWASP — architecture + quality only)
-TaskUpdate(taskId=t6b_id, status="in_progress")
-Agent(
-  prompt="""You are the Code Reviewer — architecture conformance and code quality ONLY.
-Use the Skill tool to invoke 'shipyard:code-reviewer' to load your complete methodology and follow it.
-DO NOT perform OWASP, STRIDE, or any security review — security-engineer is sole authority.
-Cross-reference: "See security-engineer findings for security context."
-Read architecture: docs/architecture/, api/
-Read implementation: services/, frontend/
-Read protocols from: Shipyard/.protocols/
-Review: SOLID/DRY/KISS, performance, N+1 queries, resource leaks, test quality.
-Write findings to: Shipyard/code-reviewer/
-READ-ONLY: produce findings only, do NOT modify source code.
-ADVERSARIAL STANCE: Your job is to find where this code breaks, not confirm it works. Assume every function has an edge case, every endpoint accepts bad input, every concurrent operation has a race condition. Hunt for the bugs the author can't see.
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T6b-code-reviewer.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Omit if Worktrees: disabled
-)
-
-# T6e: Compliance (SOLE authority on regulatory scoping + control-evidence map)
-TaskUpdate(taskId=t6e_id, status="in_progress")
-Agent(
-  prompt="""You are the Compliance Officer — SOLE authority on per-framework regulatory scoping and the control-evidence map.
-Use the Skill tool to invoke 'shipyard:compliance-officer' to load your complete methodology and follow it.
-You do NOT perform the OWASP/STRIDE audit (security-engineer owns it) and you do NOT redo the PII inventory or encryption audit — you CONSUME them.
-Read protocols from: Shipyard/.protocols/ — load and honor Shipyard/.protocols/compliance-protocol.md and Shipyard/.protocols/grounding-protocol.md.
-Read product signals: Shipyard/product-manager/BRD/ (compliance-discovery answers), .shipyard.yaml `compliance:` block, Shipyard/solution-architect/ (compliance scoping).
-Read security-engineer outputs: Shipyard/security-engineer/ (PII inventory + encryption audit) — consume, do not redo.
-Read implementation: services/, frontend/, infrastructure/.
-Scope frameworks deterministically from product signals (HIPAA/PCI-DSS/GDPR/CCPA/SOC 2/ISO 27001/FedRAMP per the protocol's map); VERIFY every control ID / article number / requirement text live against the official source this session — never recall from memory; tag every claim [verified]/[inferred]/[unverified].
-Produce the control-evidence map: for each scoped mandatory control, mark present / missing with file:line or artifact evidence.
-Write findings + control-evidence map to: Shipyard/compliance-officer/.
-A missing MANDATORY control is a BLOCKING finding (feeds T8 remediation) — do not soft-flag it.
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/Tcomp-compliance-officer.json with task, agent, phase, status, artifacts, metrics (including the controls-present/controls-missing status), effort, verification. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Omit if Worktrees: disabled
-)
 ```
+TaskUpdate(taskId=t5_id, status="in_progress")
+TaskUpdate(taskId=t6a_id, status="in_progress")
+TaskUpdate(taskId=t6b_id, status="in_progress")
+TaskUpdate(taskId=t6e_id, status="in_progress")
+```
+
+Delegate the following to their subagents to run CONCURRENTLY (each is backgrounded + isolated in its own worktree per its definition):
+
+- **`qa-engineer`** (T5 — QA Testing) — Read implementation: services/, frontend/ (if exists), api/. Read protocols from Shipyard/.protocols/. Read .shipyard.yaml for paths.tests and paths.services. Write tests to project root tests/; write workspace artifacts to Shipyard/qa-engineer/. Run integration, e2e, and performance tests. Distinguish test bugs (fix immediately) from implementation bugs (log as findings). When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T5-qa-engineer.json with task, agent, phase, status, artifacts, metrics, effort, verification. The receipt's `metrics` object MUST include these gate fields, every value taken from REAL tool output (test runner, coverage tool, mutation tool, contract check, perf runner) — never estimated or recalled: `tests_passing` (int), `tests_failing` (int), `coverage_lines` (float %), `coverage_branches` (float %), `mutation_score` (float %), `patch_coverage` (float %), `perf_baseline_regression` (bool — true if node tests/performance/compare-baseline.js shows a p95/error-rate regression past budget), `contract_can_i_deploy` (bool). These mirror Gate 3's required keys; the orchestrator reads them as `metrics.*` to enforce production-readiness, so a missing or fabricated field blocks the gate. Then mark its task complete.
+
+- **`security-engineer`** (T6a — Security Audit, SOLE OWASP AUTHORITY) — No other skill performs security review; this is its exclusive domain. Read all implementation code: services/, frontend/, infrastructure/. Read protocols from Shipyard/.protocols/. Perform STRIDE threat modeling + OWASP Top 10 (2025) audit + dependency scan. Load and honor Shipyard/.protocols/grounding-protocol.md and Shipyard/.protocols/security-testing-protocol.md. This is HARDEN (static) mode: run security phases 1-6 ONLY. Do NOT run phases 07-vapt-execution or 08-vapt-report here — live/active testing requires the explicit authorization gate enforced by the orchestrator's Pentest (VAPT) mode (it sets vapt_authorized after the gate). Every finding must carry file:line evidence and the standards tag block (CVSS/CWE/OWASP 2025/WSTG/ASVS); no fabricated CVE/CVSS; tag every claim [verified]/[inferred]/[unverified]. Write findings to Shipyard/security-engineer/. Auto-fix Critical/High issues with regression tests. Document Medium/Low for remediation plan. When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T6a-security-engineer.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark its task complete.
+
+- **`code-reviewer`** (T6b — Code Review, NO OWASP — architecture + quality only) — DO NOT perform OWASP, STRIDE, or any security review — security-engineer is sole authority. Cross-reference: "See security-engineer findings for security context." Read architecture: docs/architecture/, api/. Read implementation: services/, frontend/. Read protocols from Shipyard/.protocols/. Review: SOLID/DRY/KISS, performance, N+1 queries, resource leaks, test quality. Write findings to Shipyard/code-reviewer/. READ-ONLY: produce findings only, do NOT modify source code. ADVERSARIAL STANCE: Your job is to find where this code breaks, not confirm it works. Assume every function has an edge case, every endpoint accepts bad input, every concurrent operation has a race condition. Hunt for the bugs the author can't see. When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T6b-code-reviewer.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark its task complete.
+
+- **`compliance-officer`** (T6e — Compliance, SOLE authority on regulatory scoping + control-evidence map) — Does NOT perform the OWASP/STRIDE audit (security-engineer owns it) and does NOT redo the PII inventory or encryption audit — it CONSUMES them. Read protocols from Shipyard/.protocols/ — load and honor Shipyard/.protocols/compliance-protocol.md and Shipyard/.protocols/grounding-protocol.md. Read product signals: Shipyard/product-manager/BRD/ (compliance-discovery answers), .shipyard.yaml `compliance:` block, Shipyard/solution-architect/ (compliance scoping). Read security-engineer outputs: Shipyard/security-engineer/ (PII inventory + encryption audit) — consume, do not redo. Read implementation: services/, frontend/, infrastructure/. Scope frameworks deterministically from product signals (HIPAA/PCI-DSS/GDPR/CCPA/SOC 2/ISO 27001/FedRAMP per the protocol's map); VERIFY every control ID / article number / requirement text live against the official source this session — never recall from memory; tag every claim [verified]/[inferred]/[unverified]. Produce the control-evidence map: for each scoped mandatory control, mark present / missing with file:line or artifact evidence. Write findings + control-evidence map to Shipyard/compliance-officer/. A missing MANDATORY control is a BLOCKING finding (feeds T8 remediation) — do not soft-flag it. When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/Tcomp-compliance-officer.json with task, agent, phase, status, artifacts, metrics (including the controls-present/controls-missing status), effort, verification. Then mark its task complete.
+
+Each subagent may parallelize internally up to 3 concurrent FOREGROUND sub-tasks for genuinely independent work.
 
 ## Visual Output
 
@@ -129,7 +65,7 @@ Print pipeline dashboard with HARDEN ● active on phase start. Then print wave 
 
 ## Worktree Merge-Back
 
-If worktrees were used, merge each HARDEN agent's branch back after the wave completes:
+If worktrees were used, merge each HARDEN subagent's worktree branch back after the wave completes (subagents with isolation: worktree edit an isolated branch that must be merged back into the main line):
 
 ```python
 for branch in harden_worktree_branches:

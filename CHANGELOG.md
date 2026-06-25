@@ -2,6 +2,26 @@
 
 All notable changes to **Shipyard**.
 
+## [2.1.0] — 2026-06-25
+
+Dispatch-port + correctness release. The orchestration is now built entirely on documented Claude Code primitives — **not** breaking; these are internal dispatch and correctness fixes with no change to the public contract or generated-artifact behavior.
+
+### Changed
+- **Ported orchestration to documented primitives** — the 15 agents are now real `agents/` subagent definitions (auto-discovered, with isolation/background frontmatter) dispatched as genuine isolated subagents via the real `Task*` tools.
+- **Removed nonexistent tooling** — dropped references to the made-up `TeamCreate`/`TeamDelete` and `smart_outline`/`smart_search`/`smart_unfold` tools that were never real Claude Code tools; the real `Task*` tools are retained.
+- **First-run protocol loader fixed** — the first-run-empty bug in the protocol loader is fixed with a belt-and-suspenders `${CLAUDE_PLUGIN_ROOT}` / `${CLAUDE_SKILL_DIR}` path resolution.
+- **Scoped allowed-tools** — each worker subagent now declares a scoped `allowed-tools` set instead of inheriting the full toolset.
+- **skill-maker corrected** — updated to SOTA skill-authoring rules.
+
+### Fixed
+- **Hooks hardened** — `SessionStart`/`PreToolUse` hook commands no longer guess a non-versioned `~/.claude/plugins/cache` path; when `${CLAUDE_PLUGIN_ROOT}` is unset they fail loudly to stderr and exit 0 so the session is never blocked.
+
+### Removed
+- **Dead config** — deleted the orphaned `skills/shipyard/hooks/activation-rules.json` (referenced a `UserPromptSubmit` hook wired to nothing).
+
+### CI
+- **Strict validation** — CI now runs `claude plugin validate --strict` and fails the job on error (no more warning swallow), and verifies `skills/*/SKILL.md` + `agents/*.md` frontmatter with a real YAML parse (name present; description present and ≤1024 chars).
+
 ## [2.0.0] — 2026-06-25
 
 Enterprise-grade hardening release. Shipyard now treats production-readiness as evidence-backed and enforceable: artifacts are generated (not described) and blocking gates verify them.

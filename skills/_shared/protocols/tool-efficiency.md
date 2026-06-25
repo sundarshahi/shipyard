@@ -25,14 +25,14 @@ Read("file3.md")
 
 ## Rule 2: Use Structural Tools Before Full Reads
 
-For code analysis, use `smart_outline` to get a file's structure before reading the full file. Only use `smart_unfold` or full `Read` for specific functions you need to inspect.
+For code analysis, use `Grep` to locate symbols and structure (function/class/export declarations) before reading a file, then `Read` with `offset`/`limit` for the specific functions you need. Avoid reading a large file end-to-end to find one section.
 
 | Need | Tool | Token Cost |
 |------|------|-----------|
-| File structure overview | `smart_outline(file)` | Low (~200-500 tokens) |
-| Specific function code | `smart_unfold(file, symbol)` | Medium (~200-1000 tokens) |
+| File structure overview | `Grep` for declarations, then targeted `Read` | Low (~200-500 tokens) |
+| Specific function code | `Grep -n` the symbol, then `Read` with `offset`/`limit` | Medium (~200-1000 tokens) |
 | Full file content | `Read(file)` | High (~500-5000 tokens) |
-| Find symbols across codebase | `smart_search(query)` | Low (~300-800 tokens) |
+| Find symbols across codebase | `Grep` (with `Glob` to scope files) | Low (~300-800 tokens) |
 
 ## Rule 3: Use the Right Tool for the Job
 
