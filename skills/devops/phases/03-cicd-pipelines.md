@@ -68,7 +68,7 @@ The T7 receipt `metrics` records `{actionlint_errors, hadolint_errors, tflint_er
 1. **Build + push by DIGEST** (immutable; release id == version tag)
 2. **SLSA v1.0 provenance** — `actions/attest-build-provenance` (or slsa-github-generator), keyed to the digest
 3. **Keyless cosign sign** — Sigstore Fulcio cert + Rekor transparency log (no key material)
-4. **syft SBOM** — SPDX, attached to the GitHub Release; **reconcile** with `Shipyard/security-engineer/supply-chain/sbom.json` via `reconcile-sbom.sh`
+4. **syft SBOM** — SPDX, attached to the GitHub Release; **reconcile** with `drydock/security-engineer/supply-chain/sbom.json` via `reconcile-sbom.sh`
 5. **PRE-DEPLOY VERIFY GATE** — `gh attestation verify` + `cosign verify` against the digest; an unverifiable artifact **BLOCKS the deploy**
 6. **Required-reviewer approval** — `production` GitHub Environment
 7. **Progressive rollout** — Argo Rollouts canary on the verified digest; analysis FAIL → auto-abort/rollback
@@ -77,7 +77,7 @@ The T7 receipt `metrics` records `{actionlint_errors, hadolint_errors, tflint_er
 > **Conflict resolution:** security-engineer AUDITS the supply chain (sole authority on app-dependency analysis); **devops IMPLEMENTS** provenance + signing at the image/infra layer and reconciles its release SBOM against the security-engineer audit.
 
 ### Deployment Strategies (progressive delivery, HIGH)
-Argo Rollouts `Rollout` (or Flagger `Canary`) from `templates/rollout-canary.yaml`, with an `AnalysisTemplate` that CONSUMES SRE's `Shipyard/sre/slo/burn-rate-query.yaml` — copying its `burn_rate_query` / `latency_query` (the **exact `observability-contract` names**) and its thresholds verbatim:
+Argo Rollouts `Rollout` (or Flagger `Canary`) from `templates/rollout-canary.yaml`, with an `AnalysisTemplate` that CONSUMES SRE's `drydock/sre/slo/burn-rate-query.yaml` — copying its `burn_rate_query` / `latency_query` (the **exact `observability-contract` names**) and its thresholds verbatim:
 - **burn-rate** = SRE's `burn_rate_query` (multi-window 5xx burn on the canary subset), with `failureCondition: result[0] > 14.4` (SRE's `fail_when`)
 - **p99 latency** = SRE's `latency_query` = `histogram_quantile(0.99, http_request_duration_seconds_bucket{canary="true"})`, with `failureCondition: result[0] > 1.2` seconds (SRE's `latency_fail_when`, derived from `performance-budget.yaml`)
 
@@ -92,7 +92,7 @@ Wired across `pr-checks.yml` (frontend) and `cd-staging.yml` (backend) — all t
 - **`perf-baseline` job (cd-staging, POST-MERGE promotion gate)** — `tests/performance/compare-baseline.js` runs k6, compares `http_request_duration_seconds` p95/p99 against the committed per-scenario `tests/performance/baselines/<scenario>.baseline.json` AND the budget; **fails beyond +10%**. The runner `compare-baseline.js` and the `baselines/<scenario>.baseline.json` files are EMITTED by qa-engineer; devops only INVOKES `node tests/performance/compare-baseline.js`. This gate runs on `cd-staging` (default-branch merge) and BLOCKS staging->prod promotion via the `production` GitHub Environment — it is NOT a required PR check.
 
 ### Test / coverage gates (HIGH)
-- **Coverage gate** in `ci.yml` `test` job — `make coverage-check COVERAGE_MIN=<n>` (threshold from architecture/`.shipyard.yaml`), **no `|| true`**.
+- **Coverage gate** in `ci.yml` `test` job — `make coverage-check COVERAGE_MIN=<n>` (threshold from architecture/`.drydock.yaml`), **no `|| true`**.
 - **Patch-coverage required check** in `pr-checks.yml` — `make patch-coverage`; NEW/changed lines must meet the threshold (`diff-cover`).
 - **Nightly mutation gate** — there is ONE mutation workflow, qa-engineer's `mutation-nightly.yml` (qa owns the mutation tool config + the cron). devops does NOT emit a second mutation workflow. If devops's `scheduled.yml` needs the nightly mutation run on its cron, it invokes qa's gate via `workflow_call` (`uses: ./.github/workflows/mutation-nightly.yml`); otherwise devops makes NO mutation claim. Mutation + property tests are default-on for critical modules — owned and surfaced by qa.
 
@@ -118,4 +118,4 @@ software-engineer generates the base root `Makefile` (phase 05); each gate targe
 devops's ONLY emitted CI-gate Makefile target is `docs-examples`. Every other `make <target>` in a devops workflow (`make coverage-check`, `patch-coverage`, `flags-check`, `size-limit`, `build-frontend`, `arch`) is emitted by its owner skill (qa / software-engineer / frontend); devops merely invokes it. `make setup` / `make test` / `make lint` / `make typecheck` come from the base Makefile (software-engineer).
 
 ### `production-ready` gate decision (override-able, logged)
-`production-ready` is BLOCKED while any of {tests, coverage, perf, compliance, arch-boundary} fails. A breach may be cleared only by a logged **"accepted with justification" override** — an entry in `Shipyard/devops/override.yaml` ` { gate, breach, justification, approver, date }` surfaced at the gate ceremony. An unjustified breach stays blocking.
+`production-ready` is BLOCKED while any of {tests, coverage, perf, compliance, arch-boundary} fails. A breach may be cleared only by a logged **"accepted with justification" override** — an entry in `drydock/devops/override.yaml` ` { gate, breach, justification, approver, date }` surfaced at the gate ceremony. An unjustified breach stays blocking.

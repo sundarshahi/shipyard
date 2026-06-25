@@ -6,10 +6,10 @@
 
 ```bash
 # Read project config if present
-cat .shipyard.yaml 2>/dev/null
+cat .drydock.yaml 2>/dev/null
 ```
 
-If `.shipyard.yaml` exists, use its `paths.*` values for all file lookups. If not, use the default paths documented in each skill.
+If `.drydock.yaml` exists, use its `paths.*` values for all file lookups. If not, use the default paths documented in each skill.
 
 ## Step 2: Probe Inputs in Parallel
 
@@ -21,7 +21,7 @@ Glob("docs/architecture/**/*.md")
 Glob("api/openapi/*.yaml")
 Glob("schemas/**/*")
 Glob("services/**/*")
-Read(".shipyard.yaml")
+Read(".drydock.yaml")
 ```
 
 ## Step 3: Classify Missing Inputs

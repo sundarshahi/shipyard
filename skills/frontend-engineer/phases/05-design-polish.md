@@ -2,7 +2,7 @@
 
 ## Style Selection — Engagement Mode Aware
 
-Read engagement mode from `Shipyard/.orchestrator/settings.md`.
+Read engagement mode from `drydock/.orchestrator/settings.md`.
 
 ### Express Mode
 Auto-select the most domain-appropriate style based on the BRD:
@@ -77,7 +77,7 @@ Combine the user's **selected style** with domain-specific research:
    - **High Tech** → Vercel, GitHub, terminal-inspired UIs, developer tool dashboards
    - **Corporate** → Salesforce, HubSpot, enterprise dashboard patterns
 
-Document findings in `Shipyard/frontend-engineer/docs/design-research.md` including the selected style and how it maps to the domain.
+Document findings in `drydock/frontend-engineer/docs/design-research.md` including the selected style and how it maps to the domain.
 
 ## 5.2 Color Theory
 
@@ -219,8 +219,8 @@ Update these files with researched design decisions:
 
 ## Output
 
-- `Shipyard/frontend-engineer/docs/design-research.md` — Domain research, competitive analysis, trend findings
-- `Shipyard/frontend-engineer/docs/design-decisions.md` — Color choices with rationale, typography selection, visual hierarchy rules
+- `drydock/frontend-engineer/docs/design-research.md` — Domain research, competitive analysis, trend findings
+- `drydock/frontend-engineer/docs/design-decisions.md` — Color choices with rationale, typography selection, visual hierarchy rules
 - Updated token files, theme files, and component styles
 
 ## Validation Loop

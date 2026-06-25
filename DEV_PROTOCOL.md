@@ -100,7 +100,7 @@ Parallelism follows a strict pattern: **shared foundations BEFORE parallel execu
 
 ### Orchestrator Controls Everything
 
-The orchestrator (`skills/shipyard/SKILL.md`) is the single entry point. It:
+The orchestrator (`skills/drydock/SKILL.md`) is the single entry point. It:
 1. Classifies the request into one of 10 execution modes
 2. Presents the plan (for multi-skill modes)
 3. Creates teams and tasks
@@ -182,8 +182,8 @@ Version lives in 4 places. All must match:
 ```
 1. .claude-plugin/plugin.json                                     → version field
 2. .claude-plugin/marketplace.json                                → plugins[0].version
-3. ~/.claude/plugins/installed_plugins.json                        → shipyard@sundarshahi entry
-4. ~/.claude/plugins/cache/sundarshahi/shipyard/{version}/ → directory name
+3. ~/.claude/plugins/installed_plugins.json                        → drydock@sundarshahi entry
+4. ~/.claude/plugins/cache/sundarshahi/drydock/{version}/ → directory name
 ```
 
 **Versioning policy:**
@@ -199,7 +199,7 @@ Version lives in 4 places. All must match:
 4. Add Progress Output section following visual identity
 5. Add Input Classification table (Critical/Degraded/Optional)
 6. Split into phases if the skill has 4+ logical steps
-7. Add the skill to the orchestrator's routing table in `skills/shipyard/SKILL.md`
+7. Add the skill to the orchestrator's routing table in `skills/drydock/SKILL.md`
 8. Update README.md crew section and agent count
 9. Update plugin.json description if the skill changes the plugin's scope
 
@@ -521,12 +521,12 @@ Before every commit, verify:
 You are likely a Claude Code session implementing a change to this plugin. Here is what you need to know:
 
 1. **Read VISION.md first.** It contains the 11 principles that govern everything. This document operationalizes them.
-2. **Read the orchestrator** (`skills/shipyard/SKILL.md`) to understand routing, modes, and gate flow.
+2. **Read the orchestrator** (`skills/drydock/SKILL.md`) to understand routing, modes, and gate flow.
 3. **Read the skill you're modifying** — its SKILL.md and all its phase files — before changing anything.
 4. **Read the protocols** (`skills/_shared/protocols/`) that the skill loads. Your changes must not violate them.
 5. **Changes propagate.** If you modify a protocol, it affects all 14 skills. If you modify the orchestrator's routing table, it affects what skills run for which requests. Think through the blast radius.
 6. **Version management is manual.** When bumping versions, update all 4 locations listed in Section 4. Miss one and the install breaks.
-7. **Test by installing.** After changes, copy files to `~/.claude/plugins/cache/sundarshahi/shipyard/{version}/` and update `~/.claude/plugins/installed_plugins.json`. Then invoke the skill to verify.
+7. **Test by installing.** After changes, copy files to `~/.claude/plugins/cache/sundarshahi/drydock/{version}/` and update `~/.claude/plugins/installed_plugins.json`. Then invoke the skill to verify.
 8. **The user (Quan) is non-technical.** He is a product/business person. His partner is a senior engineer. Design for both: simple interactions for the user, rigorous output for the engineer.
 9. **Ask before destroying.** If you're about to delete files, remove protocols, change version numbers, or modify the orchestrator — confirm with the user first.
 

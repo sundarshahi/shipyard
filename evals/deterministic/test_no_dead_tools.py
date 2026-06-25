@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Guard against regressing to nonexistent ("dead") tooling.
 
-Shipyard once referenced tools that have since been removed from the harness:
+Drydock once referenced tools that have since been removed from the harness:
 TeamCreate, TeamDelete, smart_outline, smart_search, smart_unfold. If any
 skill/agent prose starts *calling* these again (or treats them as live), the
 orchestrator will silently emit instructions the runtime cannot honor — a
@@ -12,7 +12,7 @@ appears as a CALL (token immediately followed by "(") OR appears bare on a line
 that carries no removal/negation marker. A bare mention is only benign when it
 is BOTH (a) not a call-form AND (b) accompanied by a negation marker on the same
 line — e.g. the documented "TeamCreate/TeamDelete no longer exist" note in
-skills/shipyard/SKILL.md. We positively assert that benign line passes through,
+skills/drydock/SKILL.md. We positively assert that benign line passes through,
 so the heuristic itself is proven, not just assumed.
 """
 
@@ -39,7 +39,7 @@ NEGATION_MARKERS = [
 ]
 
 # The known-benign documented line we expect to slip through untouched.
-BENIGN_FILE = "skills/shipyard/SKILL.md"
+BENIGN_FILE = "skills/drydock/SKILL.md"
 BENIGN_SUBSTR = "TeamCreate/TeamDelete no longer exist"
 
 

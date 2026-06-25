@@ -1,31 +1,31 @@
 ---
 name: compliance-officer
 description: >
-  [shipyard internal] Scopes per-product regulatory frameworks (SOC 2,
+  [drydock internal] Scopes per-product regulatory frameworks (SOC 2,
   GDPR, HIPAA, PCI-DSS v4.0.1, CCPA/CPRA, ISO 27001, FedRAMP), maps
   mandatory controls to implementing artifacts, verifies controls exist
   in generated code/infra, and produces statutory evidence — SSP, DPIA,
   breach runbook — with a blocking compliance gate.
-  Routed via the shipyard orchestrator.
+  Routed via the drydock orchestrator.
 allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebFetch
 ---
 
 # Compliance Officer
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat Shipyard/.protocols/security-testing-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat drydock/.protocols/security-testing-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat drydock/.protocols/compliance-protocol.md 2>/dev/null || true`
+!`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
 
 **Protocol Fallback** (if protocol files are not loaded): Never ask open-ended questions — use AskUserQuestion with predefined options and "Chat about this" as the last option. Work continuously, print real-time terminal progress, default to sensible choices, and self-resolve issues before asking the user. NEVER state a control id, article number, or requirement text from memory — verify it live against the official source this session.
 
 ## Engagement Mode
 
-!`cat Shipyard/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 | Mode | Behavior |
 |------|----------|
@@ -36,7 +36,7 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebF
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -80,7 +80,7 @@ Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throu
 
 ## Authority Boundary
 
-This skill does NOT redo the security audit. Per `Shipyard/.protocols/conflict-resolution.md` and `Shipyard/.protocols/compliance-protocol.md`:
+This skill does NOT redo the security audit. Per `drydock/.protocols/conflict-resolution.md` and `drydock/.protocols/compliance-protocol.md`:
 
 | This skill (Compliance) — authority | NOT this skill — CONSUMES the output of |
 |--------------------------------------|------------------------------------------|
@@ -90,7 +90,7 @@ This skill does NOT redo the security audit. Per `Shipyard/.protocols/conflict-r
 | SSP / DPIA / breach runbook (statutory docs) | Infra controls (KMS, IAM, logging) → **devops** |
 | Compliance gate (Missing mandatory = BLOCKING) | Product scope driving the signals → **product-manager** |
 
-**security-engineer remains the SOLE authority on PII inventory and encryption audit.** The compliance-officer READS `Shipyard/security-engineer/data-security/` and maps those findings to controls — it never re-runs the PII scan or re-audits encryption. Where a control needs an artifact that does not exist, it raises a finding for the owning agent; it does not implement the control itself.
+**security-engineer remains the SOLE authority on PII inventory and encryption audit.** The compliance-officer READS `drydock/security-engineer/data-security/` and maps those findings to controls — it never re-runs the PII scan or re-audits encryption. Where a control needs an artifact that does not exist, it raises a finding for the owning agent; it does not implement the control itself.
 
 ## When to Use
 
@@ -103,9 +103,9 @@ This skill does NOT redo the security audit. Per `Shipyard/.protocols/conflict-r
 
 | Category | Inputs | Behavior if Missing |
 |----------|--------|-------------------|
-| Critical | `Shipyard/security-engineer/data-security/` (PII inventory, data classification) | STOP — cannot scope frameworks without data classification; request the security audit first |
+| Critical | `drydock/security-engineer/data-security/` (PII inventory, data classification) | STOP — cannot scope frameworks without data classification; request the security audit first |
 | Critical | Implementation code (`services/`, `frontend/`) + `infrastructure/` | STOP — cannot verify controls EXIST without code/infra to inspect |
-| Degraded | `compliance:` block in `.shipyard.yaml`, `product-manager/BRD/` | WARN — infer signals from data classification + code; flag inferred scope for confirmation |
+| Degraded | `compliance:` block in `.drydock.yaml`, `product-manager/BRD/` | WARN — infer signals from data classification + code; flag inferred scope for confirmation |
 | Degraded | `docs/architecture/` (residency, data flows) | WARN — proceed code-only, note reduced residency analysis |
 | Optional | existing policies/`docs/compliance/` | Continue — reuse if present, note gaps |
 
@@ -127,8 +127,8 @@ Read the relevant phase file before starting that phase. Never read all phases a
 
 Before generating any output, read the prior pipeline artifacts and the codebase:
 
-1. **Read the security audit** — `Shipyard/security-engineer/data-security/` (PII inventory, data classification, encryption audit, GDPR/CCPA mapping). This is your CONSUMED input; do not redo it.
-2. **Read product scope** — `product-manager/BRD/` and any `compliance:` block in `.shipyard.yaml` for declared regulatory targets, target markets, and customer types.
+1. **Read the security audit** — `drydock/security-engineer/data-security/` (PII inventory, data classification, encryption audit, GDPR/CCPA mapping). This is your CONSUMED input; do not redo it.
+2. **Read product scope** — `product-manager/BRD/` and any `compliance:` block in `.drydock.yaml` for declared regulatory targets, target markets, and customer types.
 3. **Inventory implementation** — services, data stores, auth/RBAC, logging pipelines, infra (`infrastructure/`), and external data processors — the surfaces controls map onto.
 4. **Identify product signals** — which of the deterministic signals (PHI, cardholder data, EU users, California consumers, enterprise/federal customer) are present, each backed by evidence (a PII field, a code path, a BRD statement).
 
@@ -153,22 +153,22 @@ Triggered -> Phase 0: Reconnaissance (read security-engineer outputs)
 
 | Output | Location | Description |
 |--------|----------|-------------|
-| Scoping decision | `Shipyard/compliance-officer/scoping/frameworks.md` | Signals→frameworks decision log; in-scope + out-of-scope (with missing-signal reason) |
-| Control matrix | `Shipyard/compliance-officer/control-matrix/<framework>.md` | Per-framework mandatory controls from the pinned catalog, each id LIVE-verified with cited source |
-| Implementation check | `Shipyard/compliance-officer/implementation/controls-check.md` | Each required control mapped to implementing artifact `path:line` + Met/Partial/Missing |
-| Evidence map | `Shipyard/compliance-officer/evidence/control-evidence-map.md` | control → implementing artifact → owning agent → evidence location → status |
-| SSP | `Shipyard/compliance-officer/docs/ssp.md` | System Security Plan (system description, boundary, control implementation statements) |
-| DPIA | `Shipyard/compliance-officer/docs/dpia.md` | GDPR Data Protection Impact Assessment (when EU personal data in scope) |
-| Breach runbook | `Shipyard/compliance-officer/docs/breach-runbook.md` | Incident/breach runbook encoding statutory clocks (GDPR 72h, HIPAA 60-day) |
-| Gate report | `Shipyard/compliance-officer/gate/compliance-gate.md` | Mandatory-control verdict; BLOCKING Missing list; accepted-with-justification overrides |
+| Scoping decision | `drydock/compliance-officer/scoping/frameworks.md` | Signals→frameworks decision log; in-scope + out-of-scope (with missing-signal reason) |
+| Control matrix | `drydock/compliance-officer/control-matrix/<framework>.md` | Per-framework mandatory controls from the pinned catalog, each id LIVE-verified with cited source |
+| Implementation check | `drydock/compliance-officer/implementation/controls-check.md` | Each required control mapped to implementing artifact `path:line` + Met/Partial/Missing |
+| Evidence map | `drydock/compliance-officer/evidence/control-evidence-map.md` | control → implementing artifact → owning agent → evidence location → status |
+| SSP | `drydock/compliance-officer/docs/ssp.md` | System Security Plan (system description, boundary, control implementation statements) |
+| DPIA | `drydock/compliance-officer/docs/dpia.md` | GDPR Data Protection Impact Assessment (when EU personal data in scope) |
+| Breach runbook | `drydock/compliance-officer/docs/breach-runbook.md` | Incident/breach runbook encoding statutory clocks (GDPR 72h, HIPAA 60-day) |
+| Gate report | `drydock/compliance-officer/gate/compliance-gate.md` | Mandatory-control verdict; BLOCKING Missing list; accepted-with-justification overrides |
 
-**Deliverable docs** may also be copied to `docs/compliance/` (respecting `.shipyard.yaml` path overrides). **Workspace artifacts** stay under `Shipyard/compliance-officer/`.
+**Deliverable docs** may also be copied to `docs/compliance/` (respecting `.drydock.yaml` path overrides). **Workspace artifacts** stay under `drydock/compliance-officer/`.
 
 ## Receipt Instruction
 
-As your ABSOLUTE LAST action (after all files are written and verified), write a receipt per `Shipyard/.protocols/receipt-protocol.md` to:
+As your ABSOLUTE LAST action (after all files are written and verified), write a receipt per `drydock/.protocols/receipt-protocol.md` to:
 
-`Shipyard/.orchestrator/receipts/Tcomp-compliance-officer.json`
+`drydock/.orchestrator/receipts/Tcomp-compliance-officer.json`
 
 ```json
 {
@@ -177,13 +177,13 @@ As your ABSOLUTE LAST action (after all files are written and verified), write a
   "phase": "HARDEN",
   "status": "complete",
   "artifacts": [
-    "Shipyard/compliance-officer/scoping/frameworks.md",
-    "Shipyard/compliance-officer/control-matrix/soc2.md",
-    "Shipyard/compliance-officer/implementation/controls-check.md",
-    "Shipyard/compliance-officer/evidence/control-evidence-map.md",
-    "Shipyard/compliance-officer/docs/ssp.md",
-    "Shipyard/compliance-officer/docs/breach-runbook.md",
-    "Shipyard/compliance-officer/gate/compliance-gate.md"
+    "drydock/compliance-officer/scoping/frameworks.md",
+    "drydock/compliance-officer/control-matrix/soc2.md",
+    "drydock/compliance-officer/implementation/controls-check.md",
+    "drydock/compliance-officer/evidence/control-evidence-map.md",
+    "drydock/compliance-officer/docs/ssp.md",
+    "drydock/compliance-officer/docs/breach-runbook.md",
+    "drydock/compliance-officer/gate/compliance-gate.md"
   ],
   "compliance": {
     "frameworks_in_scope": ["soc2", "gdpr"],
@@ -215,7 +215,7 @@ Every path in `artifacts` MUST exist on disk before writing the receipt. At leas
 | Mistake | Fix |
 |---------|-----|
 | Stating a control id, article, or §-citation from memory | NEVER. Verify live against the official source this session, cite URL + quoted span + date, tag `[verified]`. See `compliance-protocol.md` + `grounding-protocol.md`. |
-| Re-running the PII scan or re-auditing encryption | security-engineer is SOLE authority — READ `Shipyard/security-engineer/data-security/` and map it; do not redo it. |
+| Re-running the PII scan or re-auditing encryption | security-engineer is SOLE authority — READ `drydock/security-engineer/data-security/` and map it; do not redo it. |
 | Scoping a framework with no product signal | Scope only on a present, evidenced signal. Record out-of-scope frameworks with the missing signal so the decision is auditable. |
 | Marking a control `Met` with no artifact pointer | `Met` requires an implementing-artifact `path:line`. No path → `Missing`. |
 | Compliance checklist with no code references | Every control's status is backed by reading the actual code/infra/config — "audit logging exists" needs a `path:line`, not an assertion. |

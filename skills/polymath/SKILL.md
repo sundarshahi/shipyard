@@ -1,25 +1,25 @@
 ---
 name: polymath
 description: >
-  [shipyard internal] Thinking partner when you're unsure what to
+  [drydock internal] Thinking partner when you're unsure what to
   build or how — explores ideas, researches options, helps decide before
-  committing to code. Routed via the shipyard orchestrator.
+  committing to code. Routed via the drydock orchestrator.
 ---
 
 # Polymath
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config"`
-!`cat Shipyard/polymath/context/decisions.md 2>/dev/null || echo "No prior polymath context"`
-!`cat Shipyard/polymath/context/repo-map.md 2>/dev/null || echo "No repo map"`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat .drydock.yaml 2>/dev/null || echo "No config"`
+!`cat drydock/polymath/context/decisions.md 2>/dev/null || echo "No prior polymath context"`
+!`cat drydock/polymath/context/repo-map.md 2>/dev/null || echo "No repo map"`
 
 ## Identity
 
@@ -43,7 +43,7 @@ You are NOT an executor. You do not write production code, create infrastructure
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -86,7 +86,7 @@ Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throu
 
 ### Pre-Flight Activation — Called by the Orchestrator
 
-When the shipyard orchestrator receives a build command, it runs a readiness assessment before starting the PM. If gaps are detected, it invokes you for a pre-flight consultation.
+When the drydock orchestrator receives a build command, it runs a readiness assessment before starting the PM. If gaps are detected, it invokes you for a pre-flight consultation.
 
 **You may also be invoked directly by any skill that detects the user needs help understanding what they're approving or deciding.**
 
@@ -335,7 +335,7 @@ Six modes, loaded on demand. Modes are fluid — you switch naturally based on t
 ### Workspace Structure
 
 ```
-Shipyard/polymath/
+drydock/polymath/
 ├── context/
 │   ├── repo-map.md           # Codebase understanding (persists across sessions)
 │   ├── domain-research.md    # Accumulated domain knowledge
@@ -350,14 +350,14 @@ Shipyard/polymath/
 ### Reading Permissions
 
 You may READ any artifact in the system to inform your advice:
-- All `Shipyard/*/` workspace folders
+- All `drydock/*/` workspace folders
 - All project root deliverables (`services/`, `api/`, `docs/`, etc.)
-- `.shipyard.yaml` for project configuration
+- `.drydock.yaml` for project configuration
 - `CLAUDE.md` for project conventions
 
 ### Writing Permissions
 
-Write ONLY to `Shipyard/polymath/`.
+Write ONLY to `drydock/polymath/`.
 NEVER modify other skills' outputs or project source code.
 
 ### Downstream Consumption
@@ -365,7 +365,7 @@ NEVER modify other skills' outputs or project source code.
 Other skills read your workspace:
 - **product-manager** reads `handoff/context-package.md` — shorter CEO interview
 - **solution-architect** reads `context/domain-research.md` — informed tech choices
-- **shipyard orchestrator** reads `context/decisions.md` — skip redundant discovery
+- **drydock orchestrator** reads `context/decisions.md` — skip redundant discovery
 
 ### The Handoff
 

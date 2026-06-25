@@ -71,8 +71,8 @@ AskUserQuestion(questions=[{
 }])
 ```
 
-3. **Persist authorization** — write the choice + target allowlist to `Shipyard/.orchestrator/settings.md` as `vapt_authorized: true|false` and the in-scope list, and write an authorization receipt to `Shipyard/.orchestrator/receipts/`.
-4. **Dispatch Security Engineer** — run phases 1-6 (static) → **07-vapt-execution** (live DAST/PoC, ONLY if `vapt_authorized: true`; otherwise static/passive only) → **08-vapt-report**. The agent honors `Shipyard/.protocols/security-testing-protocol.md` and `grounding-protocol.md`.
+3. **Persist authorization** — write the choice + target allowlist to `drydock/.orchestrator/settings.md` as `vapt_authorized: true|false` and the in-scope list, and write an authorization receipt to `drydock/.orchestrator/receipts/`.
+4. **Dispatch Security Engineer** — run phases 1-6 (static) → **07-vapt-execution** (live DAST/PoC, ONLY if `vapt_authorized: true`; otherwise static/passive only) → **08-vapt-report**. The agent honors `drydock/.protocols/security-testing-protocol.md` and `grounding-protocol.md`.
 5. **Present the VAPT report**; offer a retest pass after remediation.
 
 **1 gate:** the authorization gate (step 2). If the user chooses "Static/passive only", this collapses to the Harden static path (phases 1-6, no execution).
@@ -81,7 +81,7 @@ AskUserQuestion(questions=[{
 
 Map implemented controls to one or more compliance frameworks on existing code. Runs in/after HARDEN — it CONSUMES the security audit (PII inventory, encryption audit, OWASP/STRIDE findings) produced by security-engineer; it never re-derives them. Single-skill (Compliance Officer) but it ALWAYS presents the scoping gate — never the silent single-skill path.
 
-1. **Codebase + audit scan** — read existing code and, if present, the security-engineer outputs in `Shipyard/security-engineer/` (PII inventory, encryption audit, findings). If no security audit exists yet, note that controls evidence will be incomplete and offer to run Harden first.
+1. **Codebase + audit scan** — read existing code and, if present, the security-engineer outputs in `drydock/security-engineer/` (PII inventory, encryption audit, findings). If no security audit exists yet, note that controls evidence will be incomplete and offer to run Harden first.
 2. **MANDATORY scoping gate** — before mapping any controls, confirm which frameworks are in scope. Block the mapping run until confirmed:
 
 ```python
@@ -99,8 +99,8 @@ AskUserQuestion(questions=[{
 }])
 ```
 
-3. **Persist scope** — write the in-scope framework list to `Shipyard/.orchestrator/settings.md` as `compliance_frameworks: [...]`, and write a scoping receipt to `Shipyard/.orchestrator/receipts/`.
-4. **Dispatch Compliance Officer** (`shipyard:compliance-officer`) — it reads the security-engineer audit outputs, maps implemented controls to the in-scope frameworks, and reports each mandatory control as present or missing. It honors `Shipyard/.protocols/compliance-protocol.md` and `grounding-protocol.md`. **Authority note:** security-engineer remains the sole authority on PII inventory and encryption audit — the compliance-officer consumes those outputs and never overrides them. It writes a receipt to `Shipyard/.orchestrator/receipts/Tcomp-compliance-officer.json` with controls-present/missing status.
+3. **Persist scope** — write the in-scope framework list to `drydock/.orchestrator/settings.md` as `compliance_frameworks: [...]`, and write a scoping receipt to `drydock/.orchestrator/receipts/`.
+4. **Dispatch Compliance Officer** (`drydock:compliance-officer`) — it reads the security-engineer audit outputs, maps implemented controls to the in-scope frameworks, and reports each mandatory control as present or missing. It honors `drydock/.protocols/compliance-protocol.md` and `grounding-protocol.md`. **Authority note:** security-engineer remains the sole authority on PII inventory and encryption audit — the compliance-officer consumes those outputs and never overrides them. It writes a receipt to `drydock/.orchestrator/receipts/Tcomp-compliance-officer.json` with controls-present/missing status.
 5. **Present the compliance report**; for each missing mandatory control, offer remediation or a logged exception.
 
 **1 gate:** the scoping gate (step 2).

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Behavioral eval harness for Shipyard — LOCAL ONLY, NOT a CI gate.
+Behavioral eval harness for Drydock — LOCAL ONLY, NOT a CI gate.
 
 WHAT THIS GUARDS / WHY IT MATTERS:
   The deterministic tier proves files are well-formed; it cannot prove that the
   *router* (Claude reading the SKILL.md descriptions) actually picks the right
   entry skill for a real user prompt. Description wording drift silently breaks
-  routing — e.g. a compliance question gets answered by `shipyard` instead of
+  routing — e.g. a compliance question gets answered by `drydock` instead of
   `compliance-officer`, or a worker skill gets surfaced for standalone use. This
   harness drives the real model via `claude -p` in a constrained "route only"
   mode (one turn, no tools, no pipeline) and reports which skill it would pick.
@@ -40,10 +40,10 @@ ROOT = Path(__file__).resolve().parents[2]
 ROUTE_INSTRUCTION = (
     "EVAL MODE: Do not take any action or call any tools. On a single final "
     "line output exactly: ROUTE: <plugin>:<skill> naming the single most "
-    "appropriate Shipyard skill to handle this request, then stop."
+    "appropriate Drydock skill to handle this request, then stop."
 )
 
-# Matches "ROUTE: shipyard:compliance-officer" anywhere in the text.
+# Matches "ROUTE: drydock:compliance-officer" anywhere in the text.
 _ROUTE_RE = re.compile(r"ROUTE:\s*([A-Za-z0-9_.-]+:[A-Za-z0-9_.-]+)")
 
 
@@ -218,7 +218,7 @@ _SAMPLE_STREAM = "\n".join([
         "session_id": "abc123",
         "model": "claude-opus-4-8",
         "plugin_errors": [],
-        "plugins": ["shipyard"],
+        "plugins": ["drydock"],
         "tools": ["Skill", "Read", "Bash"],
     }),
     "this is not json and must be skipped",
@@ -231,7 +231,7 @@ _SAMPLE_STREAM = "\n".join([
                 {
                     "type": "tool_use",
                     "name": "Skill",
-                    "input": {"skill": "shipyard:compliance-officer"},
+                    "input": {"skill": "drydock:compliance-officer"},
                 },
             ],
         },
@@ -242,7 +242,7 @@ _SAMPLE_STREAM = "\n".join([
             "role": "assistant",
             "content": [
                 {"type": "text",
-                 "text": "ROUTE: shipyard:compliance-officer"},
+                 "text": "ROUTE: drydock:compliance-officer"},
             ],
         },
     }),
@@ -250,7 +250,7 @@ _SAMPLE_STREAM = "\n".join([
         "type": "result",
         "subtype": "success",
         "is_error": False,
-        "result": "ROUTE: shipyard:compliance-officer",
+        "result": "ROUTE: drydock:compliance-officer",
     }),
 ])
 
@@ -261,19 +261,19 @@ def _self_test() -> list:
 
     if r.plugin_errors != []:
         failures.append(f"plugin_errors: expected [] got {r.plugin_errors!r}")
-    if "shipyard" not in r.plugins:
-        failures.append(f"plugins: expected to contain 'shipyard' got {r.plugins!r}")
-    if r.skills_invoked != ["shipyard:compliance-officer"]:
+    if "drydock" not in r.plugins:
+        failures.append(f"plugins: expected to contain 'drydock' got {r.plugins!r}")
+    if r.skills_invoked != ["drydock:compliance-officer"]:
         failures.append(
-            f"skills_invoked: expected ['shipyard:compliance-officer'] "
+            f"skills_invoked: expected ['drydock:compliance-officer'] "
             f"got {r.skills_invoked!r}"
         )
-    if r.route_line != "shipyard:compliance-officer":
+    if r.route_line != "drydock:compliance-officer":
         failures.append(
-            f"route_line: expected 'shipyard:compliance-officer' "
+            f"route_line: expected 'drydock:compliance-officer' "
             f"got {r.route_line!r}"
         )
-    if "ROUTE: shipyard:compliance-officer" not in r.raw_text:
+    if "ROUTE: drydock:compliance-officer" not in r.raw_text:
         failures.append("raw_text: expected to contain the ROUTE line")
     if r.exit_code != 0:
         failures.append(f"exit_code: expected 0 got {r.exit_code}")

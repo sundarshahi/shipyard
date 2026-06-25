@@ -1,16 +1,16 @@
-# Shipyard — Personal Dev Plugin for Claude Code
+# Drydock — Personal Dev Plugin for Claude Code
 
 **15 orchestrated skills. 12 execution modes. Idea to production.**
 
-Shipyard is a set of orchestrated skills (each shows up as a `shipyard:<skill>` invocation) coordinated by a single orchestrator. Throughout these docs "agent" and "skill" refer to the same thing: a specialized worker the orchestrator routes to.
+Drydock is a set of orchestrated skills (each shows up as a `drydock:<skill>` invocation) coordinated by a single orchestrator. Throughout these docs "agent" and "skill" refer to the same thing: a specialized worker the orchestrator routes to.
 
 ## Install (marketplace)
 
-Install Shipyard from inside Claude Code using the plugin marketplace flow:
+Install Drydock from inside Claude Code using the plugin marketplace flow:
 
 ```text
-/plugin marketplace add sundarshahi/shipyard
-/plugin install shipyard
+/plugin marketplace add sundarshahi/drydock
+/plugin install drydock
 ```
 
 This pulls the published plugin and registers its skills, hooks, and shared protocols. No local clone required.
@@ -22,15 +22,15 @@ This pulls the published plugin and registers its skills, hooks, and shared prot
 For local development or to run an unreleased checkout:
 
 ```bash
-git clone https://github.com/sundarshahi/shipyard ~/.claude/plugins/shipyard
-claude --plugin-dir ~/.claude/plugins/shipyard
+git clone https://github.com/sundarshahi/drydock ~/.claude/plugins/drydock
+claude --plugin-dir ~/.claude/plugins/drydock
 ```
 
 ---
 
 ## Enterprise-grade by default
 
-Every dimension below is **evidence-backed** — Shipyard generates real artifacts and enforces blocking gates, not prose recommendations.
+Every dimension below is **evidence-backed** — Drydock generates real artifacts and enforces blocking gates, not prose recommendations.
 
 - **12-Factor** — config from environment, stateless processes, and disposability are scaffolded and checked, not assumed.
 - **Clean Architecture** — the dependency rule is enforced by the `architecture-boundaries` protocol; boundary violations block `production-ready`.
@@ -115,7 +115,7 @@ YOU → "Build a SaaS for ..."
 
 ## The 15 Skills
 
-These are orchestrated skills — each is invocable as `shipyard:<skill>` and the orchestrator routes to them based on your request.
+These are orchestrated skills — each is invocable as `drydock:<skill>` and the orchestrator routes to them based on your request.
 
 | # | Skill | Sole Authority |
 |---|---|---|
@@ -139,25 +139,25 @@ These are orchestrated skills — each is invocable as `shipyard:<skill>` and th
 
 ## Invocation
 
-Invoke any skill directly with its `shipyard:<skill>` name, or let the orchestrator route for you.
+Invoke any skill directly with its `drydock:<skill>` name, or let the orchestrator route for you.
 
 | Invocation | Skill |
 |---|---|
-| `/shipyard:shipyard` | Orchestrator (routing + gates) |
-| `/shipyard:polymath` | Polymath |
-| `/shipyard:product-manager` | Product Manager |
-| `/shipyard:solution-architect` | Solution Architect |
-| `/shipyard:software-engineer` | Software Engineer |
-| `/shipyard:frontend-engineer` | Frontend Engineer |
-| `/shipyard:qa-engineer` | QA Engineer |
-| `/shipyard:security-engineer` | Security Engineer |
-| `/shipyard:code-reviewer` | Code Reviewer |
-| `/shipyard:devops` | DevOps |
-| `/shipyard:sre` | SRE |
-| `/shipyard:data-scientist` | Data Scientist |
-| `/shipyard:technical-writer` | Technical Writer |
-| `/shipyard:skill-maker` | Skill Maker |
-| `/shipyard:compliance-officer` | Compliance Officer |
+| `/drydock:drydock` | Orchestrator (routing + gates) |
+| `/drydock:polymath` | Polymath |
+| `/drydock:product-manager` | Product Manager |
+| `/drydock:solution-architect` | Solution Architect |
+| `/drydock:software-engineer` | Software Engineer |
+| `/drydock:frontend-engineer` | Frontend Engineer |
+| `/drydock:qa-engineer` | QA Engineer |
+| `/drydock:security-engineer` | Security Engineer |
+| `/drydock:code-reviewer` | Code Reviewer |
+| `/drydock:devops` | DevOps |
+| `/drydock:sre` | SRE |
+| `/drydock:data-scientist` | Data Scientist |
+| `/drydock:technical-writer` | Technical Writer |
+| `/drydock:skill-maker` | Skill Maker |
+| `/drydock:compliance-officer` | Compliance Officer |
 
 ---
 
@@ -188,7 +188,7 @@ Invoke any skill directly with its `shipyard:<skill>` name, or let the orchestra
 ## Workspace Structure (created per project)
 
 ```
-Shipyard/
+drydock/
 ├── .protocols/        # shared protocols deployed at bootstrap
 ├── .orchestrator/     # pipeline state + receipts
 ├── product-manager/
@@ -210,21 +210,21 @@ Shipyard/
 
 ## Configuration
 
-Copy `skills/_shared/templates/shipyard.yaml.tmpl` to `.shipyard.yaml` at project root to customize paths, preferences, and feature toggles.
+Copy `skills/_shared/templates/drydock.yaml.tmpl` to `.drydock.yaml` at project root to customize paths, preferences, and feature toggles.
 
 ---
 
 ## Partial Execution
 
 ```bash
-/shipyard just define       # T1 + T2 only
-/shipyard just build        # Requires DEFINE output
-/shipyard just harden       # Requires BUILD output
-/shipyard pentest           # 8-phase VAPT — live DAST + report (gated; authorized targets only)
-/shipyard compliance        # Map regulatory controls to artifacts (gated)
-/shipyard just ship         # Requires HARDEN output
-/shipyard just document     # T11 only
-/shipyard skip frontend     # Omit T3b
+/drydock just define       # T1 + T2 only
+/drydock just build        # Requires DEFINE output
+/drydock just harden       # Requires BUILD output
+/drydock pentest           # 8-phase VAPT — live DAST + report (gated; authorized targets only)
+/drydock compliance        # Map regulatory controls to artifacts (gated)
+/drydock just ship         # Requires HARDEN output
+/drydock just document     # T11 only
+/drydock skip frontend     # Omit T3b
 ```
 
 ---

@@ -1,9 +1,9 @@
-# Behavioral routing fixtures for Shipyard (LOCAL ONLY, never a CI gate).
+# Behavioral routing fixtures for Drydock (LOCAL ONLY, never a CI gate).
 #
 # Each case is an unambiguous user prompt plus the entry skill the router
 # SHOULD pick. Expectations are derived from the real user-facing SKILL.md
 # descriptions of the 6 entry skills:
-#   - shipyard           : full idea->production build ("build/create X")
+#   - drydock           : full idea->production build ("build/create X")
 #   - product-manager    : turn a product idea into requirements / PRD / scope
 #   - solution-architect : architecture / system-design / tech-stack decisions
 #   - polymath           : cross-domain research / explore-before-coding /
@@ -11,9 +11,9 @@
 #   - skill-maker        : create a new reusable Claude Code skill/plugin
 #   - compliance-officer : which regulations apply / SOC 2 / GDPR / HIPAA scoping
 #
-# The 11 worker skills are "only invoked by the shipyard orchestrator — not for
-# standalone use", so a worker-shaped user request should route to `shipyard`,
-# NOT directly to the worker. (See worker_routes_to_shipyard below.)
+# The 11 worker skills are "only invoked by the drydock orchestrator — not for
+# standalone use", so a worker-shaped user request should route to `drydock`,
+# NOT directly to the worker. (See worker_routes_to_drydock below.)
 #
 # Matching at runtime is loose/substring because temp=1.0 routing is
 # non-deterministic.
@@ -22,14 +22,14 @@
   prompt: >
     Build me a production-ready URL shortener web app with analytics, auth,
     and a deploy pipeline. Take it from idea all the way to ship.
-  expect_skill: shipyard
+  expect_skill: drydock
   note: Canonical "build me X, production-ready, end-to-end" request.
 
 - id: add_feature_existing
   prompt: >
     I have an existing Node API. Add a rate-limiting feature, write tests for
     it, and harden it before we launch.
-  expect_skill: shipyard
+  expect_skill: drydock
   note: Multi-step build/harden work on existing code -> orchestrator.
 
 - id: requirements_prd
@@ -84,11 +84,11 @@
   expect_skill: compliance-officer
   note: Regulatory applicability question (GDPR).
 
-- id: worker_routes_to_shipyard
+- id: worker_routes_to_drydock
   prompt: >
     Set up a full CI/CD pipeline and Kubernetes deployment for my service, with
     observability and a hardened production DevOps setup.
-  expect_skill: shipyard
+  expect_skill: drydock
   note: >
     DevOps is a WORKER skill (no standalone use). A worker-shaped request must
-    route to the shipyard orchestrator, not directly to devops.
+    route to the drydock orchestrator, not directly to devops.

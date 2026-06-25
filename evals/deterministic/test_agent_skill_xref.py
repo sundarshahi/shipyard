@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Guard the agent<->skill dispatch wiring integrity.
 
-Shipyard dispatches work by spawning an isolated subagent (agents/<name>.md)
+Drydock dispatches work by spawning an isolated subagent (agents/<name>.md)
 that immediately invokes the same-named worker skill (skills/<name>/SKILL.md)
-via `Skill: shipyard:<name>`. If an agent loses its 1:1 skill, points at the
+via `Skill: drydock:<name>`. If an agent loses its 1:1 skill, points at the
 wrong skill, or a new worker skill is added without an agent (or vice-versa),
 dispatch silently breaks or a capability becomes unreachable.
 
@@ -13,9 +13,9 @@ decision instead of shipping a broken orchestrator.
 It asserts:
   (a) every agents/<name>.md has a matching skills/<name>/SKILL.md (11 expected);
   (b) skill dirs (excluding _shared) minus agent names == exactly the 4
-      intentional main-context skills {shipyard, product-manager,
+      intentional main-context skills {drydock, product-manager,
       solution-architect, polymath};
-  (c) every agent body instructs invoking its skill via literal "shipyard:<name>";
+  (c) every agent body instructs invoking its skill via literal "drydock:<name>";
   (d) every agent frontmatter has name==<filename>, plus non-empty
       'description' and 'tools' keys.
 """
@@ -32,7 +32,7 @@ SKILLS_DIR = ROOT / "skills"
 
 # The skills that intentionally run in the main context and therefore have
 # NO agents/<name>.md dispatcher.
-MAIN_CONTEXT_SKILLS = {"shipyard", "product-manager", "solution-architect", "polymath"}
+MAIN_CONTEXT_SKILLS = {"drydock", "product-manager", "solution-architect", "polymath"}
 EXPECTED_AGENT_COUNT = 11
 
 
@@ -103,10 +103,10 @@ def run() -> list[str]:
         text = agent_md.read_text(encoding="utf-8")
 
         # (c) body must instruct invoking the same-named skill.
-        if f"shipyard:{name}" not in text:
+        if f"drydock:{name}" not in text:
             failures.append(
                 f"agents/{name}.md does not reference its skill "
-                f'"shipyard:{name}"'
+                f'"drydock:{name}"'
             )
 
         # (d) frontmatter integrity.

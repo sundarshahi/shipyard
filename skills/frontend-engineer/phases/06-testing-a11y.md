@@ -6,7 +6,7 @@ Establish comprehensive testing coverage and accessibility compliance on the **f
 
 ## Context Bridge
 
-Read Phase 3 component inventory from `Shipyard/frontend-engineer/docs/component-inventory.md`. Read Phase 4 pages from `frontend/app/pages/` for route coverage. Read Phase 5 design decisions from `Shipyard/frontend-engineer/docs/design-decisions.md` for visual regression context.
+Read Phase 3 component inventory from `drydock/frontend-engineer/docs/component-inventory.md`. Read Phase 4 pages from `frontend/app/pages/` for route coverage. Read Phase 5 design decisions from `drydock/frontend-engineer/docs/design-decisions.md` for visual regression context.
 
 ## Workflow
 
@@ -46,7 +46,7 @@ Produce E2E tests in `frontend/tests/e2e/` and `frontend/playwright.config.ts`.
 - Color contrast: 4.5:1 normal text, 3:1 large text
 - Motion: `prefers-reduced-motion` respected
 
-Produce `Shipyard/frontend-engineer/docs/a11y-audit.md`.
+Produce `drydock/frontend-engineer/docs/a11y-audit.md`.
 
 ### Step 4: Performance Budget (Core Web Vitals) — thresholds READ FROM the shared budget artifact
 
@@ -67,7 +67,7 @@ Because these are generated from the YAML, a budget change in `docs/architecture
 
 The web-vitals captured at runtime (Phase 4.6) report to the same `web_vitals` keys, so the field RUM data and the CI budget speak the same units.
 
-Produce `frontend/lighthouserc.json`, `frontend/.size-limit.json`, and `Shipyard/frontend-engineer/docs/performance-budget.md` (documenting which thresholds came from the artifact).
+Produce `frontend/lighthouserc.json`, `frontend/.size-limit.json`, and `drydock/frontend-engineer/docs/performance-budget.md` (documenting which thresholds came from the artifact).
 
 ### Step 5: Visual Regression Testing
 
@@ -86,7 +86,7 @@ Produce visual regression configs in `frontend/tests/visual/`.
 | Mobile Chrome | Latest | Playwright emulation | P0 |
 | Mobile Safari | Latest | Playwright emulation | P0 |
 
-Produce `Shipyard/frontend-engineer/docs/browser-support.md`.
+Produce `drydock/frontend-engineer/docs/browser-support.md`.
 
 ### Step 7: Observability & Security Verification
 
@@ -104,9 +104,9 @@ Verify the contracts established in Phase 2 (security) and Phase 4.6 (observabil
 - `frontend/playwright.config.ts`
 - `frontend/lighthouserc.json` (LCP/INP/CLS thresholds read from `docs/architecture/performance-budget.yaml`)
 - `frontend/.size-limit.json` (per-entry `max_kb` read from the budget `bundle` section)
-- `Shipyard/frontend-engineer/docs/a11y-audit.md`
-- `Shipyard/frontend-engineer/docs/performance-budget.md`
-- `Shipyard/frontend-engineer/docs/browser-support.md`
+- `drydock/frontend-engineer/docs/a11y-audit.md`
+- `drydock/frontend-engineer/docs/performance-budget.md`
+- `drydock/frontend-engineer/docs/browser-support.md`
 
 ## Validation Loop
 

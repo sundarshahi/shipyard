@@ -1,6 +1,6 @@
-# Contributing to Shipyard
+# Contributing to Drydock
 
-Thanks for helping improve Shipyard. This plugin is a coordinated set of orchestrated skills, not a loose script collection — contributions are held to the same production bar the pipeline enforces.
+Thanks for helping improve Drydock. This plugin is a coordinated set of orchestrated skills, not a loose script collection — contributions are held to the same production bar the pipeline enforces.
 
 ## Before you start
 
@@ -11,7 +11,7 @@ Thanks for helping improve Shipyard. This plugin is a coordinated set of orchest
 
 - `.claude-plugin/plugin.json` — plugin manifest (name, version, keywords).
 - `skills/<name>/SKILL.md` — one directory per orchestrated skill. Frontmatter must include `name` and `description`.
-- `skills/_shared/protocols/` — protocol SOURCE files. The orchestrator copies these to `Shipyard/.protocols/` at bootstrap; that copied path is what worker-skill loaders read at runtime, not this source directory.
+- `skills/_shared/protocols/` — protocol SOURCE files. The orchestrator copies these to `drydock/.protocols/` at bootstrap; that copied path is what worker-skill loaders read at runtime, not this source directory.
 - `skills/_shared/templates/` — config and scaffold templates.
 - `hooks/` — `hooks.json` plus the hook scripts it wires (e.g. `secret-guard.sh`).
 
@@ -21,7 +21,7 @@ Thanks for helping improve Shipyard. This plugin is a coordinated set of orchest
 2. **Read the target file fully** before editing. Keep edits surgical and consistent with existing structure and tone.
 3. **Keep counts honest.** If you add or remove a skill, mode, or protocol, update every current-count claim in `README.md`, `plugin.json`, `VISION.md`, and the orchestrator SKILL.md. Mismatched counts fail review.
 4. **Adding a protocol?** Add it to the orchestrator bootstrap deploy list and to the loader line of every skill that consumes it, or its `cat` loader will read a missing file.
-5. **Adding a skill?** Create `skills/<name>/SKILL.md` with valid `name` + `description` frontmatter, give it a `shipyard:<name>` invocation, and add it to the README invocation table.
+5. **Adding a skill?** Create `skills/<name>/SKILL.md` with valid `name` + `description` frontmatter, give it a `drydock:<name>` invocation, and add it to the README invocation table.
 6. **Bump the version** in `plugin.json` and add a dated `CHANGELOG.md` entry. Flag anything potentially breaking under a `### Breaking` heading.
 
 ## Validation

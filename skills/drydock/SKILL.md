@@ -1,5 +1,5 @@
 ---
-name: shipyard
+name: drydock
 description: >
   Use when the user wants to build, create, or develop anything — websites,
   apps, APIs, services, platforms. This skill enhances Claude Code from
@@ -15,18 +15,18 @@ description: >
   and CI/CD — not just code files."
 ---
 
-# Shipyard
+# Drydock
 
 !`git status 2>/dev/null || echo "No git repo detected"`
 !`cat CLAUDE.md 2>/dev/null || echo "No CLAUDE.md found"`
-!`ls Shipyard/ 2>/dev/null || echo "No existing workspace"`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config file — defaults apply"`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
+!`ls drydock/ 2>/dev/null || echo "No existing workspace"`
+!`cat .drydock.yaml 2>/dev/null || echo "No config file — defaults apply"`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat drydock/.protocols/compliance-protocol.md 2>/dev/null || true`
 
 <IMPORTANT>
 This skill ENHANCES Claude Code's development capabilities. Without it, Claude Code produces code files. With it, Claude Code produces complete production-ready systems — architecture, tested code, security audit, CI/CD, and documentation.
@@ -43,7 +43,7 @@ Invoke this skill when the user's request involves ANY of these:
 
 When in doubt, invoke this skill. It classifies the request and runs only the relevant agents — from a single code review to a full 15-agent pipeline. The overhead of invoking unnecessarily is near zero.
 
-If you decide NOT to invoke this skill for a build/create request, you MUST still ask the user if they'd like Shipyard execution. Frame it as a choice, not a sales pitch:
+If you decide NOT to invoke this skill for a build/create request, you MUST still ask the user if they'd like Drydock execution. Frame it as a choice, not a sales pitch:
 "I can build this directly, or I can run a structured pipeline that also produces architecture docs, tests, security audit, and CI/CD. Which do you prefer?"
 If the user declines, proceed normally. If they accept, invoke this skill.
 </IMPORTANT>
@@ -60,7 +60,7 @@ Adaptive meta-skill orchestrator that enhances Claude Code's development output.
 
 ## Reference Index
 
-Detailed procedures live in referenced files (progressive disclosure). Load each on demand — never read all at once. Paths use `${CLAUDE_PLUGIN_ROOT}/skills/shipyard/...` with `${CLAUDE_SKILL_DIR}/...` as fallback.
+Detailed procedures live in referenced files (progressive disclosure). Load each on demand — never read all at once. Paths use `${CLAUDE_PLUGIN_ROOT}/skills/drydock/...` with `${CLAUDE_SKILL_DIR}/...` as fallback.
 
 | Reference File | Load When |
 |----------------|-----------|
@@ -122,7 +122,7 @@ AskUserQuestion(questions=[{
   "header": "Execution Plan",
   "options": [
     {"label": "Looks good — start (Recommended)", "description": "Execute this plan"},
-    {"label": "I want the full Shipyard pipeline", "description": "Run all 15 skills, 5 phases, 3 gates"},
+    {"label": "I want the full Drydock pipeline", "description": "Run all 15 skills, 5 phases, 3 gates"},
     {"label": "Adjust the plan", "description": "Add or remove skills from the plan"},
     {"label": "Chat about this", "description": "Free-form input"}
   ],
@@ -141,9 +141,8 @@ For non-Full-Build modes, use the lightweight execution flows below. For Full Bu
 ## Mode Execution (Non-Full-Build)
 
 All modes share these behaviors:
-- Bootstrap workspace: `mkdir -p Shipyard/.protocols/ Shipyard/.orchestrator/`
-- Write shared protocols (same as Full Build step 3, including `visual-identity.md`, `freshness-protocol.md`, `receipt-protocol.md`, `boundary-safety.md`, `grounding-protocol.md`, `security-testing-protocol.md`, `security-defaults.md`, `observability-contract.md`, `architecture-boundaries.md`, and `compliance-protocol.md`)
-- Read `.shipyard.yaml` for path overrides
+- Bootstrap workspace + protocols: run `bash "${CLAUDE_PLUGIN_ROOT}/skills/drydock/scripts/bootstrap-workspace.sh"` (fallback `"${CLAUDE_SKILL_DIR}/scripts/bootstrap-workspace.sh"`) — it creates the workspace dirs and deploys all shared protocols to `drydock/.protocols/`. Same script as Full Build step 2 (see `phases/full-build-setup.md`).
+- Read `.drydock.yaml` for path overrides
 - Read existing workspace state if present
 - Engagement mode + parallelism: ask ONLY if mode involves 3+ skills. For 1-2 skill modes, use Standard engagement + Sequential execution (overhead of asking isn't worth it).
 - **Cleanup:** After mode completion (or gate rejection), no team teardown is required. Delegated subagents finish on their own and their worktrees auto-clean; just merge back any worktree branches a wave produced (see phase dispatchers) before reading their outputs.
@@ -173,7 +172,7 @@ All modes share these behaviors:
 
 **Single-skill modes** (Test, Review, Architect, Document, Explore): The skill prints its own `━━━ [Skill Name] ━━━` header and `[1/N]` phase progress. No orchestrator-level completion box needed.
 
-After classifying into a non-Full-Build mode, read `${CLAUDE_PLUGIN_ROOT}/skills/shipyard/reference/non-full-build-modes.md` (fallback `${CLAUDE_SKILL_DIR}/reference/non-full-build-modes.md`) and follow the section for the selected mode. The 12 per-mode subsections (execution steps, gates, authorization/scoping ceremonies, and visual flows) live there:
+After classifying into a non-Full-Build mode, read `${CLAUDE_PLUGIN_ROOT}/skills/drydock/reference/non-full-build-modes.md` (fallback `${CLAUDE_SKILL_DIR}/reference/non-full-build-modes.md`) and follow the section for the selected mode. The 12 per-mode subsections (execution steps, gates, authorization/scoping ceremonies, and visual flows) live there:
 
 | Mode | Gates | Notes |
 |------|-------|-------|
@@ -194,11 +193,11 @@ After classifying into a non-Full-Build mode, read `${CLAUDE_PLUGIN_ROOT}/skills
 
 ## Full Build Pipeline
 
-When mode is **Full Build**, read `${CLAUDE_PLUGIN_ROOT}/skills/shipyard/phases/full-build-setup.md` (fallback `${CLAUDE_SKILL_DIR}/phases/full-build-setup.md`) and follow its 11-step bootstrap (workspace + protocols, brownfield detection, engagement + parallelism selection, polymath pre-flight, task-graph creation), then begin Phase 1 via `phases/define.md`. Reprint the pipeline dashboard at every phase transition and gate.
+When mode is **Full Build**, read `${CLAUDE_PLUGIN_ROOT}/skills/drydock/phases/full-build-setup.md` (fallback `${CLAUDE_SKILL_DIR}/phases/full-build-setup.md`) and follow its 11-step bootstrap (workspace + protocols, brownfield detection, engagement + parallelism selection, polymath pre-flight, task-graph creation), then begin Phase 1 via `phases/define.md`. Reprint the pipeline dashboard at every phase transition and gate.
 
 ## User Experience Protocol
 
-Follow the shared UX Protocol at `Shipyard/.protocols/ux-protocol.md` and the visual identity at `Shipyard/.protocols/visual-identity.md`. Key rules:
+Follow the shared UX Protocol at `drydock/.protocols/ux-protocol.md` and the visual identity at `drydock/.protocols/visual-identity.md`. Key rules:
 1. **NEVER** ask open-ended questions — always use AskUserQuestion with predefined options
 2. **"Chat about this"** always last option
 3. **Recommended option first** with `(Recommended)` suffix
@@ -221,11 +220,11 @@ This ensures non-technical users can understand what they're approving without t
 
 ### Strategic Gates (3 total)
 
-The 3 strategic gates (BRD, Architecture, Production Readiness) — ceremonies, receipt verification, the BLOCKING production-readiness evaluation, override receipts, and rework loops — are defined in `${CLAUDE_PLUGIN_ROOT}/skills/shipyard/phases/gates.md` (fallback `${CLAUDE_SKILL_DIR}/phases/gates.md`). Read it before presenting any gate.
+The 3 strategic gates (BRD, Architecture, Production Readiness) — ceremonies, receipt verification, the BLOCKING production-readiness evaluation, override receipts, and rework loops — are defined in `${CLAUDE_PLUGIN_ROOT}/skills/drydock/phases/gates.md` (fallback `${CLAUDE_SKILL_DIR}/phases/gates.md`). Read it before presenting any gate.
 
 ## Phase Execution
 
-Each phase loads its dispatcher file for task management and agent spawning. The full two-wave task dependency graph, wave announcements, task tables, dynamic task generation, and conditional tasks are in `${CLAUDE_PLUGIN_ROOT}/skills/shipyard/reference/task-graph.md` (fallback `${CLAUDE_SKILL_DIR}/reference/task-graph.md`) — read it when creating the task graph.
+Each phase loads its dispatcher file for task management and agent spawning. The full two-wave task dependency graph, wave announcements, task tables, dynamic task generation, and conditional tasks are in `${CLAUDE_PLUGIN_ROOT}/skills/drydock/reference/task-graph.md` (fallback `${CLAUDE_SKILL_DIR}/reference/task-graph.md`) — read it when creating the task graph.
 
 | Phase | File | Tasks | Parallel Strategy |
 |-------|------|-------|-------------------|
@@ -258,15 +257,15 @@ Each phase loads its dispatcher file for task management and agent spawning. The
 Skill(skill="product-manager")
 ```
 
-**Subagent delegation** — for parallel, autonomous, background work. Delegate in natural language to the named subagent shipped at `agents/<name>.md` (auto-discovered). Each autonomous worker — `software-engineer`, `frontend-engineer`, `qa-engineer`, `security-engineer`, `code-reviewer`, `compliance-officer`, `devops`, `sre`, `technical-writer`, `skill-maker`, `data-scientist` — declares `background: true` and (for most) `isolation: worktree` in its own frontmatter and invokes the matching `shipyard:<name>` skill in its body. So you do NOT pass `subagent_type`/`isolation`/`background`/`mode` and you do NOT restate "you are X / invoke the skill" — just carry the task-specific context:
+**Subagent delegation** — for parallel, autonomous, background work. Delegate in natural language to the named subagent shipped at `agents/<name>.md` (auto-discovered). Each autonomous worker — `software-engineer`, `frontend-engineer`, `qa-engineer`, `security-engineer`, `code-reviewer`, `compliance-officer`, `devops`, `sre`, `technical-writer`, `skill-maker`, `data-scientist` — declares `background: true` and (for most) `isolation: worktree` in its own frontmatter and invokes the matching `drydock:<name>` skill in its body. So you do NOT pass `subagent_type`/`isolation`/`background`/`mode` and you do NOT restate "you are X / invoke the skill" — just carry the task-specific context:
 
-> Delegate to the `software-engineer` subagent (`agents/software-engineer.md` — runs backgrounded in its own worktree per its definition). Task context: read the architecture at `docs/architecture/`, implement the assigned service(s) into `services/`, write its receipt to `Shipyard/.orchestrator/receipts/<Txx>-software-engineer.json`, then mark its task complete.
+> Delegate to the `software-engineer` subagent (`agents/software-engineer.md` — runs backgrounded in its own worktree per its definition). Task context: read the architecture at `docs/architecture/`, implement the assigned service(s) into `services/`, write its receipt to `drydock/.orchestrator/receipts/<Txx>-software-engineer.json`, then mark its task complete.
 
 A subagent may parallelize internally up to 3 concurrent FOREGROUND sub-tasks for genuinely independent work; no unbounded or background nested fan-out.
 
 ## Conflict Resolution
 
-Follow the shared protocol at `Shipyard/.protocols/conflict-resolution.md`.
+Follow the shared protocol at `drydock/.protocols/conflict-resolution.md`.
 
 | Artifact | Sole Authority | Others Must NOT |
 |----------|---------------|-----------------|
@@ -307,12 +306,12 @@ When HARDEN skills find Critical/High issues:
 | T11: Tech Writer | ALL workspace + project | `docs/` | `technical-writer/` |
 | T12: Skill Maker | ALL workspace | `.claude/skills/` | `skill-maker/` |
 
-**Deliverables** go to project root (respecting `.shipyard.yaml` path overrides). **Workspace artifacts** go to `Shipyard/<skill-name>/`.
+**Deliverables** go to project root (respecting `.drydock.yaml` path overrides). **Workspace artifacts** go to `drydock/<skill-name>/`.
 
 ## Workspace Architecture
 
 ```
-Shipyard/
+drydock/
 ├── .protocols/              # Shared protocols (written at bootstrap)
 ├── .orchestrator/           # Pipeline state via TaskList
 ├── product-manager/         # BRD, research
@@ -350,7 +349,7 @@ A REAL secret-guard hook enforces secret hygiene during ALL phases. It is implem
 - **FAST-SCANS** the target content and the staged git diff (on `git add` / `git commit`) for known secret patterns and private-key headers, using `gitleaks` when available and a built-in grep/regex fallback otherwise.
 - **Exit codes:** `0` allows the tool call; `2` BLOCKS it and surfaces the reason on stderr to Claude and the user.
 
-**Override (not default):** set `SHIPYARD_ALLOW_SECRET=1` to bypass the block — it allows the call but emits a loud warning on stderr. Use only for intentional, reviewed exceptions.
+**Override (not default):** set `DRYDOCK_ALLOW_SECRET=1` to bypass the block — it allows the call but emits a loud warning on stderr. Use only for intentional, reviewed exceptions.
 
 In addition, engineers scan for hardcoded secrets as they write code, and destructive shell operations (`rm -rf /`, `chmod 777`) remain disallowed by agent policy.
 
@@ -367,20 +366,20 @@ Every agent follows:
 
 | Command | Tasks Run |
 |---------|----------|
-| `/shipyard just define` | T1, T2 only |
-| `/shipyard just build` | T3a, T3b, T4 (requires T2 output) |
-| `/shipyard just harden` | T5, T6a, T6b (requires BUILD output) |
-| `/shipyard pentest` | Security Engineer phases 1-8 — VAPT incl. live DAST execution + report. REQUIRES authorization gate; runs against existing/running code. |
-| `/shipyard vapt` | Alias of `/shipyard pentest`. |
-| `/shipyard compliance` | Compliance Officer — maps controls to in-scope frameworks (SOC 2/HIPAA/GDPR/PCI/CCPA/ISO 27001/FedRAMP). REQUIRES a scoping gate; consumes the security audit (runs in/after HARDEN). |
-| `/shipyard just ship` | T7-T10 (requires HARDEN output) |
-| `/shipyard just document` | T11 only |
-| `/shipyard skip frontend` | Omit T3b |
-| `/shipyard start from architecture` | Skip T1, start at T2 |
+| `/drydock just define` | T1, T2 only |
+| `/drydock just build` | T3a, T3b, T4 (requires T2 output) |
+| `/drydock just harden` | T5, T6a, T6b (requires BUILD output) |
+| `/drydock pentest` | Security Engineer phases 1-8 — VAPT incl. live DAST execution + report. REQUIRES authorization gate; runs against existing/running code. |
+| `/drydock vapt` | Alias of `/drydock pentest`. |
+| `/drydock compliance` | Compliance Officer — maps controls to in-scope frameworks (SOC 2/HIPAA/GDPR/PCI/CCPA/ISO 27001/FedRAMP). REQUIRES a scoping gate; consumes the security audit (runs in/after HARDEN). |
+| `/drydock just ship` | T7-T10 (requires HARDEN output) |
+| `/drydock just document` | T11 only |
+| `/drydock skip frontend` | Omit T3b |
+| `/drydock start from architecture` | Skip T1, start at T2 |
 
 ## Final Summary
 
-At pipeline completion, render the final summary box and cost aggregation defined in `${CLAUDE_PLUGIN_ROOT}/skills/shipyard/reference/final-summary.md` (fallback `${CLAUDE_SKILL_DIR}/reference/final-summary.md`).
+At pipeline completion, render the final summary box and cost aggregation defined in `${CLAUDE_PLUGIN_ROOT}/skills/drydock/reference/final-summary.md` (fallback `${CLAUDE_SKILL_DIR}/reference/final-summary.md`).
 
 ## Re-Anchoring Protocol
 
@@ -430,7 +429,7 @@ There is no `TeamDelete` step — TeamCreate/TeamDelete no longer exist, and sub
 | Ignoring engagement mode | ALL skills must read settings.md and adapt depth. Express architect doesn't ask 15 questions. Meticulous PM doesn't skip to BRD after 2 questions. |
 | One-size-fits-all architecture | Architecture is derived from constraints (scale, team, budget, compliance). A 100-user internal tool does NOT need microservices + K8s. |
 | Writing stubs | No `// TODO: implement` in production code |
-| Hardcoded paths | Read `.shipyard.yaml` for path overrides |
+| Hardcoded paths | Read `.drydock.yaml` for path overrides |
 | Sequential when parallel possible | Maximum parallelism: two-wave execution + internal skill agents. Every independent unit gets its own agent |
 | Duplicating security review | code-reviewer references security-engineer findings |
 | `✓ Analysis complete` without numbers | Every completion line MUST include concrete counts |
@@ -439,7 +438,7 @@ There is no `TeamDelete` step — TeamCreate/TeamDelete no longer exist, and sub
 | Missing wave announcements | Print Tier 2 box before and after every parallel wave |
 | Opening a gate without verifying receipts | Read receipts and verify artifacts exist on disk BEFORE presenting any gate. No receipt = task didn't complete properly. |
 | Skipping re-anchor at phase transitions | Re-read workspace artifacts from disk at every transition. Your compressed memory of the architecture spec is lossy after 20+ minutes. |
-| Trusting agent metrics without receipt verification | Gate metrics come from verified receipt data, not from agent memory or task status. |
+| Trusting agent metrics without re-derivation | Gate 3 RE-DERIVES tests/coverage from ground-truth artifacts via `scripts/verify-gate.py` — a receipt whose self-reported numbers contradict the JUnit/coverage artifacts is a blocking breach, not a pass. Never gate on receipt `metrics` alone. |
 | Using framework navigation for non-page targets | `<Link>` and `navigate()` are for pages only. API routes, external URLs, OAuth flows, file downloads need raw `<a href>` or `window.location`. See boundary-safety protocol. |
 | Duplicating framework control flow in UI | Don't link to `/api/auth/signin` — link to the protected destination and let middleware redirect. See boundary-safety protocol pattern 2. |
 | Global interceptors without conditional logic | Auth callbacks, API interceptors, and error handlers must branch on input. A hardcoded return value breaks every flow that passes through. See boundary-safety protocol pattern 4. |

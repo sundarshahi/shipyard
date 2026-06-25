@@ -5,7 +5,7 @@ When mode is **Full Build**, follow this EXACT sequence:
 1. **Print pipeline dashboard** (initial state — all pending):
 ```
 ╔══════════════════════════════════════════════════════════════╗
-║  ◆ SHIPYARD v{local_version}                        ║
+║  ◆ DRYDOCK v{local_version}                        ║
 ║  Project: [extracted from user's message]                    ║
 ╠══════════════════════════════════════════════════════════════╣
 ║                                                              ║
@@ -22,15 +22,14 @@ When mode is **Full Build**, follow this EXACT sequence:
 
 **Reprint this dashboard** at every phase transition and before every gate, updating phase statuses (`○ pending` → `● active` → `✓ complete ⏱ Xm Ys`). Track elapsed time per phase and total. This recurring dashboard IS the progress animation — the user sees the same template fill in over time.
 
-2. **Bootstrap workspace:**
+2. **Bootstrap workspace + deploy protocols** — run the bundled script (one deterministic command instead of hand-running `mkdir` + copying each protocol):
 ```bash
-mkdir -p Shipyard/.protocols/
-mkdir -p Shipyard/.orchestrator/
-mkdir -p Shipyard/.orchestrator/receipts/
-mkdir -p Shipyard/.orchestrator/overrides/
+bash "${CLAUDE_PLUGIN_ROOT}/skills/drydock/scripts/bootstrap-workspace.sh" 2>/dev/null \
+  || bash "${CLAUDE_SKILL_DIR}/scripts/bootstrap-workspace.sh"
 ```
+It creates `drydock/.protocols/`, `drydock/.orchestrator/receipts/`, and `drydock/.orchestrator/overrides/`, and copies every shared protocol from the plugin's `skills/_shared/protocols/` into `drydock/.protocols/`. If it prints a `WARN` that it could not locate the protocols, fall back to writing each from the summaries in step 3.
 
-3. **Write shared protocols** to `Shipyard/.protocols/`:
+3. **Shared protocols** (deployed by the script in step 2 — this table is the reference / fallback if the script could not locate the source):
 
 | Protocol File | Content |
 |---------------|---------|
@@ -49,7 +48,7 @@ mkdir -p Shipyard/.orchestrator/overrides/
 | `architecture-boundaries.md` | Architecture boundary rules: module/service boundaries, dependency direction, layering, and the architecture-boundary gate enforced at Gate 3. Loads into architect/build/review agents. |
 | `compliance-protocol.md` | Compliance control mapping: framework scoping (SOC 2/HIPAA/GDPR/PCI/CCPA/ISO 27001/FedRAMP), mandatory controls-present/missing reporting, consumes security-engineer PII/encryption outputs. Loads into compliance-officer. |
 
-Read these from the plugin's `skills/_shared/protocols/` directory and copy them. If plugin path is unavailable, write from the summaries above.
+If the bootstrap script could not locate the plugin's `skills/_shared/protocols/` (it prints a `WARN`), write each protocol to `drydock/.protocols/` from the summaries above.
 
 4. **Codebase discovery — detect greenfield vs brownfield:**
 
@@ -58,7 +57,7 @@ Read these from the plugin's `skills/_shared/protocols/` directory and copy them
    Glob("package.json"), Glob("go.mod"), Glob("pyproject.toml"), Glob("Cargo.toml"), Glob("pom.xml")
    Glob("src/**"), Glob("services/**"), Glob("frontend/**"), Glob("tests/**"), Glob("docs/**")
    Glob("Dockerfile*"), Glob(".github/workflows/*"), Glob("infrastructure/**"), Glob("terraform/**")
-   Glob(".shipyard.yaml")
+   Glob(".drydock.yaml")
    ```
 
    **Classify the project:**
@@ -66,8 +65,8 @@ Read these from the plugin's `skills/_shared/protocols/` directory and copy them
    | Signal | Mode | Behavior |
    |--------|------|----------|
    | Empty/new directory, no source files | **Greenfield** | Create everything from scratch |
-   | Source files exist, no `.shipyard.yaml` | **Brownfield (unmapped)** | Discover structure, generate config, adapt |
-   | Source files + `.shipyard.yaml` exist | **Brownfield (mapped)** | Use config paths, augment existing code |
+   | Source files exist, no `.drydock.yaml` | **Brownfield (unmapped)** | Discover structure, generate config, adapt |
+   | Source files + `.drydock.yaml` exist | **Brownfield (mapped)** | Use config paths, augment existing code |
 
    **If Greenfield** → log `✓ Greenfield project — creating from scratch` and continue to step 5.
 
@@ -82,7 +81,7 @@ Read these from the plugin's `skills/_shared/protocols/` directory and copy them
    Files: [N] source files, [N] test files, [N] config files
    ```
 
-   b. **Path mapping** — if no `.shipyard.yaml`, generate one from discovered structure:
+   b. **Path mapping** — if no `.drydock.yaml`, generate one from discovered structure:
    ```python
    AskUserQuestion(questions=[{
      "question": "I've detected an existing codebase. Here's what I found:\n\n"
@@ -90,7 +89,7 @@ Read these from the plugin's `skills/_shared/protocols/` directory and copy them
        "I'll map the pipeline outputs to your existing structure.",
      "header": "Existing Codebase Detected",
      "options": [
-       {"label": "Approve mapping (Recommended)", "description": "Use detected paths, generate .shipyard.yaml"},
+       {"label": "Approve mapping (Recommended)", "description": "Use detected paths, generate .drydock.yaml"},
        {"label": "Customize paths", "description": "Review and adjust the path mapping"},
        {"label": "Treat as greenfield", "description": "Ignore existing code, create fresh structure"},
        {"label": "Chat about this", "description": "Discuss how the pipeline adapts to your codebase"}
@@ -99,9 +98,9 @@ Read these from the plugin's `skills/_shared/protocols/` directory and copy them
    }])
    ```
 
-   c. **Write `.shipyard.yaml`** from discovered structure — map `paths.*` to actual directories found.
+   c. **Write `.drydock.yaml`** from discovered structure — map `paths.*` to actual directories found.
 
-   d. **Set brownfield context** — write to `Shipyard/.orchestrator/codebase-context.md`:
+   d. **Set brownfield context** — write to `drydock/.orchestrator/codebase-context.md`:
    ```markdown
    # Codebase Context
    Mode: brownfield
@@ -136,7 +135,7 @@ AskUserQuestion(questions=[{
 }])
 ```
 
-Write the choice to `Shipyard/.orchestrator/settings.md`:
+Write the choice to `drydock/.orchestrator/settings.md`:
 ```markdown
 # Pipeline Settings
 Engagement: [express|standard|thorough|meticulous]
@@ -165,7 +164,7 @@ AskUserQuestion(questions=[{
 }])
 ```
 
-Store all choices in `Shipyard/.orchestrator/settings.md`:
+Store all choices in `drydock/.orchestrator/settings.md`:
 ```markdown
 # Pipeline Settings
 Engagement: [express|standard|thorough|meticulous]
@@ -186,10 +185,10 @@ Maximum parallelism with worktree isolation is the recommended default — paral
 
 Use the cost estimation table from the visual-identity protocol to look up the range based on mode + engagement.
 
-7. **Detect existing workspace** — if `Shipyard/.orchestrator/` has prior state, offer to resume or restart via AskUserQuestion.
+7. **Detect existing workspace** — if `drydock/.orchestrator/` has prior state, offer to resume or restart via AskUserQuestion.
 
 8. **Polymath pre-flight check:**
-   - If `Shipyard/polymath/handoff/context-package.md` exists → read it, pass to PM as pre-loaded context. Log: `✓ Polymath context loaded — skipping redundant discovery`
+   - If `drydock/polymath/handoff/context-package.md` exists → read it, pass to PM as pre-loaded context. Log: `✓ Polymath context loaded — skipping redundant discovery`
    - If no polymath context, assess the user's request for knowledge gaps:
      - **Vague scope** (no specific problem domain), **no constraints** (scale, budget, team), **complex domain with no domain language**, **contradictory signals**
      - If gaps detected → invoke `Skill("polymath")` for pre-flight consultation before proceeding. The polymath will research, clarify with the user, and write a context package when ready.

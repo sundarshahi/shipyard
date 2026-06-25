@@ -1,13 +1,13 @@
 {
-  "name": "shipyard",
+  "name": "drydock",
   "description": "Idea-to-production engineering pipeline for Claude Code. Specialized agents take a product from architecture and API-first contracts through tested implementation, security-by-default, observability, CI/CD, performance budgets, feature flags, and regulatory compliance — all the way to ship.",
   "owner": {
     "name": "sundarshahi",
-    "url": "https://github.com/sundarshahi/shipyard"
+    "url": "https://github.com/sundarshahi/drydock"
   },
   "plugins": [
     {
-      "name": "shipyard",
+      "name": "drydock",
       "source": ".",
       "description": "Transforms Claude Code from raw code generation into a full production-ready engineering system. 15 specialized agents cover architecture, API-first contracts, tested backend/frontend, observability, security-by-default, CI/CD hardening, automated testing, performance budgets, feature flags, and regulatory compliance — from idea to ship.",
       "version": "2.1.0",

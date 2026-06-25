@@ -182,10 +182,10 @@ docker-compose.dev.yml             # Full local dev stack
 Makefile                           # Root-level dev commands
 ```
 
-### Workspace Output (`Shipyard/software-engineer/`)
+### Workspace Output (`drydock/software-engineer/`)
 
 ```
-Shipyard/software-engineer/
+drydock/software-engineer/
 ├── implementation-plan.md
 ├── progress.md
 └── logs/

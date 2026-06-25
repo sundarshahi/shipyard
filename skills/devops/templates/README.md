@@ -41,4 +41,4 @@ actions, and missing `permissions:` blocks slip in. Start from the template; kee
 `<UPPER_SNAKE>` = fill in. Common tokens:
 `<SERVICE>`, `<IMAGE>` (`ghcr.io/<org>/<service>`), `<AWS_ACCOUNT_ID>`, `<OIDC_ROLE_ARN>`,
 `<AWS_REGION>`, `<CLUSTER>`, `<NAMESPACE>`, `<RUNTIME>` (node/python/go/jvm),
-`<COVERAGE_MIN>` (from `.shipyard.yaml`/architecture, default 80), `<DEFAULT_BRANCH>`.
+`<COVERAGE_MIN>` (from `.drydock.yaml`/architecture, default 80), `<DEFAULT_BRANCH>`.

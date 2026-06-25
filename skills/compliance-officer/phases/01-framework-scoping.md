@@ -2,17 +2,17 @@
 
 ## Objective
 
-Determine WHICH regulatory frameworks apply to this product, deterministically, from product signals. Produce an auditable scoping decision log — every framework is scoped IN with an evidenced signal, or scoped OUT with the specific missing signal. The compliance-officer is the authority on per-product framework scoping; no other skill makes this determination. Generate outputs in `Shipyard/compliance-officer/scoping/`.
+Determine WHICH regulatory frameworks apply to this product, deterministically, from product signals. Produce an auditable scoping decision log — every framework is scoped IN with an evidenced signal, or scoped OUT with the specific missing signal. The compliance-officer is the authority on per-product framework scoping; no other skill makes this determination. Generate outputs in `drydock/compliance-officer/scoping/`.
 
 ## Context Bridge
 
-Read Phase 0 (Reconnaissance) outputs and, critically, the security-engineer's data-security outputs. You should already know the data classification, PII inventory, product scope, and customer types. The data classification is the PRIMARY signal source — do not re-derive it; consume it (`Shipyard/.protocols/compliance-protocol.md`, Authority Boundary). If Phase 0 was not run, perform reconnaissance inline before proceeding.
+Read Phase 0 (Reconnaissance) outputs and, critically, the security-engineer's data-security outputs. You should already know the data classification, PII inventory, product scope, and customer types. The data classification is the PRIMARY signal source — do not re-derive it; consume it (`drydock/.protocols/compliance-protocol.md`, Authority Boundary). If Phase 0 was not run, perform reconnaissance inline before proceeding.
 
 ## Inputs
 
-- **Data classification + PII inventory** — `Shipyard/security-engineer/data-security/pii-inventory.md`, `gdpr-compliance.md` (CONSUMED, not redone)
+- **Data classification + PII inventory** — `drydock/security-engineer/data-security/pii-inventory.md`, `gdpr-compliance.md` (CONSUMED, not redone)
 - **Product scope** — `product-manager/BRD/` (target markets, customer types, data the product collects)
-- **Declared targets** — `compliance:` block in `.shipyard.yaml` (if present: explicit framework list, target markets)
+- **Declared targets** — `compliance:` block in `.drydock.yaml` (if present: explicit framework list, target markets)
 - **Implementation code** — `services/`, `frontend/` (data fields, payment integrations, regional deployment hints)
 - **Architecture** — `docs/architecture/` (data residency, regions, external processors)
 
@@ -35,7 +35,7 @@ For each signal, record the concrete evidence (`path:line`, a PII field, a BRD s
 
 ### Step 2: Apply the Deterministic Signals → Frameworks Map
 
-Apply the map from `Shipyard/.protocols/compliance-protocol.md` exactly. A present signal SCOPES IN its framework. Signals STACK — record every framework each present signal scopes in.
+Apply the map from `drydock/.protocols/compliance-protocol.md` exactly. A present signal SCOPES IN its framework. Signals STACK — record every framework each present signal scopes in.
 
 | Present signal | Framework scoped IN |
 |----------------|---------------------|
@@ -55,7 +55,7 @@ Apply the map from `Shipyard/.protocols/compliance-protocol.md` exactly. A prese
 - **Standard:** confirm only signals not derivable from artifacts (1 AskUserQuestion, batched options).
 - **Thorough/Meticulous:** confirm the scoped set, target markets, and certification stage (SOC 2 Type I vs II; FedRAMP Low/Moderate/High baseline) via AskUserQuestion (1-2 calls max, predefined options + "Chat about this" last).
 
-Never ask open-ended questions — follow `Shipyard/.protocols/ux-protocol.md`.
+Never ask open-ended questions — follow `drydock/.protocols/ux-protocol.md`.
 
 ### Step 4: Pin Editions
 
@@ -73,7 +73,7 @@ Produce a decision log that an auditor can trace. Out-of-scope frameworks are re
 
 ## Output Deliverables
 
-Write to `Shipyard/compliance-officer/scoping/`:
+Write to `drydock/compliance-officer/scoping/`:
 
 | File | Contents |
 |------|----------|

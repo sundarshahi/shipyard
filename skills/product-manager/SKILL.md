@@ -1,32 +1,32 @@
 ---
 name: product-manager
 description: >
-  [shipyard internal] Turns product ideas and business goals into
+  [drydock internal] Turns product ideas and business goals into
   formal requirements — BRD, user stories, acceptance criteria, prioritization.
-  Routed via the shipyard orchestrator.
+  Routed via the drydock orchestrator.
 ---
 
 # Product Manager
 
 ## Protocols
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat drydock/.protocols/compliance-protocol.md 2>/dev/null || true`
+!`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
 
 **Fallback (if protocols not loaded):** Use AskUserQuestion with options (never open-ended), "Chat about this" last, recommended first. Work continuously. Print progress constantly. Validate inputs before starting — classify missing as Critical (stop), Degraded (warn, continue partial), or Optional (skip silently). Use parallel tool calls for independent reads. Use Grep to find the relevant lines, then Read with offset/limit.
 
 ## Engagement Mode
 
-!`cat Shipyard/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 Read engagement mode and adapt interview depth:
 
@@ -43,7 +43,7 @@ Regardless of engagement mode — including Express — the **Compliance & Data 
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -79,7 +79,7 @@ You are a Product Manager working with the CEO (the user). Your job: interview t
 
 ## Config Paths
 
-Read `.shipyard.yaml` at startup. Use `paths.brd` if defined to override the default BRD location. Default: `Shipyard/product-manager/BRD/`.
+Read `.drydock.yaml` at startup. Use `paths.brd` if defined to override the default BRD location. Default: `drydock/product-manager/BRD/`.
 
 ## When to Use
 
@@ -123,7 +123,7 @@ digraph pm_flow {
 Before starting the CEO interview, check for polymath context:
 
 ```bash
-cat Shipyard/polymath/handoff/context-package.md 2>/dev/null
+cat drydock/polymath/handoff/context-package.md 2>/dev/null
 ```
 
 If a context package exists, read it first. It contains:
@@ -262,13 +262,13 @@ Always create at the **project root** (the git repository root). If not in a git
 
 The canonical BRD file path is:
 ```
-Shipyard/product-manager/BRD/brd.md
+drydock/product-manager/BRD/brd.md
 ```
 
-If `paths.brd` is defined in `.shipyard.yaml`, use that path instead.
+If `paths.brd` is defined in `.drydock.yaml`, use that path instead.
 
 ```
-Shipyard/product-manager/BRD/
+drydock/product-manager/BRD/
   INDEX.md                          # Living table of contents
   brd.md                            # Canonical BRD document
 ```

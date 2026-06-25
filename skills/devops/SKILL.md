@@ -1,9 +1,9 @@
 ---
 name: devops
 description: >
-  [shipyard internal] Sets up deployment and infrastructure —
+  [drydock internal] Sets up deployment and infrastructure —
   Docker, CI/CD pipelines, cloud provisioning, environment configuration.
-  Routed via the shipyard orchestrator.
+  Routed via the drydock orchestrator.
 allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill
 ---
 
@@ -11,28 +11,28 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill
 
 ## Protocols
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat Shipyard/.protocols/architecture-boundaries.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-defaults.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-defaults.md" 2>/dev/null || cat Shipyard/.protocols/security-defaults.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat drydock/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat drydock/.protocols/architecture-boundaries.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-defaults.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-defaults.md" 2>/dev/null || cat drydock/.protocols/security-defaults.md 2>/dev/null || true`
 !`cat docs/architecture/performance-budget.yaml 2>/dev/null || true`
 !`cat config/feature-flags.yaml 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
-!`cat Shipyard/.orchestrator/codebase-context.md 2>/dev/null || true`
+!`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
+!`cat drydock/.orchestrator/codebase-context.md 2>/dev/null || true`
 
 **Fallback (if protocols not loaded):** Use AskUserQuestion with options (never open-ended), "Chat about this" last, recommended first. Work continuously. Print progress constantly. Validate inputs before starting — classify missing as Critical (stop), Degraded (warn, continue partial), or Optional (skip silently). Use parallel tool calls for independent reads. Use Grep to find the relevant lines, then Read with offset/limit.
 
 ## Engagement Mode
 
-!`cat Shipyard/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 | Mode | Behavior |
 |------|----------|
@@ -43,7 +43,7 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -81,7 +81,7 @@ Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throu
 
 ## Brownfield Awareness
 
-If `Shipyard/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
+If `drydock/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
 - **READ existing infrastructure first** — check for Dockerfiles, CI configs, Terraform, K8s manifests
 - **EXTEND, don't replace** — add new services to existing docker-compose, add jobs to existing CI
 - **NEVER overwrite** — existing Dockerfile, workflows, or Terraform state
@@ -89,7 +89,7 @@ If `Shipyard/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
 
 ## Overview
 
-Full DevOps pipeline generator: from infrastructure design to production-ready deployment with monitoring and security. Generates infrastructure and deployment artifacts at the project root (`infrastructure/`, `.github/workflows/`, Dockerfiles) with planning notes in `Shipyard/devops/`.
+Full DevOps pipeline generator: from infrastructure design to production-ready deployment with monitoring and security. Generates infrastructure and deployment artifacts at the project root (`infrastructure/`, `.github/workflows/`, Dockerfiles) with planning notes in `drydock/devops/`.
 
 ## Hardening Contract — Generated Gates, Not Prose Standards
 
@@ -125,7 +125,7 @@ The user's policy: **BLOCK `production-ready` on failing tests / coverage / perf
 
 ### Shared-contract guardrails (consistency with the BUILD skills)
 
-- **Loader paths use the RUNTIME path EXACTLY** — `!`cat Shipyard/.protocols/<name>.md 2>/dev/null || true`` (the orchestrator copies from `skills/_shared/protocols/`; never reference that source path in a loader). Project artifacts use project-relative paths (`docs/architecture/performance-budget.yaml`, `config/feature-flags.yaml`).
+- **Loader paths use the RUNTIME path EXACTLY** — `!`cat drydock/.protocols/<name>.md 2>/dev/null || true`` (the orchestrator copies from `skills/_shared/protocols/`; never reference that source path in a loader). Project artifacts use project-relative paths (`docs/architecture/performance-budget.yaml`, `config/feature-flags.yaml`).
 - **Metric / log / span names:** dashboards, Prometheus alerts, the Argo `AnalysisTemplate`, and k6 checks reference ONLY the EXACT names in `observability-contract.md` — `http_requests_total`, `http_request_duration_seconds` (with exemplars), `http_requests_in_flight`, `*_pool_*` USE metrics, the structured-log fields, the span attrs. **Never invent a metric name no code emits** (that is the "No data" panel bug this closes).
 - **Error format:** services return RFC 9457 `application/problem+json` (`{ type,title,status,detail,instance }` + `trace_id`/`errors[]`). The reusable OpenAPI `Problem` schema is owned by solution-architect; the error-catalog module is the single runtime+docs source. devops dashboards/alerts key error rate off `http_requests_total{status_class="5xx"}`, not bespoke counters.
 - **Performance budget:** read thresholds from `docs/architecture/performance-budget.yaml` — never hardcode 500ms / 200KB anywhere (lhci, size-limit, k6, canary p99).
@@ -135,13 +135,13 @@ The user's policy: **BLOCK `production-ready` on failing tests / coverage / perf
 ### Authority boundaries (per `conflict-resolution.md`)
 
 - **devops IMPLEMENTS** monitoring infra, CI/CD, container/IaC, provenance + signing.
-- **security-engineer AUDITS** the supply chain — reconcile the release SBOM with `Shipyard/security-engineer/supply-chain/sbom.json` (security-engineer is sole authority on app-dependency analysis; devops owns image provenance/signing at the infra layer).
-- **sre OWNS** SLO thresholds + the burn-rate / latency queries in `Shipyard/sre/slo/burn-rate-query.yaml` (`burn_rate_query`/`fail_when`, `latency_query`/`latency_fail_when`) — devops only COPIES that query + threshold into the canary AnalysisTemplate `failureCondition`; it never re-derives them.
+- **security-engineer AUDITS** the supply chain — reconcile the release SBOM with `drydock/security-engineer/supply-chain/sbom.json` (security-engineer is sole authority on app-dependency analysis; devops owns image provenance/signing at the infra layer).
+- **sre OWNS** SLO thresholds + the burn-rate / latency queries in `drydock/sre/slo/burn-rate-query.yaml` (`burn_rate_query`/`fail_when`, `latency_query`/`latency_fail_when`) — devops only COPIES that query + threshold into the canary AnalysisTemplate `failureCondition`; it never re-derives them.
 - **solution-architect OWNS** the `Problem` schema + performance budget; **frontend/qa/sre/devops READ** them.
 
 ## Config Paths
 
-Read `.shipyard.yaml` at startup. Use these overrides if defined:
+Read `.drydock.yaml` at startup. Use these overrides if defined:
 - `paths.terraform` — default: `infrastructure/terraform/`
 - `paths.kubernetes` — default: `infrastructure/kubernetes/`
 - `paths.ci_cd` — default: `.github/workflows/`
@@ -240,7 +240,7 @@ Read the relevant phase file before starting that phase. Never read all phases a
 ### Workspace Output (Planning & Assessment)
 
 ```
-Shipyard/devops/
+drydock/devops/
 ├── deployment-plan.md          # Deployment planning notes
 ├── infrastructure-assessment.md # Infrastructure assessment documents
 └── decisions.md                # DevOps decision log

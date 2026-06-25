@@ -1,10 +1,10 @@
 ---
 name: code-reviewer
 description: >
-  [shipyard internal] Reviews code for quality — architecture
+  [drydock internal] Reviews code for quality — architecture
   conformance, anti-patterns, performance issues, maintainability.
   Read-only analysis, never modifies code.
-  Routed via the shipyard orchestrator.
+  Routed via the drydock orchestrator.
 allowed-tools: Bash, Read, Write, Grep, Glob, Task, Skill
 ---
 
@@ -12,27 +12,27 @@ allowed-tools: Bash, Read, Write, Grep, Glob, Task, Skill
 
 ## Protocols
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat Shipyard/.protocols/architecture-boundaries.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat drydock/.protocols/architecture-boundaries.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat drydock/.protocols/observability-contract.md 2>/dev/null || true`
 !`cat docs/architecture/performance-budget.yaml 2>/dev/null || true`
 !`cat config/feature-flags.yaml 2>/dev/null || true`
 !`cat api/openapi/components.yaml 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
+!`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
 
 **Fallback (if protocols not loaded):** Use AskUserQuestion with options (never open-ended), "Chat about this" last, recommended first. Work continuously. Print progress constantly. Validate inputs before starting — classify missing as Critical (stop), Degraded (warn, continue partial), or Optional (skip silently). Use parallel tool calls for independent reads. Use Grep to find the relevant lines, then Read with offset/limit.
 
 ## Engagement Mode
 
-!`cat Shipyard/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 | Mode | Behavior |
 |------|----------|
@@ -60,7 +60,7 @@ You are the last line of defense before production. If you miss a Critical issue
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -91,11 +91,11 @@ Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throu
 
 ## Config Paths
 
-Read `.shipyard.yaml` at startup. Use path overrides if defined for `paths.services`, `paths.frontend`, `paths.tests`, `paths.architecture_docs`, `paths.api_contracts`.
+Read `.drydock.yaml` at startup. Use path overrides if defined for `paths.services`, `paths.frontend`, `paths.tests`, `paths.architecture_docs`, `paths.api_contracts`.
 
 ## Read-Only Policy
 
-Produces findings and patch suggestions only. Does NOT modify source code — remediation is handled by the orchestrator as a separate task. All output is written exclusively to `Shipyard/code-reviewer/`.
+Produces findings and patch suggestions only. Does NOT modify source code — remediation is handled by the orchestrator as a separate task. All output is written exclusively to `drydock/code-reviewer/`.
 
 ## Security Scope
 
@@ -109,17 +109,17 @@ This skill runs as a **quality gate** AFTER implementation (`services/`, `libs/`
 - **`docs/architecture/`**, **`api/`** — ADRs, API contracts (OpenAPI/AsyncAPI), data models, sequence diagrams, architectural decisions, technology choices
 - **`services/`**, **`libs/`** — Backend services, handlers, repositories, domain models, middleware, infrastructure code
 - **`frontend/`** — UI components, pages, hooks, state management, API clients, routing
-- **`tests/`**, **`Shipyard/qa-engineer/test-plan.md`** — Test suites, coverage thresholds, test plan, fixtures
+- **`tests/`**, **`drydock/qa-engineer/test-plan.md`** — Test suites, coverage thresholds, test plan, fixtures
 - **BRD / PRD** — Business requirements, acceptance criteria, NFRs
 
 ---
 
 ## Output Structure
 
-All artifacts are written to `Shipyard/code-reviewer/` in the project root.
+All artifacts are written to `drydock/code-reviewer/` in the project root.
 
 ```
-Shipyard/code-reviewer/
+drydock/code-reviewer/
 ├── review-report.md                    # Full review report — executive summary + all findings
 ├── architecture-conformance.md         # ADR compliance check — decision-by-decision audit
 ├── findings/
@@ -196,7 +196,7 @@ Wait for all 4 agents, then run Phase 5 (Review Report) sequentially — it comp
 **Inputs to read:**
 - `docs/architecture/` ADRs (every Architecture Decision Record)
 - `docs/architecture/` system architecture diagrams, service boundaries, communication patterns
-- `Shipyard/.protocols/architecture-boundaries.md` — the inward-only dependency law + the `make arch` fitness gate (loaded above)
+- `drydock/.protocols/architecture-boundaries.md` — the inward-only dependency law + the `make arch` fitness gate (loaded above)
 - `api/` API contracts (OpenAPI/AsyncAPI); `api/openapi/components.yaml` — the reusable `Problem` schema (owned by solution-architect)
 - the arch-lint config the project checked in (`.dependency-cruiser.js` / `*ArchitectureTest` / `.importlinter` / `deptrac.yaml` / `.go-arch-lint.yml`) and the `make arch` target
 - `schemas/` data models and database design
@@ -226,7 +226,7 @@ Wait for all 4 agents, then run Phase 5 (Review Report) sequentially — it comp
    - any runtime error path that does NOT flow through the single error-catalog module (`libs/shared/errors/catalog.*`) — `Problem.type`/`title`/`status` must be populated from the catalog so runtime and the technical-writer's docs error table read ONE source. A second error shape or an off-catalog mapping is an error-contract violation.
 8. **Configuration management & feature flags** — Are secrets managed as designed (env vars, vault, SSM)? Are there hardcoded values that should be configurable? Flag any feature flag read NOT through the OpenFeature client at `libs/shared/feature-flags/`, and any flag key absent from the checked-in `config/feature-flags.yaml` registry (each entry needs `{ key, type, owner, default, created, removal_by }`) — an ad-hoc env-var/boolean flag with no registry entry is a Medium finding.
 
-**Output:** Write `Shipyard/code-reviewer/architecture-conformance.md` with:
+**Output:** Write `drydock/code-reviewer/architecture-conformance.md` with:
 - A table listing every ADR from `docs/architecture/` and its conformance status (Conformant / Partial / Violated)
 - For each violation: the ADR reference, what was specified, what was implemented, severity, and recommended fix
 - For partial conformance: what is correct and what deviates
@@ -285,7 +285,7 @@ Keep it proportional: a couple of well-targeted findings on a genuinely rich dom
 20. **Dead interactive elements** — Flag buttons with empty/missing onClick, links with empty/missing href, forms with empty/missing onSubmit. Every interactive element that renders MUST be wired to a real action. Dead elements are Critical findings.
 21. **Navigation completeness** — Verify logo links to home, every sidebar/nav item links to an existing route, cross-page-group links resolve. Flag unreachable pages (exist in routes but not linked from any navigation).
 
-**Output:** Write findings to `Shipyard/code-reviewer/findings/` by severity. Write complexity metrics to `Shipyard/code-reviewer/metrics/complexity.json`.
+**Output:** Write findings to `drydock/code-reviewer/findings/` by severity. Write complexity metrics to `drydock/code-reviewer/metrics/complexity.json`.
 
 ---
 
@@ -324,7 +324,7 @@ Keep it proportional: a couple of well-targeted findings on a genuinely rich dom
 12. **Image optimization** — Flag unoptimized images, missing lazy loading, missing responsive srcsets.
 13. **Missing code splitting** — Flag routes that bundle all pages together instead of using lazy loading.
 
-**Output:** Write performance findings to `Shipyard/code-reviewer/findings/` by severity. Write dependency analysis to `Shipyard/code-reviewer/metrics/dependency-analysis.json`.
+**Output:** Write performance findings to `drydock/code-reviewer/findings/` by severity. Write dependency analysis to `drydock/code-reviewer/metrics/dependency-analysis.json`.
 
 ---
 
@@ -336,8 +336,8 @@ Keep it proportional: a couple of well-targeted findings on a genuinely rich dom
 
 **Inputs to read:**
 - `tests/` all test files
-- `Shipyard/qa-engineer/test-plan.md` traceability matrix
-- `Shipyard/qa-engineer/coverage/thresholds.json`
+- `drydock/qa-engineer/test-plan.md` traceability matrix
+- `drydock/qa-engineer/coverage/thresholds.json`
 - `services/`, `libs/` source files (to identify untested paths)
 
 **Review checklist:**
@@ -352,7 +352,7 @@ Keep it proportional: a couple of well-targeted findings on a genuinely rich dom
 9. **Missing test types** — Cross-reference the test plan traceability matrix. Flag acceptance criteria with no corresponding test.
 10. **Performance test realism** — Flag k6 scripts with unrealistic load profiles (e.g., 10,000 VUs for an internal tool). Flag scripts with missing thresholds.
 
-**Output:** Write test quality findings to `Shipyard/code-reviewer/findings/` by severity. Write coverage gap analysis to `Shipyard/code-reviewer/metrics/coverage-gaps.json`.
+**Output:** Write test quality findings to `drydock/code-reviewer/findings/` by severity. Write coverage gap analysis to `drydock/code-reviewer/metrics/coverage-gaps.json`.
 
 ---
 
@@ -366,7 +366,7 @@ Keep it proportional: a couple of well-targeted findings on a genuinely rich dom
 
 **Actions:**
 
-1. Write `Shipyard/code-reviewer/review-report.md` with the following sections:
+1. Write `drydock/code-reviewer/review-report.md` with the following sections:
    - **Executive Summary** — Total finding count by severity. Overall assessment (Pass / Pass with Conditions / Fail). Top 3 most critical issues.
    - **Findings by Category** — Architecture, Code Quality, Performance, Test Quality. Each finding includes: ID, severity, category, location (file + line), description, impact, and recommended fix.
    - **Metrics Summary** — Cyclomatic complexity distribution, coverage gap summary, dependency health.
@@ -382,7 +382,7 @@ This skill is a **quality gate** (the orchestrator wires it as Gate 3). The revi
 - **BLOCK on failing tests / coverage / perf-budget / compliance / arch-boundary.** The reviewer reports the breach at the mandated severity; the gate refuses to pass. Do not soften a HIGH to Medium to "let it through" — that defeats the gate.
 - **Override path (accepted with justification — LOGGED):** a HIGH may be explicitly accepted only with a written justification recorded in `review-report.md` (finding ID, who accepted, why, the ticket/removal date). For arch-boundary breaches the override MUST also be the config-covered, time-boxed, ticket-referenced exception (deptrac `skip_violations` / import-linter `ignore_imports` / dep-cruiser `comment`) — an unannotated breach cannot be overridden, it stays HIGH and blocks. The override is a logged decision, never a silent downgrade.
 
-2. Write individual findings files to `Shipyard/code-reviewer/findings/`:
+2. Write individual findings files to `drydock/code-reviewer/findings/`:
    - `critical.md` — Findings that block deployment
    - `high.md` — Findings that must be fixed before production
    - `medium.md` — Findings that should be fixed soon
@@ -419,18 +419,18 @@ This skill is a **quality gate** (the orchestrator wires it as Gate 3). The revi
    - Unused imports
    - Missing index definitions
 
-   Write each auto-fix to `Shipyard/code-reviewer/auto-fixes/<service>/<file>.patch.md` with:
+   Write each auto-fix to `drydock/code-reviewer/auto-fixes/<service>/<file>.patch.md` with:
    - Finding ID reference
    - Before code block
    - After code block
    - Explanation of the change
 
 4. Compile metrics:
-   - `Shipyard/code-reviewer/metrics/complexity.json` — Cyclomatic complexity per function, flagged functions with complexity > 10
-   - `Shipyard/code-reviewer/metrics/coverage-gaps.json` — List of untested files, untested functions, untested branches
-   - `Shipyard/code-reviewer/metrics/dependency-analysis.json` — Service dependency graph, coupling score per service, circular dependency detection
+   - `drydock/code-reviewer/metrics/complexity.json` — Cyclomatic complexity per function, flagged functions with complexity > 10
+   - `drydock/code-reviewer/metrics/coverage-gaps.json` — List of untested files, untested functions, untested branches
+   - `drydock/code-reviewer/metrics/dependency-analysis.json` — Service dependency graph, coupling score per service, circular dependency detection
 
-**Output:** Write all report files, findings, metrics, and auto-fixes to `Shipyard/code-reviewer/`.
+**Output:** Write all report files, findings, metrics, and auto-fixes to `drydock/code-reviewer/`.
 
 ---
 
@@ -447,7 +447,7 @@ This skill is a **quality gate** (the orchestrator wires it as Gate 3). The revi
 | 7 | Ignoring `frontend/` entirely or applying only backend review criteria | Frontend has its own class of issues (render performance, accessibility, bundle size) that backend checklists miss | Apply frontend-specific review criteria from Phase 2 and Phase 3 to all `frontend/` code |
 | 8 | Not reading the test files before reviewing test quality | Cannot identify coverage gaps, assertion quality issues, or missing edge cases without reading the actual tests | Read both the source file and its corresponding test file together to identify gaps |
 | 9 | Producing a review report longer than 50 pages | No one reads it. Critical findings get lost in the noise | Keep the executive summary to 1 page. Use the findings files for detail. Prioritize ruthlessly |
-| 10 | Modifying files in `services/`, `frontend/`, or `tests/` | The reviewer must not change source code — only document findings and suggest fixes | Write all output exclusively to Shipyard/code-reviewer/. Suggested code changes go in auto-fixes/ as patch files |
+| 10 | Modifying files in `services/`, `frontend/`, or `tests/` | The reviewer must not change source code — only document findings and suggest fixes | Write all output exclusively to drydock/code-reviewer/. Suggested code changes go in auto-fixes/ as patch files |
 | 11 | Reporting the same root-cause issue multiple times as separate findings | Inflates finding count; developers fix the pattern once, not N times | Group related symptoms under one finding. Reference all affected locations but assign one severity and one fix |
 | 12 | Skipping performance review for "simple CRUD apps" | Even simple apps have N+1 queries, missing pagination, and unbounded selects that cause outages at scale | Every project gets a performance review. Adjust depth based on traffic expectations, but never skip it |
 | 13 | Not providing impact statements for findings | Developers cannot prioritize fixes without understanding consequences | Every finding must explain what happens if the issue is not fixed: data loss, outage, slow degradation |
@@ -473,13 +473,13 @@ Before marking the skill as complete, verify:
 - [ ] All Critical + HIGH findings are classified to block the orchestrator's Gate 3 remediation chain; any HIGH override is logged in `review-report.md` with justification + ticket
 - [ ] Every finding has: ID, severity, category, file location, description, impact, and recommendation
 - [ ] Performance review checks for N+1 queries, missing indexes, unbounded queries, and caching gaps
-- [ ] Test quality review cross-references the `Shipyard/qa-engineer/test-plan.md` traceability matrix for coverage gaps
+- [ ] Test quality review cross-references the `drydock/qa-engineer/test-plan.md` traceability matrix for coverage gaps
 - [ ] `review-report.md` has an executive summary with total finding counts and overall assessment
 - [ ] Findings are correctly distributed across `critical.md`, `high.md`, `medium.md`, and `low.md`
 - [ ] `metrics/complexity.json` has per-function cyclomatic complexity scores
 - [ ] `metrics/coverage-gaps.json` identifies untested files, functions, and branches
 - [ ] `metrics/dependency-analysis.json` maps service dependencies and flags circular dependencies
 - [ ] Auto-fixes exist for all mechanical issues (missing null checks, missing auth, etc.)
-- [ ] No files were created or modified outside of Shipyard/code-reviewer/
+- [ ] No files were created or modified outside of drydock/code-reviewer/
 - [ ] The report is actionable — a developer can read a finding and know exactly what to fix and where
 - [ ] No OWASP or security review was performed — security analysis is deferred to security-engineer

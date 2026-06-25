@@ -51,11 +51,11 @@ When creating multiple files, use parallel Write/Edit calls where possible. When
 
 ## Rule 5: Config-Aware Paths
 
-Always check `.shipyard.yaml` for path overrides before using hardcoded paths. This allows the plugin to work with existing project structures.
+Always check `.drydock.yaml` for path overrides before using hardcoded paths. This allows the plugin to work with existing project structures.
 
 ```
 # Read config paths
-config = Read(".shipyard.yaml")
+config = Read(".drydock.yaml")
 api_path = config.paths.api_contracts || "api/openapi/*.yaml"
 arch_path = config.paths.architecture_docs || "docs/architecture/"
 ```

@@ -1,14 +1,23 @@
 # Changelog
 
-All notable changes to **Shipyard**.
+All notable changes to **Drydock**.
 
 ## [Unreleased]
+
+### Renamed
+- **Plugin renamed `shipyard` → `drydock`** ahead of the community-marketplace
+  submission (the name `shipyard` was already taken by a different plugin). This
+  changes the install name (`drydock`), the skill namespace (`drydock:<skill>`),
+  the `/drydock` command, the runtime workspace directory (`drydock/`), and the
+  project config file (`.drydock.yaml`). The GitHub repository itself stays at
+  `sundarshahi/drydock`. Verified by the eval suite, `validate --strict`, and a
+  live routing smoke test (`route='drydock:drydock'`, zero plugin errors).
 
 ### Changed
 - **Progressive-disclosure refactor** — the four oversized `SKILL.md` files were
   slimmed below the 500-line budget by deferring per-phase detail to on-demand
   `phases/` and `reference/` files (loaders + frontmatter stay in `SKILL.md`):
-  `shipyard` 1212→451 (5 new `phases/`+`reference/` files), `solution-architect`
+  `drydock` 1212→451 (5 new `phases/`+`reference/` files), `solution-architect`
   826→240 (6 phases), `qa-engineer` 670→376 (7 phases), `devops` 667→273 (6
   phases). Each slimmed `SKILL.md` gains a Phase/Reference Index and Dispatch
   Protocol, mirroring `software-engineer`. Lossless: no instruction was dropped,
@@ -16,7 +25,32 @@ All notable changes to **Shipyard**.
   live routing smoke test (orchestrator still loads with zero plugin errors and
   classifies correctly).
 
+### Added
+- **Gate-metric re-derivation** — the production-readiness gate no longer trusts
+  the agents' self-reported receipt metrics. `skills/drydock/scripts/verify-gate.py`
+  independently re-derives **tests** (from JUnit XML) and **coverage** (from
+  Istanbul/Cobertura/lcov) from the build's ground-truth artifacts, verifies every
+  claimed artifact exists, and flags any receipt whose numbers contradict the
+  artifacts. `phases/gates.md` now gates on the derived values: a `mismatch`
+  (overstated pass count / coverage) or a missing artifact is a BLOCKING breach;
+  metrics with no parseable artifact fall back to the receipt tagged `[unverified]`.
+- **Scripts over prose** — two deterministic orchestrator procedures that were
+  described in prose are now bundled scripts the orchestrator runs directly:
+  `skills/drydock/scripts/bootstrap-workspace.sh` (scaffold `drydock/` +
+  deploy all shared protocols, with `${CLAUDE_PLUGIN_ROOT}` → `${CLAUDE_SKILL_DIR}`
+  → script-relative source resolution) and `skills/drydock/scripts/aggregate-cost.py`
+  (sum effort/cost metrics across receipts, dedup artifacts, tolerate malformed
+  receipts). The full-build setup, non-Full-Build mode bootstrap, and final-summary
+  docs now call these instead of re-deriving them each run.
+
 ### Testing
+- **Gate re-derivation eval** — `test_gate_verification.py` drives `verify-gate.py`
+  against fixtures: it CONFIRMS a truthful receipt (`verified`, `trustworthy`),
+  CATCHES a lying one (tests/coverage `mismatch`, missing artifact flagged,
+  `trustworthy: false`), and reports `unverified` when no artifact exists.
+- **Bundled-script eval** — `test_drydock_scripts.py` runs both helper scripts
+  against throwaway fixtures and asserts their behavior (protocols deployed,
+  metrics aggregated/deduplicated), so a script regression fails CI for free.
 - **SKILL.md size budget** — new deterministic test `test_skill_size.py` fails
   any `skills/*/SKILL.md` over 500 lines, locking in the progressive-disclosure
   win (`phases/`/`reference/` detail files are exempt).
@@ -53,7 +87,7 @@ Dispatch-port + correctness release. The orchestration is now built entirely on 
 - **Hooks hardened** — `SessionStart`/`PreToolUse` hook commands no longer guess a non-versioned `~/.claude/plugins/cache` path; when `${CLAUDE_PLUGIN_ROOT}` is unset they fail loudly to stderr and exit 0 so the session is never blocked.
 
 ### Removed
-- **Dead config** — deleted the orphaned `skills/shipyard/hooks/activation-rules.json` (referenced a `UserPromptSubmit` hook wired to nothing).
+- **Dead config** — deleted the orphaned `skills/drydock/hooks/activation-rules.json` (referenced a `UserPromptSubmit` hook wired to nothing).
 
 ### CI
 - **Strict validation** — CI installs the Claude Code CLI (`npm install -g @anthropic-ai/claude-code`) and runs `claude plugin validate . --strict`, failing the job on any error or warning (no more warning swallow, and no more hard-fail when the CLI is simply absent on the runner). It also verifies `skills/*/SKILL.md` + `agents/*.md` frontmatter with a real YAML parse (name present; description present and ≤1024 chars).
@@ -61,11 +95,11 @@ Dispatch-port + correctness release. The orchestration is now built entirely on 
 
 ## [2.0.0] — 2026-06-25
 
-Enterprise-grade hardening release. Shipyard now treats production-readiness as evidence-backed and enforceable: artifacts are generated (not described) and blocking gates verify them.
+Enterprise-grade hardening release. Drydock now treats production-readiness as evidence-backed and enforceable: artifacts are generated (not described) and blocking gates verify them.
 
 ### Added
-- **Four new shared protocols**, deployed to `Shipyard/.protocols/` at orchestrator bootstrap and loaded by the worker skills: `security-defaults.md` (security-by-default baseline), `observability-contract.md` (OTel traces/metrics/logs + RED/USE), `architecture-boundaries.md` (Clean Architecture / dependency-rule enforcement), and `compliance-protocol.md` (per-product regulatory mapping). These join `grounding-protocol.md` and `security-testing-protocol.md`.
-- **Compliance Officer skill** (`shipyard:compliance-officer`) — the 15th agent. Scopes per-product regulatory frameworks (SOC 2, GDPR, HIPAA, PCI-DSS v4.0.1, CCPA/CPRA, ISO 27001, FedRAMP), maps mandatory controls to implementing artifacts, verifies controls exist in generated code/infra, and emits statutory evidence (SSP, DPIA, breach runbook) behind a blocking compliance gate.
+- **Four new shared protocols**, deployed to `drydock/.protocols/` at orchestrator bootstrap and loaded by the worker skills: `security-defaults.md` (security-by-default baseline), `observability-contract.md` (OTel traces/metrics/logs + RED/USE), `architecture-boundaries.md` (Clean Architecture / dependency-rule enforcement), and `compliance-protocol.md` (per-product regulatory mapping). These join `grounding-protocol.md` and `security-testing-protocol.md`.
+- **Compliance Officer skill** (`drydock:compliance-officer`) — the 15th agent. Scopes per-product regulatory frameworks (SOC 2, GDPR, HIPAA, PCI-DSS v4.0.1, CCPA/CPRA, ISO 27001, FedRAMP), maps mandatory controls to implementing artifacts, verifies controls exist in generated code/infra, and emits statutory evidence (SSP, DPIA, breach runbook) behind a blocking compliance gate.
 - **Compliance execution mode** — new orchestrator mode (now 12 total), invocable for regulated builds and as a gate input to production-readiness.
 - **Real secret-guard hook** — `hooks/secret-guard.sh`, wired as a `PreToolUse` hook in `hooks/hooks.json`. Blocks committing/writing secret files and scans staged diffs for credentials.
 - **Generated observability** — OpenTelemetry traces/metrics/logs scaffolding plus RED (Rate/Errors/Duration) and USE (Utilization/Saturation/Errors) metric sets, produced as real artifacts.
@@ -89,7 +123,7 @@ Enterprise-grade hardening release. Shipyard now treats production-readiness as 
 - **Grounding & Anti-Hallucination protocol** — new shared protocol `grounding-protocol.md`, loaded by all 14 agents. Evidence-first generation: every factual/code claim cites `file:line`, command output, or a retrieved source; claim↔evidence separation; `[verified]`/`[inferred]`/`[unverified]` confidence tags; cite-or-abstain; a 4-step chain-of-verification; and security-specific no-fabrication (never invent CVE ids or CVSS scores).
 - **Security Testing Authorization & Safety protocol** — new shared protocol `security-testing-protocol.md`, loaded by the Security Engineer. Mandatory authorization + scope gate before any active testing; local/authorized-staging targets only; no DoS/destructive payloads/production data; responsible disclosure; evidence-backed findings; CVSS discipline (4.0 primary, 3.1 ingested, paired with EPSS/CISA KEV).
 - **Real VAPT execution** — two new Security Engineer phases. `07-vapt-execution.md` runs gated DAST/pen-testing (recon→enum→scan→exploit/PoC→retest) with a 24-tool integration table (semgrep, CodeQL, trivy, grype, osv-scanner, gitleaks, trufflehog, checkov, OWASP ZAP, nuclei, nikto, sqlmap, wapiti, ffuf, schemathesis, RESTler…), each with verified invocations and safe-by-default usage; all active/DAST tools are gated behind the authorization step. `08-vapt-report.md` assembles a professional CVSS-backed pentest report. The Security Engineer now runs 8 phases.
-- **Pentest (VAPT) execution mode** — new orchestrator mode with a mandatory authorization-gate prompt before any active testing, plus `/shipyard pentest` and `/shipyard vapt` commands. HARDEN mode remains static-only so the gate cannot be bypassed.
+- **Pentest (VAPT) execution mode** — new orchestrator mode with a mandatory authorization-gate prompt before any active testing, plus `/drydock pentest` and `/drydock vapt` commands. HARDEN mode remains static-only so the gate cannot be bypassed.
 
 ### Changed
 - **OWASP coverage** — Security Engineer audits against OWASP Top 10 2025, API Security Top 10 (2023), and the LLM Top 10 (2025), with a Standards References section and a per-finding standards tag block (CVSS 4.0 / CWE / OWASP / WSTG v4.2 / ASVS 5.0.0). Verified against official sources.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic eval runner for the Shipyard plugin.
+"""Deterministic eval runner for the Drydock plugin.
 
 WHAT THIS GUARDS / WHY IT MATTERS
 ---------------------------------

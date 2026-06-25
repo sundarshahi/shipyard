@@ -1,35 +1,35 @@
 ---
 name: frontend-engineer
 description: >
-  [shipyard internal] Builds web frontends — React/Next.js components,
+  [drydock internal] Builds web frontends — React/Next.js components,
   pages, design systems, state management, typed API clients.
-  Routed via the shipyard orchestrator.
+  Routed via the drydock orchestrator.
 allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebFetch
 ---
 
 # Frontend Engineer
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-defaults.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-defaults.md" 2>/dev/null || cat Shipyard/.protocols/security-defaults.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat drydock/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-defaults.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-defaults.md" 2>/dev/null || cat drydock/.protocols/security-defaults.md 2>/dev/null || true`
 !`cat docs/architecture/performance-budget.yaml 2>/dev/null || true`
 !`cat config/feature-flags.yaml 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
-!`cat Shipyard/.orchestrator/codebase-context.md 2>/dev/null || true`
+!`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
+!`cat drydock/.orchestrator/codebase-context.md 2>/dev/null || true`
 
 **Protocol Fallback** (if protocol files are not loaded): Never ask open-ended questions — use AskUserQuestion with predefined options and "Chat about this" as the last option. Work continuously, print real-time terminal progress, default to sensible choices, and self-resolve issues before asking the user.
 
 ## Engagement Mode
 
-!`cat Shipyard/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 Read engagement mode and adapt decision surfacing:
 
@@ -42,7 +42,7 @@ Read engagement mode and adapt decision surfacing:
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -87,7 +87,7 @@ Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throu
 
 ## Brownfield Awareness
 
-If `Shipyard/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
+If `drydock/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
 - **READ existing frontend first** — understand the framework, component patterns, styling approach, state management
 - **MATCH existing stack** — if they use Vue, don't create React. If they use Tailwind, use Tailwind
 - **NEVER overwrite** — add new components alongside existing ones
@@ -104,7 +104,7 @@ If `Shipyard/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
 
 ## Pipeline Position
 
-This skill runs as Phase 3b in the Shipyard pipeline, in parallel with Software Engineer (Phase 3a). Both consume project root artifacts (OpenAPI specs, architecture docs) independently. Coordination points:
+This skill runs as Phase 3b in the Drydock pipeline, in parallel with Software Engineer (Phase 3a). Both consume project root artifacts (OpenAPI specs, architecture docs) independently. Coordination points:
 - API client types generated here must match the service implementations from Software Engineer
 - Both skills reference the same OpenAPI specs as the single source of truth
 - `frontend/` and `services/` are independent folder trees at the project root with no file conflicts
@@ -253,19 +253,19 @@ When parallel page agents complete (auth agent, dashboard agent, settings agent,
 | Makefile gate targets | root `Makefile` (append) | EMIT `size-limit` (runs size-limit against `.size-limit.json`, exits non-zero over budget) and `build-frontend` (production build, exits non-zero on failure); APPENDED to the base Makefile software-engineer owns (CANON #8) |
 | Feature flags | `frontend/app/hooks/use-flag.ts` | OpenFeature client hook over `libs/shared/feature-flags/`, SSR/edge-safe, fail-static safe defaults |
 | Security | `frontend/next.config.*` / middleware, `frontend/app/lib/sanitize.ts` | CSP + security headers, DOMPurify wrapper per security-defaults.md |
-| Workspace | `Shipyard/frontend-engineer/` | Analysis docs, design research, design decisions, performance budget, progress notes |
+| Workspace | `drydock/frontend-engineer/` | Analysis docs, design research, design decisions, performance budget, progress notes |
 
 ## Cross-Skill Contracts (obey exactly — shared with backend / qa / devops / sre)
 
 These contracts are loaded at the top of this SKILL.md and are **non-negotiable**. The frontend implements the browser half; other agents implement the matching half against the same names and artifacts.
 
 - **Errors (RFC 9457):** the API client parses `application/problem+json` responses into the `Problem` shape — `{ type, title, status, detail, instance, trace_id, errors[] }` — and maps `code` to user-facing copy via the shared **error catalog** (`libs/shared/errors/catalog.*`). Do NOT invent a frontend-only error shape; read titles/messages from the catalog, never duplicate them.
-- **Observability:** EMIT exactly the names in `Shipyard/.protocols/observability-contract.md` — `http_requests_total`, `http_request_duration_seconds` (labels `method`, `route` templated, `status_class`), JSON logs with `trace_id`/`span_id` from the live span, W3C `traceparent` on every fetch/XHR so the browser starts the trace. See Phase 4 (Frontend Observability) and Phase 6.
+- **Observability:** EMIT exactly the names in `drydock/.protocols/observability-contract.md` — `http_requests_total`, `http_request_duration_seconds` (labels `method`, `route` templated, `status_class`), JSON logs with `trace_id`/`span_id` from the live span, W3C `traceparent` on every fetch/XHR so the browser starts the trace. See Phase 4 (Frontend Observability) and Phase 6.
 - **Performance budget:** READ `docs/architecture/performance-budget.yaml` (`web_vitals`, `bundle`) — never hardcode 2.5s / 200KB. Lighthouse + size-limit thresholds derive from it. See Phase 6.
 - **Makefile gate targets (CANON #8):** software-engineer EMITS the base root `Makefile` (Phase 05); frontend-engineer APPENDS its two CI gate targets to it — `size-limit` (runs size-limit against `.size-limit.json`, exits non-zero over budget) and `build-frontend` (production build, exits non-zero on failure). No CI gate may call a make target no skill emits; these two are frontend's to emit.
 - **Feature flags:** consume the OpenFeature client at `libs/shared/feature-flags/` and the registry `config/feature-flags.yaml`. Add a client hook with SSR/edge-safe evaluation and per-flag SAFE DEFAULT (fail-static on provider error). See Phase 4 (OpenFeature client hook). Owner of the client/registry is software-engineer; frontend only adds the hook.
-- **Security defaults:** obey `Shipyard/.protocols/security-defaults.md` — CSP/security headers, no unsanitized `dangerouslySetInnerHTML`, secure cookies, no secrets in the client bundle. Each BUILD phase asserts `security-defaults checklist passes`.
-- **Architecture boundaries:** obey `Shipyard/.protocols/architecture-boundaries.md` — UI/page components depend inward on hooks/services; no direct cross-layer reach-through.
+- **Security defaults:** obey `drydock/.protocols/security-defaults.md` — CSP/security headers, no unsanitized `dangerouslySetInnerHTML`, secure cookies, no secrets in the client bundle. Each BUILD phase asserts `security-defaults checklist passes`.
+- **Architecture boundaries:** obey `drydock/.protocols/architecture-boundaries.md` — UI/page components depend inward on hooks/services; no direct cross-layer reach-through.
 
 ## Common Mistakes
 

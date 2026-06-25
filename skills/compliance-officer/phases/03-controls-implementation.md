@@ -2,20 +2,20 @@
 
 ## Objective
 
-For every mandatory control in the Phase 2 matrix, verify the control ACTUALLY EXISTS in the generated code/infrastructure — by reading the implementing artifact, not by assuming. Map each control to a concrete `path:line` and a status (Met / Partial / Missing). This phase CONSUMES the outputs of security-engineer, solution-architect, and devops; it does not re-audit or implement. Generate outputs in `Shipyard/compliance-officer/implementation/`.
+For every mandatory control in the Phase 2 matrix, verify the control ACTUALLY EXISTS in the generated code/infrastructure — by reading the implementing artifact, not by assuming. Map each control to a concrete `path:line` and a status (Met / Partial / Missing). This phase CONSUMES the outputs of security-engineer, solution-architect, and devops; it does not re-audit or implement. Generate outputs in `drydock/compliance-officer/implementation/`.
 
 ## Context Bridge
 
-Read the Phase 2 matrices (`Shipyard/compliance-officer/control-matrix/`) and the upstream artifacts you map onto:
-- `Shipyard/security-engineer/data-security/` — PII inventory, encryption audit, GDPR/CCPA mapping (CONSUMED — the SOLE authority on PII + encryption; do not redo).
-- `Shipyard/security-engineer/auth-review/` — auth flows, RBAC findings.
+Read the Phase 2 matrices (`drydock/compliance-officer/control-matrix/`) and the upstream artifacts you map onto:
+- `drydock/security-engineer/data-security/` — PII inventory, encryption audit, GDPR/CCPA mapping (CONSUMED — the SOLE authority on PII + encryption; do not redo).
+- `drydock/security-engineer/auth-review/` — auth flows, RBAC findings.
 - `docs/architecture/` — data residency, regions, data flows (solution-architect).
 - `infrastructure/`, `.github/workflows/` — KMS, IAM, logging pipelines, retention jobs (devops).
 - `services/`, `frontend/` — application controls (consent, retention, PII handling).
 
 ## Authority Boundary (do not double-work)
 
-Per `Shipyard/.protocols/conflict-resolution.md` + `Shipyard/.protocols/compliance-protocol.md`:
+Per `drydock/.protocols/conflict-resolution.md` + `drydock/.protocols/compliance-protocol.md`:
 - Encryption/crypto and PII findings come FROM security-engineer — cite their artifact, do not re-audit.
 - Data-residency decisions come FROM solution-architect — flag a gap as a finding, do not change architecture.
 - Infra controls come FROM devops — point the evidence at their files, do not re-provision.
@@ -54,7 +54,7 @@ A control marked `Met` with no `path:line` is invalid — downgrade to `Missing`
 
 ### Step 3: Cross-Reference, Do Not Re-Audit
 
-When a control's evidence is a security-engineer or devops artifact, cite it (`See Shipyard/security-engineer/data-security/encryption-audit.md:NN`). Do not produce a competing audit — that violates the authority hierarchy. If the upstream artifact is missing or inconclusive, mark the control `Partial`/`Missing` and raise a finding for the owning agent rather than auditing it yourself.
+When a control's evidence is a security-engineer or devops artifact, cite it (`See drydock/security-engineer/data-security/encryption-audit.md:NN`). Do not produce a competing audit — that violates the authority hierarchy. If the upstream artifact is missing or inconclusive, mark the control `Partial`/`Missing` and raise a finding for the owning agent rather than auditing it yourself.
 
 ### Step 4: Record Gaps as Findings
 
@@ -62,7 +62,7 @@ For each `Missing`/`Partial` mandatory control, write a finding: control id, wha
 
 ## Output Deliverables
 
-Write to `Shipyard/compliance-officer/implementation/`:
+Write to `drydock/compliance-officer/implementation/`:
 
 | File | Contents |
 |------|----------|
