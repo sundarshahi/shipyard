@@ -56,7 +56,7 @@ Read specific files the user wants to understand. Explain the code, the patterns
 
 ## Output
 
-Write to `Shipyard/polymath/context/repo-map.md`:
+Write to `Drydock/polymath/context/repo-map.md`:
 
 ```markdown
 # Repo Map — [project name]

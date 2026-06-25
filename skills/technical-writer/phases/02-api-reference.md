@@ -14,7 +14,7 @@ Generate comprehensive API documentation from OpenAPI/AsyncAPI specs and source 
 | **Error catalog module** | `libs/shared/errors/catalog.*` | **Single source for the error-code table** — entries `{ code, http_status, title, message_template, remediation, docs_anchor }` (the SAME module the runtime error handler reads) |
 | `Problem` schema | `api/openapi/components.yaml` | Reusable RFC 9457 `Problem` component (owned by solution-architect) referenced by every error response |
 | Rate limit config | `services/*/src/middleware/rate-limit*` | Rate tiers, limit values |
-| Content inventory | `Shipyard/technical-writer/content-inventory.md` | Phase 1 gap analysis results |
+| Content inventory | `Drydock/technical-writer/content-inventory.md` | Phase 1 gap analysis results |
 
 ## 2.2 — Authentication Documentation
 

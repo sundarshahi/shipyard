@@ -9,7 +9,7 @@ Active security testing sends real payloads to running systems. Done without aut
 ## Authorization & Scope Gate (BEFORE any active testing)
 
 - **Mandatory gate before the FIRST active action.** Confirm explicit written authorization, an in-scope target allowlist (hosts/domains/IPs/API base URLs), rules of engagement (RoE), and a testing window. Do not send a single payload until all four are recorded.
-- **Implementation hook.** The gate is an `AskUserQuestion` with an explicit "I authorize active testing against these targets" confirmation plus a scope list. Record the authorization in a receipt for an audit trail (`Shipyard/.orchestrator/receipts/` per `receipt-protocol.md`).
+- **Implementation hook.** The gate is an `AskUserQuestion` with an explicit "I authorize active testing against these targets" confirmation plus a scope list. Record the authorization in a receipt for an audit trail (`Drydock/.orchestrator/receipts/` per `receipt-protocol.md`).
 - **No authorization → passive/static only.** If authorization cannot be confirmed, run ONLY passive/static tooling (SAST, SCA, secret/IaC scanning of local files) and halt before any payload.
 - **Re-confirm scope before EVERY active action.** Maintain the allowlist and verify each request target is on it. Refuse out-of-scope, wildcard, or third-party assets. Re-validate if a target redirects to a different host.
 

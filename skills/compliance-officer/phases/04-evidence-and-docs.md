@@ -2,19 +2,19 @@
 
 ## Objective
 
-Produce the statutory compliance documents an auditor or regulator expects — System Security Plan (SSP), GDPR Data Protection Impact Assessment (DPIA), and a breach/incident runbook encoding statutory notification clocks — and assemble the control-evidence map that ties every mandatory control to its proof. Every control statement is grounded in a real implementing artifact and live-verified requirement text. Generate outputs in `Shipyard/compliance-officer/docs/` and `Shipyard/compliance-officer/evidence/`.
+Produce the statutory compliance documents an auditor or regulator expects — System Security Plan (SSP), GDPR Data Protection Impact Assessment (DPIA), and a breach/incident runbook encoding statutory notification clocks — and assemble the control-evidence map that ties every mandatory control to its proof. Every control statement is grounded in a real implementing artifact and live-verified requirement text. Generate outputs in `Drydock/compliance-officer/docs/` and `Drydock/compliance-officer/evidence/`.
 
 ## Context Bridge
 
 Read:
-- Phase 2 matrices (`Shipyard/compliance-officer/control-matrix/`) — live-verified control ids + requirement text.
-- Phase 3 implementation check (`Shipyard/compliance-officer/implementation/controls-check.md`) — status + implementing artifacts.
+- Phase 2 matrices (`Drydock/compliance-officer/control-matrix/`) — live-verified control ids + requirement text.
+- Phase 3 implementation check (`Drydock/compliance-officer/implementation/controls-check.md`) — status + implementing artifacts.
 - security-engineer outputs (PII inventory, encryption audit) — CONSUMED for data descriptions, not redone.
 - solution-architect architecture (system boundary, data flows, residency).
 
 ## Runtime-Freshness Rule (BINDING)
 
-Per `Shipyard/.protocols/compliance-protocol.md`: any statutory clock, article number, or requirement sentence written into these documents is verified LIVE against the official source this session (eur-lex for GDPR Arts. 33–34; ecfr.gov/hhs.gov for HIPAA §164.404 / Breach Notification Rule), cited with URL + quote + date. NEVER write a statutory deadline or control statement from memory. If you cannot verify a clock live, mark it `not verified` rather than asserting a number.
+Per `Drydock/.protocols/compliance-protocol.md`: any statutory clock, article number, or requirement sentence written into these documents is verified LIVE against the official source this session (eur-lex for GDPR Arts. 33–34; ecfr.gov/hhs.gov for HIPAA §164.404 / Breach Notification Rule), cited with URL + quote + date. NEVER write a statutory deadline or control statement from memory. If you cannot verify a clock live, mark it `not verified` rather than asserting a number.
 
 ## Workflow
 
@@ -50,7 +50,7 @@ The runbook includes: detection → triage/assessment → containment → the no
 
 ### Step 4: Control-Evidence Map
 
-Assemble the proof contract from `Shipyard/.protocols/compliance-protocol.md`. One row per mandatory control:
+Assemble the proof contract from `Drydock/.protocols/compliance-protocol.md`. One row per mandatory control:
 
 | Control | Implementing artifact | Owning agent | Evidence location | Status |
 |---------|----------------------|--------------|-------------------|--------|
@@ -62,11 +62,11 @@ Assemble the proof contract from `Shipyard/.protocols/compliance-protocol.md`. O
 
 ### Step 5: Copy Deliverables (optional, config-aware)
 
-If `.shipyard.yaml` defines a docs path, also copy SSP/DPIA/runbook to `docs/compliance/`. Otherwise leave them in the workspace. Never overwrite existing user docs without the brownfield rules in `Shipyard/.orchestrator/codebase-context.md`.
+If `.drydock.yaml` defines a docs path, also copy SSP/DPIA/runbook to `docs/compliance/`. Otherwise leave them in the workspace. Never overwrite existing user docs without the brownfield rules in `Drydock/.orchestrator/codebase-context.md`.
 
 ## Output Deliverables
 
-Write to `Shipyard/compliance-officer/docs/` and `Shipyard/compliance-officer/evidence/`:
+Write to `Drydock/compliance-officer/docs/` and `Drydock/compliance-officer/evidence/`:
 
 | File | Contents |
 |------|----------|

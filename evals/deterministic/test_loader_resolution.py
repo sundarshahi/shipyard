@@ -6,7 +6,7 @@ Every worker SKILL.md pulls shared protocols at load time with a
 
     !`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/P.md" 2>/dev/null \
       || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/P.md" 2>/dev/null \
-      || cat Shipyard/.protocols/P.md 2>/dev/null || true`
+      || cat Drydock/.protocols/P.md 2>/dev/null || true`
 
 If a protocol file is missing, typo'd, or renamed, the loader silently
 resolves to EMPTY (the `|| true` tail) and the worker boots with no
@@ -21,7 +21,7 @@ This test asserts three independent things:
       file (no dangling refs across all skills/*/SKILL.md), and
   (c) the loader snippet itself resolves correctly under each of the
       four real fallback scenarios (PLUGIN_ROOT hit, SKILL_DIR hit,
-      Shipyard/.protocols hit, and graceful-empty cold start).
+      Drydock/.protocols hit, and graceful-empty cold start).
 """
 
 from __future__ import annotations
@@ -67,7 +67,7 @@ REF_RE = re.compile(r"_shared/protocols/([A-Za-z0-9._-]+\.md)")
 REQUIRED_FALLBACKS = (
     "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/",
     "${CLAUDE_SKILL_DIR}/../_shared/protocols/",
-    "Shipyard/.protocols/",
+    "Drydock/.protocols/",
 )
 
 
@@ -76,7 +76,7 @@ def _loader_snippet(stem: str) -> str:
     return (
         f'cat "${{CLAUDE_PLUGIN_ROOT}}/skills/_shared/protocols/{stem}" 2>/dev/null '
         f'|| cat "${{CLAUDE_SKILL_DIR}}/../_shared/protocols/{stem}" 2>/dev/null '
-        f"|| cat Shipyard/.protocols/{stem} 2>/dev/null || true"
+        f"|| cat Drydock/.protocols/{stem} 2>/dev/null || true"
     )
 
 
@@ -194,10 +194,10 @@ def run() -> list[str]:
                 f"protocol content (got {len(out)} bytes, expected {len(real_content)})"
             )
 
-    # SCENARIO 3: both unset, cwd contains Shipyard/.protocols/<sample> -> path-3 hit.
-    sentinel = "SENTINEL-SHIPYARD-PROTOCOLS-FALLBACK\n"
+    # SCENARIO 3: both unset, cwd contains Drydock/.protocols/<sample> -> path-3 hit.
+    sentinel = "SENTINEL-DRYDOCK-PROTOCOLS-FALLBACK\n"
     with tempfile.TemporaryDirectory() as tmp3:
-        proto_dir = Path(tmp3) / "Shipyard" / ".protocols"
+        proto_dir = Path(tmp3) / "Drydock" / ".protocols"
         proto_dir.mkdir(parents=True)
         (proto_dir / SAMPLE).write_text(sentinel, encoding="utf-8")
         out = _run_loader(
@@ -207,11 +207,11 @@ def run() -> list[str]:
         )
         if out != sentinel:
             failures.append(
-                "(c3) Shipyard/.protocols fallback did not resolve to the sentinel "
+                "(c3) Drydock/.protocols fallback did not resolve to the sentinel "
                 f"(got {out!r}, expected {sentinel!r})"
             )
 
-    # SCENARIO 4: cold first run -- nothing set, no Shipyard/.protocols ->
+    # SCENARIO 4: cold first run -- nothing set, no Drydock/.protocols ->
     #             loader degrades gracefully to empty via `|| true`.
     with tempfile.TemporaryDirectory() as tmp4:
         out = _run_loader(

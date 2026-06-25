@@ -3,7 +3,7 @@
 Local only. Requires you to be logged into Claude Code. Spends subscription usage.
 Run: python3 evals/behavioral/run.py
 
-Behavioral routing eval CLI for Shipyard. Loads cases.yaml, drives the real
+Behavioral routing eval CLI for Drydock. Loads cases.yaml, drives the real
 `claude -p` router (one constrained turn, no tools) for each fixture via
 harness.run_route, and compares the model's chosen entry skill against the
 expected one with a loose/substring match (routing is non-deterministic at
@@ -48,7 +48,7 @@ def _matches(picked: str, expect_skill: str) -> bool:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Shipyard behavioral routing eval")
+    ap = argparse.ArgumentParser(description="Drydock behavioral routing eval")
     ap.add_argument("--model", default=None, help="model id to pass to claude")
     ap.add_argument("--timeout", type=int, default=180, help="per-case timeout (s)")
     args = ap.parse_args()

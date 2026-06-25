@@ -42,9 +42,9 @@ def run() -> list[str]:
                 val = plugin.get(field)
                 if not (isinstance(val, str) and val.strip()):
                     failures.append(f"plugin.json: '{field}' must be a non-empty string")
-            if plugin.get("name") != "shipyard":
+            if plugin.get("name") != "drydock":
                 failures.append(
-                    f"plugin.json: name must be 'shipyard', got {plugin.get('name')!r}"
+                    f"plugin.json: name must be 'drydock', got {plugin.get('name')!r}"
                 )
             plugin_version = plugin.get("version")
 
@@ -62,9 +62,9 @@ def run() -> list[str]:
                     "marketplace.json: top-level 'description' must be a non-empty "
                     "string (its absence broke `--strict`)"
                 )
-            if mkt.get("name") != "shipyard":
+            if mkt.get("name") != "drydock":
                 failures.append(
-                    f"marketplace.json: name must be 'shipyard', got {mkt.get('name')!r}"
+                    f"marketplace.json: name must be 'drydock', got {mkt.get('name')!r}"
                 )
             plugins = mkt.get("plugins")
             if not (isinstance(plugins, list) and plugins):
@@ -82,9 +82,9 @@ def run() -> list[str]:
                 f"marketplace.json: plugins[0].source must be '.', got "
                 f"{mkt_plugin0.get('source')!r}"
             )
-        if mkt_plugin0.get("name") != "shipyard":
+        if mkt_plugin0.get("name") != "drydock":
             failures.append(
-                f"marketplace.json: plugins[0].name must be 'shipyard', got "
+                f"marketplace.json: plugins[0].name must be 'drydock', got "
                 f"{mkt_plugin0.get('name')!r}"
             )
 

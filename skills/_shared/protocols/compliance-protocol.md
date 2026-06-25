@@ -8,7 +8,7 @@ This is the cross-agent contract for regulatory compliance. It is the one domain
 
 ## Deterministic Product-Signals → Frameworks Map
 
-Read data classification (security-engineer PII inventory), the product/BRD, and any `compliance:` block in `.shipyard.yaml`. Apply this map deterministically — a present signal SCOPES IN its framework. Multiple signals stack (a B2B health SaaS with EU users scopes HIPAA + SOC 2 + GDPR). When a signal is ambiguous, scope it IN and flag for confirmation; never silently drop.
+Read data classification (security-engineer PII inventory), the product/BRD, and any `compliance:` block in `.drydock.yaml`. Apply this map deterministically — a present signal SCOPES IN its framework. Multiple signals stack (a B2B health SaaS with EU users scopes HIPAA + SOC 2 + GDPR). When a signal is ambiguous, scope it IN and flag for confirmation; never silently drop.
 
 | Product signal (evidence required) | Framework scoped IN | Edition pinned this protocol |
 |------------------------------------|---------------------|------------------------------|
@@ -102,7 +102,7 @@ A control marked `Met` with an empty Implementing-artifact field is invalid — 
 
 ## Authority Boundary (no double-work)
 
-- **security-engineer** remains the SOLE authority on PII inventory, data classification, and the encryption/crypto AUDIT. compliance-officer READS those outputs (`Shipyard/security-engineer/data-security/`) and maps them to controls — it does NOT re-run the PII scan or re-audit encryption.
+- **security-engineer** remains the SOLE authority on PII inventory, data classification, and the encryption/crypto AUDIT. compliance-officer READS those outputs (`Drydock/security-engineer/data-security/`) and maps them to controls — it does NOT re-run the PII scan or re-audit encryption.
 - **solution-architect** owns data-residency and architecture decisions; compliance-officer flags a residency/control GAP as a finding, it does not change the architecture.
 - **devops** owns infra controls (KMS, IAM, logging pipelines); compliance-officer points the evidence map at devops artifacts.
 - **product-manager** owns the product scope that drives the signals map; compliance-officer reads it, confirms ambiguous signals, and does not redefine requirements.

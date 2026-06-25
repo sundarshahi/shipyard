@@ -17,7 +17,7 @@ For every skills/<x>/SKILL.md (15) and agents/<x>.md (11):
   (b) `name` and `description` are present, non-empty strings; len(description) <= 1024.
   (c) For the 11 WORKER skills only (skill dir name == an agent filename), the
       SKILL.md frontmatter declares a non-empty `allowed-tools` (str or list).
-      The 4 main-context skills (shipyard, product-manager, solution-architect,
+      The 4 main-context skills (drydock, product-manager, solution-architect,
       polymath) are intentionally exempt.
 
 The worker set is DERIVED from disk (agent filenames), matching the same

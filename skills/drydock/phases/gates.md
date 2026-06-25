@@ -19,7 +19,7 @@ Print the pipeline dashboard (DEFINE ● active), then the gate ceremony:
 ```
 
 **Receipt verification before gate:**
-Read `Shipyard/.orchestrator/receipts/T1-product-manager.json`. Verify all `artifacts` exist on disk. If receipt missing or artifacts missing, investigate before opening gate. Use receipt `metrics` for the numbers displayed above.
+Read `Drydock/.orchestrator/receipts/T1-product-manager.json`. Verify all `artifacts` exist on disk. If receipt missing or artifacts missing, investigate before opening gate. Use receipt `metrics` for the numbers displayed above.
 
 Then ask:
 ```python
@@ -55,7 +55,7 @@ Print the pipeline dashboard (DEFINE ✓ complete), then the gate ceremony:
 ```
 
 **Receipt verification before gate:**
-Read `Shipyard/.orchestrator/receipts/T2-solution-architect.json`. Verify all `artifacts` exist on disk (ADRs, API specs, system design). If receipt missing or artifacts missing, investigate before opening gate. Use receipt `metrics` for the numbers displayed above.
+Read `Drydock/.orchestrator/receipts/T2-solution-architect.json`. Verify all `artifacts` exist on disk (ADRs, API specs, system design). If receipt missing or artifacts missing, investigate before opening gate. Use receipt `metrics` for the numbers displayed above.
 
 Then ask:
 ```python
@@ -76,7 +76,7 @@ AskUserQuestion(questions=[{
 
 If user selects "Rework architecture":
 1. Ask what concerns they have (AskUserQuestion with common architecture concerns + free-form)
-2. Track rework cycle: read `Shipyard/.orchestrator/rework-log.md`, increment Gate 2 rework count
+2. Track rework cycle: read `Drydock/.orchestrator/rework-log.md`, increment Gate 2 rework count
 3. If rework count < 2: Re-invoke Solution Architect with the user's concerns as additional constraints. The architect re-reads its own previous output, applies the feedback, and produces updated artifacts.
 4. If rework count >= 2: Escalate — "Architecture has been revised twice. Approve current state or discuss further?"
 5. After rework: re-verify receipts, re-present Gate 2
@@ -86,7 +86,7 @@ Print rework indicator in the gate ceremony:
   ⬥ GATE 2 — Architecture Approval (Rework {N}/2)        ⏱ {elapsed}
 ```
 
-Write each rework cycle to `Shipyard/.orchestrator/rework-log.md`:
+Write each rework cycle to `Drydock/.orchestrator/rework-log.md`:
 ```markdown
 ## Gate 2 — Rework {N}
 Concerns: {user's feedback}
@@ -119,7 +119,7 @@ Print the pipeline dashboard (DEFINE ✓, BUILD ✓, HARDEN ✓, SHIP ✓ comple
 
 Do NOT take the agents' self-reported `metrics` at face value. Independently re-derive the gate metrics from the build's ground-truth artifacts:
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/shipyard/scripts/verify-gate.py" 2>/dev/null \
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/drydock/scripts/verify-gate.py" 2>/dev/null \
   || python3 "${CLAUDE_SKILL_DIR}/scripts/verify-gate.py"
 ```
 It reads ALL receipts, verifies each receipt's claimed `artifacts` exist on disk, and re-derives **tests** (from JUnit XML) and **coverage** (from Istanbul `coverage-summary.json` / Cobertura `coverage.xml` / `lcov.info`), returning JSON:
@@ -143,7 +143,7 @@ Evaluate against the RE-DERIVED metrics from `verify-gate.py` first, then the re
 - **Compliance** — every mandatory control for each in-scope framework is present (`compliance.controls_missing` is empty / count == 0)
 - **Architecture boundary** — no boundary violations (per `architecture-boundaries.md`)
 
-If ANY of these breaches, the "Ship it — production ready" option is BLOCKED **unless** a logged `accepted with justification` override receipt exists for that specific breach at `Shipyard/.orchestrator/overrides/<gate>-<id>.json`. The override receipt schema:
+If ANY of these breaches, the "Ship it — production ready" option is BLOCKED **unless** a logged `accepted with justification` override receipt exists for that specific breach at `Drydock/.orchestrator/overrides/<gate>-<id>.json`. The override receipt schema:
 ```json
 {
   "gate": "coverage | perf | compliance | architecture | tests",
@@ -155,7 +155,7 @@ If ANY of these breaches, the "Ship it — production ready" option is BLOCKED *
   "timestamp": "<ISO 8601>"
 }
 ```
-When a gate is breached, do NOT silently offer "Ship it". Instead present the breach and offer either "Rework — fix issues first" or "Accept with justification" (which writes the override receipt to `Shipyard/.orchestrator/overrides/<gate>-<id>.json` and only then unblocks "Ship it" for that breach). Each independent breach requires its own override receipt.
+When a gate is breached, do NOT silently offer "Ship it". Instead present the breach and offer either "Rework — fix issues first" or "Accept with justification" (which writes the override receipt to `Drydock/.orchestrator/overrides/<gate>-<id>.json` and only then unblocks "Ship it" for that breach). Each independent breach requires its own override receipt.
 
 Then ask:
 ```python
@@ -176,12 +176,12 @@ AskUserQuestion(questions=[{
 }])
 ```
 
-If the user selects **"Accept with justification"**, ask which breached gate(s) they are accepting and capture a justification, then write an override receipt to `Shipyard/.orchestrator/overrides/<gate>-<id>.json` (schema above) for each. Only after the override receipt(s) exist may "Ship it — production ready" be offered for those breaches.
+If the user selects **"Accept with justification"**, ask which breached gate(s) they are accepting and capture a justification, then write an override receipt to `Drydock/.orchestrator/overrides/<gate>-<id>.json` (schema above) for each. Only after the override receipt(s) exist may "Ship it — production ready" be offered for those breaches.
 
 **Rework loop (Gate 3):**
 
 If user selects "Rework — fix issues first":
-1. Track rework cycle in `Shipyard/.orchestrator/rework-log.md`, increment Gate 3 rework count
+1. Track rework cycle in `Drydock/.orchestrator/rework-log.md`, increment Gate 3 rework count
 2. If rework count < 2:
    a. Create a new remediation task targeting the remaining Critical/High findings
    b. After remediation completes, re-run verification (original finding agents re-scan affected files)

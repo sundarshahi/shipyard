@@ -8,17 +8,17 @@ Inventory every existing artifact across the project, identify documentation gap
 
 | Input | Path | What to Extract |
 |-------|------|-----------------|
-| Business context | `Shipyard/product-manager/` | User personas, feature scope, domain glossary |
+| Business context | `Drydock/product-manager/` | User personas, feature scope, domain glossary |
 | Architecture docs | `docs/architecture/` | Service boundaries, ADRs, tech stack, data flow |
 | API contracts | `api/openapi/*.yaml`, `api/asyncapi/*.yaml` | Endpoints, schemas, auth methods, webhook events, reusable `Problem` schema |
 | Error catalog | `libs/shared/errors/catalog.*` | Single source for the generated error-code table — `{ code, http_status, title, message_template, remediation, docs_anchor }` |
-| Observability contract | `Shipyard/.protocols/observability-contract.md` | The ONLY metric/log/span names the monitoring guide may reference |
+| Observability contract | `Drydock/.protocols/observability-contract.md` | The ONLY metric/log/span names the monitoring guide may reference |
 | Performance budget | `docs/architecture/performance-budget.yaml` | Threshold source — never hardcode perf numbers in docs |
 | Feature-flag registry | `config/feature-flags.yaml` | Flag list + lifecycle for feature-flag docs |
 | Source code | `services/`, `frontend/`, `libs/` | Module structure, code comments, config files, env vars |
-| Test artifacts | `tests/`, `Shipyard/qa-engineer/` | Test coverage, integration test descriptions, test strategy |
+| Test artifacts | `tests/`, `Drydock/qa-engineer/` | Test coverage, integration test descriptions, test strategy |
 | DevOps artifacts | `infrastructure/`, `.github/workflows/` | CI/CD pipelines, deployment configs, environment definitions |
-| SRE artifacts | `docs/runbooks/`, `Shipyard/sre/` | Runbooks, incident procedures, SLO definitions, DR playbooks |
+| SRE artifacts | `docs/runbooks/`, `Drydock/sre/` | Runbooks, incident procedures, SLO definitions, DR playbooks |
 | Project README | `README.md` | Current onboarding state, accuracy of existing instructions |
 
 ## 1.2 — Artifact Inventory
@@ -117,8 +117,8 @@ Produce a prioritized plan with estimated effort:
 
 | Artifact | Path |
 |----------|------|
-| Content inventory | `Shipyard/technical-writer/content-inventory.md` |
-| Writing notes and style decisions | `Shipyard/technical-writer/writing-notes.md` |
+| Content inventory | `Drydock/technical-writer/content-inventory.md` |
+| Writing notes and style decisions | `Drydock/technical-writer/writing-notes.md` |
 
 ## Validation Loop
 

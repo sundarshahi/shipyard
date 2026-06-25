@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Shipyard Secret Guard  (PreToolUse hook)
+# Drydock Secret Guard  (PreToolUse hook)
 # ---------------------------------------------------------------------------
-# Closes the "Security Hooks (Continuous)" claim in skills/shipyard/SKILL.md.
+# Closes the "Security Hooks (Continuous)" claim in skills/drydock/SKILL.md.
 #
 # This is a REAL enforcement hook. It runs before Write|Edit and before
 # Bash commands that stage/commit code (git add / git commit), and it:
@@ -17,7 +17,7 @@
 #   2  -> BLOCK the tool call (stderr is shown to Claude / the user)
 #
 # Intentional, documented bypass (NOT default):
-#   SHIPYARD_ALLOW_SECRET=1   -> allow with a loud warning on stderr.
+#   DRYDOCK_ALLOW_SECRET=1   -> allow with a loud warning on stderr.
 #
 # Dependency-light: pure bash + coreutils (grep, sed). `jq` and `gitleaks`
 # are used opportunistically if present but are never required.
@@ -106,13 +106,13 @@ is_secret_path() {
 }
 
 # --- loud, documented bypass ----------------------------------------------
-if [ "${SHIPYARD_ALLOW_SECRET:-}" = "1" ]; then
+if [ "${DRYDOCK_ALLOW_SECRET:-}" = "1" ]; then
   {
     echo "=============================================================="
-    echo "  !!  SHIPYARD SECRET GUARD BYPASSED (SHIPYARD_ALLOW_SECRET=1)"
+    echo "  !!  DRYDOCK SECRET GUARD BYPASSED (DRYDOCK_ALLOW_SECRET=1)"
     echo "  !!  Secret-path and secret-content checks are DISABLED for"
     echo "  !!  this tool call. This is intentional and on YOU."
-    echo "  !!  Unset SHIPYARD_ALLOW_SECRET to re-enable enforcement."
+    echo "  !!  Unset DRYDOCK_ALLOW_SECRET to re-enable enforcement."
     echo "=============================================================="
   } >&2
   exit 0
@@ -121,7 +121,7 @@ fi
 # --- helper: emit a block message and exit 2 -------------------------------
 block() {
   {
-    echo "BLOCKED by Shipyard Secret Guard"
+    echo "BLOCKED by Drydock Secret Guard"
     echo "--------------------------------"
     echo "$1"
     echo ""
@@ -129,7 +129,7 @@ block() {
     echo "Fix: keep secrets out of code; use a secret manager / env injection;"
     echo "     add the path to .gitignore; reference values via env vars."
     echo "Bypass (discouraged, you accept the risk):"
-    echo "     SHIPYARD_ALLOW_SECRET=1 <your action>"
+    echo "     DRYDOCK_ALLOW_SECRET=1 <your action>"
   } >&2
   exit 2
 }
@@ -171,7 +171,7 @@ fi
 # ===========================================================================
 
 # Build a temp file holding the material to scan.
-SCRATCH="$(mktemp 2>/dev/null || echo "/tmp/shipyard-secret-$$.txt")"
+SCRATCH="$(mktemp 2>/dev/null || echo "/tmp/drydock-secret-$$.txt")"
 trap 'rm -f "$SCRATCH" 2>/dev/null' EXIT
 : > "$SCRATCH"
 

@@ -1,9 +1,9 @@
 ---
 name: technical-writer
 description: >
-  [shipyard internal] Generates documentation when you need to
+  [drydock internal] Generates documentation when you need to
   explain code — API references, developer guides, READMEs, architecture
-  overviews. Routed via the shipyard orchestrator.
+  overviews. Routed via the drydock orchestrator.
 allowed-tools: Read, Write, Edit, Grep, Glob, Task, Skill
 ---
 
@@ -11,19 +11,19 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Task, Skill
 
 ## Preprocessing
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat Shipyard/.protocols/architecture-boundaries.md 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
-!`cat Shipyard/.orchestrator/codebase-context.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Drydock/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat Drydock/.protocols/architecture-boundaries.md 2>/dev/null || true`
+!`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
+!`cat Drydock/.orchestrator/codebase-context.md 2>/dev/null || true`
 
 **Project-artifact loaders (read the contracts you must document against — never hardcode their values):**
 !`cat docs/architecture/performance-budget.yaml 2>/dev/null || true`
@@ -40,7 +40,7 @@ If codebase context indicates `brownfield` mode:
 
 ## Engagement Mode
 
-!`cat Shipyard/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat Drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 | Mode | Behavior |
 |------|----------|
@@ -51,7 +51,7 @@ If codebase context indicates `brownfield` mode:
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `Drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -104,10 +104,10 @@ Documentation that restates a value owned elsewhere drifts and lies. Where a mac
 | Error-code table + problem+json format | the error-catalog module `libs/shared/errors/catalog.*` (entries `{ code, http_status, title, message_template, remediation, docs_anchor }`) — the SAME module the runtime error handler reads | runtime + docs must agree; two copies drift |
 | API endpoint/schema reference | `api/openapi/*.yaml` (+ the reusable `Problem` schema in `api/openapi/components.yaml`, owned by solution-architect) | spec is the contract |
 | Runnable API collection (Bruno / `.http`) | the same OpenAPI spec | a collection that drifts from the spec sends wrong requests |
-| Monitoring/observability metric names, log fields, span attrs | `Shipyard/.protocols/observability-contract.md` ONLY — `http_requests_total`, `http_request_duration_seconds` (with exemplars), `http_requests_in_flight`, `*_pool_*` USE metrics | a dashboard/doc that names a metric no code emits is broken |
+| Monitoring/observability metric names, log fields, span attrs | `Drydock/.protocols/observability-contract.md` ONLY — `http_requests_total`, `http_request_duration_seconds` (with exemplars), `http_requests_in_flight`, `*_pool_*` USE metrics | a dashboard/doc that names a metric no code emits is broken |
 | Performance numbers (latency/size budgets) | `docs/architecture/performance-budget.yaml` | never hardcode `500ms`/`200KB` — read the threshold |
 | Feature-flag list + lifecycle | `config/feature-flags.yaml` (OpenFeature registry, client at `libs/shared/feature-flags/`) | the checked-in registry is canonical |
-| Dependency/layering rules in architecture docs | `Shipyard/.protocols/architecture-boundaries.md` (inward-only law + `make arch` gate) | docs must match the enforced law |
+| Dependency/layering rules in architecture docs | `Drydock/.protocols/architecture-boundaries.md` (inward-only law + `make arch` gate) | docs must match the enforced law |
 
 If a generated doc and its source disagree, the **source wins** and the docs-generation/`docs-examples` CI job FAILS — see the gates below.
 
@@ -115,13 +115,13 @@ If a generated doc and its source disagree, the **source wins** and the docs-gen
 
 | Input | Status | Source | What Technical Writer Needs |
 |-------|--------|--------|----------------------------|
-| `Shipyard/product-manager/` | Critical | BA | Business context, user personas, feature scope, glossary |
+| `Drydock/product-manager/` | Critical | BA | Business context, user personas, feature scope, glossary |
 | `docs/architecture/` | Critical | Architect | Service boundaries, technology choices, data flow, decision rationale |
 | `api/` (OpenAPI / AsyncAPI specs) | Critical | Implementation | API contracts, schemas, auth methods |
 | `services/`, `frontend/` (Source code) | Degraded | Implementation | Code comments, module structure, config files, env vars |
 | `tests/`, test plan | Degraded | Testing | Coverage reports, integration test descriptions, testing strategy |
 | `infrastructure/`, `.github/workflows/` | Degraded | DevOps | Deployment procedures, environment configs, CI/CD pipeline |
-| `docs/runbooks/`, `Shipyard/sre/` | Optional | SRE | Runbooks, incident procedures, SLO definitions, DR playbooks |
+| `docs/runbooks/`, `Drydock/sre/` | Optional | SRE | Runbooks, incident procedures, SLO definitions, DR playbooks |
 
 ## Phase Index
 
@@ -185,7 +185,7 @@ scripts/
 
 ### Workspace (Writing Notes)
 ```
-Shipyard/technical-writer/
+Drydock/technical-writer/
     writing-notes.md
     content-inventory.md
 ```

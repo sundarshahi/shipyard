@@ -20,7 +20,7 @@
 8. Identify **critical modules** (money/billing, authz predicates, validators, parsers, serializers, domain invariants) that require mutation testing + property/fuzz tests (Test Quality Gates).
 9. If `config/feature-flags.yaml` exists, list every flag key for the feature-flag test matrix (on/off + provider-down safe default).
 
-**Output:** Write `Shipyard/qa-engineer/test-plan.md` with the following sections:
+**Output:** Write `Drydock/qa-engineer/test-plan.md` with the following sections:
 - **Scope** — What is being tested, what is explicitly out of scope
 - **Test Strategy** — Test pyramid approach, which test types cover which risk areas
 - **Traceability Matrix** — Table mapping AC-ID to test case IDs, test type, and priority

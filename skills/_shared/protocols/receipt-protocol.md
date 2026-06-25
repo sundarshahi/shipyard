@@ -8,7 +8,7 @@
 
 Every agent writes a JSON receipt as its LAST action before `TaskUpdate(status="completed")`.
 
-**File path:** `Shipyard/.orchestrator/receipts/{task_id}-{agent_name}.json`
+**File path:** `Drydock/.orchestrator/receipts/{task_id}-{agent_name}.json`
 
 **Required fields:**
 
@@ -19,9 +19,9 @@ Every agent writes a JSON receipt as its LAST action before `TaskUpdate(status="
   "phase": "HARDEN",
   "status": "complete",
   "artifacts": [
-    "Shipyard/code-reviewer/review-report.md",
-    "Shipyard/code-reviewer/findings/critical.md",
-    "Shipyard/code-reviewer/metrics/complexity.json"
+    "Drydock/code-reviewer/review-report.md",
+    "Drydock/code-reviewer/findings/critical.md",
+    "Drydock/code-reviewer/metrics/complexity.json"
   ],
   "metrics": {
     "findings_critical": 2,
@@ -124,7 +124,7 @@ At every phase transition and before every gate, the orchestrator:
 4. **If receipt missing** — the task did not complete properly. Investigate before proceeding.
 5. **If artifacts missing** — the agent claimed to produce files it didn't. Investigate before proceeding.
 6. **Extracts metrics** for gate ceremony display — users see verified data, not agent claims
-7. **Reads the gate fields inside `metrics` and the top-level `compliance` object** to enforce gates from data, not prose. `production-ready` is BLOCKED when `metrics.tests_failing > 0`, `metrics.coverage_lines`/`metrics.coverage_branches`/`metrics.mutation_score`/`metrics.patch_coverage` are below budget, `metrics.perf_baseline_regression` is true, `metrics.contract_can_i_deploy` is false, `compliance.controls_missing` is non-empty, or an architecture-boundary violation is present — UNLESS a logged "accepted with justification" override receipt exists for that specific gate at `Shipyard/.orchestrator/overrides/<gate>-<id>.json`.
+7. **Reads the gate fields inside `metrics` and the top-level `compliance` object** to enforce gates from data, not prose. `production-ready` is BLOCKED when `metrics.tests_failing > 0`, `metrics.coverage_lines`/`metrics.coverage_branches`/`metrics.mutation_score`/`metrics.patch_coverage` are below budget, `metrics.perf_baseline_regression` is true, `metrics.contract_can_i_deploy` is false, `compliance.controls_missing` is non-empty, or an architecture-boundary violation is present — UNLESS a logged "accepted with justification" override receipt exists for that specific gate at `Drydock/.orchestrator/overrides/<gate>-<id>.json`.
 
 ---
 

@@ -7,8 +7,8 @@ the orchestrator re-summing effort fields from memory (lossy, error-prone), it
 runs this script and renders the returned JSON into the final summary box.
 
 Reads:
-  Shipyard/.orchestrator/receipts/*.json   — one receipt per completed task
-  Shipyard/.orchestrator/rework-log.md      — gate rework cycles (optional)
+  Drydock/.orchestrator/receipts/*.json   — one receipt per completed task
+  Drydock/.orchestrator/rework-log.md      — gate rework cycles (optional)
 
 Each receipt may carry an `effort` object {files_read, files_written,
 tool_calls} and an `artifacts` list. Missing/garbage fields are treated as zero
@@ -19,7 +19,7 @@ Emits JSON to stdout:
    unique_artifacts, rework_cycles}
 
 Usage:
-  python3 aggregate-cost.py [WORKSPACE_DIR]   (default: ./Shipyard)
+  python3 aggregate-cost.py [WORKSPACE_DIR]   (default: ./Drydock)
 """
 
 from __future__ import annotations
@@ -82,7 +82,7 @@ def aggregate(workspace: str) -> dict:
 
 
 def main(argv: list[str]) -> int:
-    workspace = argv[1] if len(argv) > 1 else "Shipyard"
+    workspace = argv[1] if len(argv) > 1 else "Drydock"
     print(json.dumps(aggregate(workspace), indent=2))
     return 0
 

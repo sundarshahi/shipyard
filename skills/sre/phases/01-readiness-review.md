@@ -130,7 +130,7 @@ Write `production-readiness/factor-compliance.md`:
 
 ## Failures requiring remediation
 <List every FAIL with severity + the remediation pointer. A FAIL blocks `production-ready`
-unless logged in Shipyard/sre/gate/overrides.log as accepted-with-justification.>
+unless logged in Drydock/sre/gate/overrides.log as accepted-with-justification.>
 ```
 
 **Rules:**
@@ -191,7 +191,7 @@ Before proceeding to Phase 2, verify:
 - [ ] Startup & Disposability section present per service (PORT bind, readiness-within-budget, no blocking remote calls before listening, migrations as a one-off process, startup-probe tuned to real boot)
 - [ ] All Critical findings have remediation instructions
 - [ ] Findings are linked to specific files and line numbers where possible
-- [ ] Any factor FAIL is either remediated or logged in `Shipyard/sre/gate/overrides.log` (accepted-with-justification) — otherwise it BLOCKS `production-ready`
+- [ ] Any factor FAIL is either remediated or logged in `Drydock/sre/gate/overrides.log` (accepted-with-justification) — otherwise it BLOCKS `production-ready`
 
 ## Quality Bar
 

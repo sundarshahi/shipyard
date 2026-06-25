@@ -10,15 +10,15 @@ Read Phase 1 findings from `production-readiness/findings.md` to understand know
 
 ## Contracts You MUST Read First (do not invent names or numbers)
 
-- **`Shipyard/.protocols/observability-contract.md`** — the ONLY metric/log/span names you may query. RED metrics: `http_requests_total{method,route,status_class}` (error rate = `status_class="5xx"` over total — **NOT** `status=~"5.."`), `http_request_duration_seconds` (histogram in **seconds**, with exemplars, exposes `_bucket`/`_sum`/`_count`), `http_requests_in_flight{method,route}`. USE metrics: `<resource>_pool_connections_in_use|_max|_idle`, `<resource>_pool_wait_seconds`, `<resource>_pool_acquire_errors_total`, `broker_consumer_lag{destination,group}`. Every alert expr, recording rule, and dashboard panel below uses these names verbatim. A name absent from the contract is a bug the Production-Ready Gate fails on.
+- **`Drydock/.protocols/observability-contract.md`** — the ONLY metric/log/span names you may query. RED metrics: `http_requests_total{method,route,status_class}` (error rate = `status_class="5xx"` over total — **NOT** `status=~"5.."`), `http_request_duration_seconds` (histogram in **seconds**, with exemplars, exposes `_bucket`/`_sum`/`_count`), `http_requests_in_flight{method,route}`. USE metrics: `<resource>_pool_connections_in_use|_max|_idle`, `<resource>_pool_wait_seconds`, `<resource>_pool_acquire_errors_total`, `broker_consumer_lag{destination,group}`. Every alert expr, recording rule, and dashboard panel below uses these names verbatim. A name absent from the contract is a bug the Production-Ready Gate fails on.
 - **`docs/architecture/performance-budget.yaml`** — the ONLY source of latency/throughput/error-rate targets. SLO latency thresholds READ the route's `p99_ms`/`p95_ms` from this file. **Never hardcode 500ms.** If the file is missing, fall back to the observability-contract default buckets and record the assumption in `error-budget-policy.md`.
 
 ## Inputs
 
-- `Shipyard/.protocols/observability-contract.md` — canonical metric names (authoritative)
+- `Drydock/.protocols/observability-contract.md` — canonical metric names (authoritative)
 - `docs/architecture/performance-budget.yaml` — latency/throughput/error-rate targets (authoritative)
 - `infrastructure/monitoring/` — existing Prometheus rules, Grafana dashboards
-- `Shipyard/product-manager/` or requirements — availability promises, user expectations
+- `Drydock/product-manager/` or requirements — availability promises, user expectations
 - Architecture docs — request flow, critical paths, dependency chains
 - Phase 1 findings — known reliability risks
 
@@ -199,7 +199,7 @@ groups:
 SRE OWNS the SLO threshold and the burn-rate query; **devops's canary AnalysisTemplate (Argo Rollouts / Flagger) CONSUMES it**. Emit `slo/burn-rate-query.yaml` as the single contract devops reads — so the canary aborts on the SAME burn-rate math the SLO alerts use, querying the SAME contract metric names. Do NOT let devops re-derive a separate threshold.
 
 ```yaml
-# Shipyard/sre/slo/burn-rate-query.yaml — SRE owns; devops's AnalysisTemplate reads.
+# Drydock/sre/slo/burn-rate-query.yaml — SRE owns; devops's AnalysisTemplate reads.
 slo: api-availability
 target: 0.999            # SRE-owned SLO threshold
 # Canary fast-burn guard: short-window 5xx burn rate over the canary subset.

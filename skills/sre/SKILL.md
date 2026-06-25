@@ -1,9 +1,9 @@
 ---
 name: sre
 description: >
-  [shipyard internal] Makes systems reliable in production —
+  [drydock internal] Makes systems reliable in production —
   SLOs, monitoring, alerting, chaos engineering, incident runbooks,
-  capacity planning. Routed via the shipyard orchestrator.
+  capacity planning. Routed via the drydock orchestrator.
 allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill
 ---
 
@@ -11,19 +11,19 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill
 
 ## Preprocessing
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat Shipyard/.protocols/architecture-boundaries.md 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
-!`cat Shipyard/.orchestrator/codebase-context.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Drydock/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/architecture-boundaries.md" 2>/dev/null || cat Drydock/.protocols/architecture-boundaries.md 2>/dev/null || true`
+!`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
+!`cat Drydock/.orchestrator/codebase-context.md 2>/dev/null || true`
 
 ## Cross-Skill Contracts (READ — do not invent names or numbers)
 
@@ -47,7 +47,7 @@ If codebase context indicates `brownfield` mode:
 
 ## Engagement Mode
 
-!`cat Shipyard/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat Drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 | Mode | Behavior |
 |------|----------|
@@ -58,7 +58,7 @@ If codebase context indicates `brownfield` mode:
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `Drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -176,7 +176,7 @@ Makefile                                 # `production-ready` target appended
 
 ### Workspace (Assessment & Analysis)
 ```
-Shipyard/sre/
+Drydock/sre/
     production-readiness/  (checklist.md, factor-compliance.md, findings.md, remediation.md)
     slo/                   (sli-definitions.yaml, slo-dashboard.json, error-budget-policy.md, burn-rate-alerts.yaml, burn-rate-query.yaml)
     gate/                  (production-ready.sh, overrides.log)
@@ -186,31 +186,31 @@ Shipyard/sre/
     disaster-recovery/     (rto-rpo-definitions.md, failover-playbook.md, backup-verification.md, recovery-procedures.md)
 ```
 
-`Shipyard/sre/slo/burn-rate-query.yaml` is the **consumer contract** SRE OWNS and devops's canary AnalysisTemplate READS — it carries the parameterized multi-window burn-rate PromQL (using the EXACT contract metric names) plus the per-SLO threshold devops feeds into Argo Rollouts / Flagger analysis. SRE owns the threshold and the query; devops wires it into the canary.
+`Drydock/sre/slo/burn-rate-query.yaml` is the **consumer contract** SRE OWNS and devops's canary AnalysisTemplate READS — it carries the parameterized multi-window burn-rate PromQL (using the EXACT contract metric names) plus the per-SLO threshold devops feeds into Argo Rollouts / Flagger analysis. SRE owns the threshold and the query; devops wires it into the canary.
 
 ## Production-Ready Gate (BLOCKING — emit + wire it)
 
 A config file nothing runs does NOT count. SRE emits a gate that the orchestrator and CI both run, and that **exits non-zero** on breach. Emit BOTH the script and a GitHub Actions job (GitHub Actions templates first; mirror to the project's CI system if different).
 
-Emit `Shipyard/sre/gate/production-ready.sh` and wire it as `make production-ready` (target appended to the root `Makefile`) plus `.github/workflows/production-ready.yml`. The gate runs these checks and aggregates a non-zero exit if ANY fails:
+Emit `Drydock/sre/gate/production-ready.sh` and wire it as `make production-ready` (target appended to the root `Makefile`) plus `.github/workflows/production-ready.yml`. The gate runs these checks and aggregates a non-zero exit if ANY fails:
 
 | Check | Command (exits non-zero on breach) | Source of truth |
 |-------|-------------------------------------|-----------------|
-| Alerts/dashboards reference only declared metrics | `scripts/check-observability-names.sh` greps every name token in `Shipyard/sre/slo/*.yaml` + `slo-dashboard.json` against the allow-list extracted from `Shipyard/.protocols/observability-contract.md`; any unknown name → exit 1 | observability-contract.md |
-| Burn-rate alert rules are valid + multi-window | `promtool check rules Shipyard/sre/slo/burn-rate-alerts.yaml` AND assert each SLO has ≥2 windows | promtool |
+| Alerts/dashboards reference only declared metrics | `scripts/check-observability-names.sh` greps every name token in `Drydock/sre/slo/*.yaml` + `slo-dashboard.json` against the allow-list extracted from `Drydock/.protocols/observability-contract.md`; any unknown name → exit 1 | observability-contract.md |
+| Burn-rate alert rules are valid + multi-window | `promtool check rules Drydock/sre/slo/burn-rate-alerts.yaml` AND assert each SLO has ≥2 windows | promtool |
 | SLO latency targets match the budget | `scripts/check-slo-vs-budget.sh` asserts every `threshold` in `sli-definitions.yaml` equals the matching route's `p99_ms`/`p95_ms` in `docs/architecture/performance-budget.yaml`; mismatch or hardcoded value → exit 1 | performance-budget.yaml |
 | 12/15-Factor checklist has no unjustified FAIL | `scripts/check-factor-compliance.sh` parses `production-readiness/factor-compliance.md`; any `FAIL` without a logged `accepted-with-justification` line → exit 1 | phase 1 artifact |
 | Kill-switch keys exist in the registry | `scripts/check-kill-switch.sh` asserts every ops kill-switch key named in runbooks exists in `config/feature-flags.yaml` | feature-flags.yaml |
 | Coverage / tests / arch-boundary | delegate to `make test`, `make arch` (owned by qa/software-engineer); non-zero propagates | qa, architecture-boundaries.md |
 
-**User policy (enforced):** the gate BLOCKS `production-ready` on failing tests/coverage/perf/compliance/arch-boundary. An override is allowed ONLY as an `accepted-with-justification` entry appended to `Shipyard/sre/gate/overrides.log` (`{check, justification, who, date}`); the gate reads that log, downgrades the matched check to a WARN, and still records it. Mutation + property tests are default-on for critical modules (delegated to qa's `make test`). No silent skips.
+**User policy (enforced):** the gate BLOCKS `production-ready` on failing tests/coverage/perf/compliance/arch-boundary. An override is allowed ONLY as an `accepted-with-justification` entry appended to `Drydock/sre/gate/overrides.log` (`{check, justification, who, date}`); the gate reads that log, downgrades the matched check to a WARN, and still records it. Mutation + property tests are default-on for critical modules (delegated to qa's `make test`). No silent skips.
 
 ```bash
-# Shipyard/sre/gate/production-ready.sh (shape — exits non-zero on any breach)
+# Drydock/sre/gate/production-ready.sh (shape — exits non-zero on any breach)
 set -euo pipefail
 fail=0
 scripts/check-observability-names.sh           || fail=1
-promtool check rules Shipyard/sre/slo/burn-rate-alerts.yaml || fail=1
+promtool check rules Drydock/sre/slo/burn-rate-alerts.yaml || fail=1
 scripts/check-slo-vs-budget.sh                 || fail=1
 scripts/check-factor-compliance.sh             || fail=1
 scripts/check-kill-switch.sh                   || fail=1

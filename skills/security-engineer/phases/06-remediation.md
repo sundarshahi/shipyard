@@ -2,16 +2,16 @@
 
 ## Objective
 
-Aggregate all findings from Phases 1-5 into a single prioritized remediation plan with executable fix instructions. Every Critical and High finding gets before/after code, a verification test, and an owner assignment. Medium and Low findings get a timeline. Also generate a structured penetration test plan. Generate all outputs in `Shipyard/security-engineer/remediation/` and `Shipyard/security-engineer/pen-test/`.
+Aggregate all findings from Phases 1-5 into a single prioritized remediation plan with executable fix instructions. Every Critical and High finding gets before/after code, a verification test, and an owner assignment. Medium and Low findings get a timeline. Also generate a structured penetration test plan. Generate all outputs in `Drydock/security-engineer/remediation/` and `Drydock/security-engineer/pen-test/`.
 
 ## Context Bridge
 
 Read ALL prior phase outputs:
-- `Shipyard/security-engineer/threat-model/` (Phase 1)
-- `Shipyard/security-engineer/code-audit/` (Phase 2)
-- `Shipyard/security-engineer/auth-review/` (Phase 3)
-- `Shipyard/security-engineer/data-security/` (Phase 4)
-- `Shipyard/security-engineer/supply-chain/` (Phase 5)
+- `Drydock/security-engineer/threat-model/` (Phase 1)
+- `Drydock/security-engineer/code-audit/` (Phase 2)
+- `Drydock/security-engineer/auth-review/` (Phase 3)
+- `Drydock/security-engineer/data-security/` (Phase 4)
+- `Drydock/security-engineer/supply-chain/` (Phase 5)
 
 Every finding from every phase feeds into this plan. Do not re-analyze -- aggregate, deduplicate, and prioritize.
 
@@ -79,7 +79,7 @@ Requirements for code fixes:
 
 ### Step 4: Generate Penetration Test Plan
 
-Create a structured pen test plan in `Shipyard/security-engineer/pen-test/`:
+Create a structured pen test plan in `Drydock/security-engineer/pen-test/`:
 
 **Authentication Tests:**
 - Brute force login (test lockout threshold and timing)
@@ -218,7 +218,7 @@ Produce a summary suitable for stakeholders:
 
 ## Output Deliverables
 
-Write all outputs to `Shipyard/security-engineer/remediation/` and `Shipyard/security-engineer/pen-test/`:
+Write all outputs to `Drydock/security-engineer/remediation/` and `Drydock/security-engineer/pen-test/`:
 
 | File | Contents |
 |------|----------|

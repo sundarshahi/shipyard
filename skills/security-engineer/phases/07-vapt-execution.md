@@ -2,23 +2,23 @@
 
 ## Objective
 
-The agent's default posture in this phase is read-only and static: nothing in this phase sends a payload to a running system unless Step 0's authorization gate has passed. With authorization, actually EXECUTE the pen-test (authorized DAST) against the live target -- boot the app, run real tooling against the endpoints discovered in Phase 1 `attack-surface.md`, capture request/response evidence, and mark each scenario PASS / FAIL / INCONCLUSIVE. Write all outputs to `Shipyard/security-engineer/vapt/`. Honor `security-testing-protocol.md` and `grounding-protocol.md` throughout: every active tool is gated behind Step 0, and no finding is promoted to Critical/High without a reproduction.
+The agent's default posture in this phase is read-only and static: nothing in this phase sends a payload to a running system unless Step 0's authorization gate has passed. With authorization, actually EXECUTE the pen-test (authorized DAST) against the live target -- boot the app, run real tooling against the endpoints discovered in Phase 1 `attack-surface.md`, capture request/response evidence, and mark each scenario PASS / FAIL / INCONCLUSIVE. Write all outputs to `Drydock/security-engineer/vapt/`. Honor `security-testing-protocol.md` and `grounding-protocol.md` throughout: every active tool is gated behind Step 0, and no finding is promoted to Critical/High without a reproduction.
 
 ## Context Bridge
 
 Read the prior phase outputs before executing anything:
-- Phase 1 attack surface -- `Shipyard/security-engineer/threat-model/attack-surface.md` (the target inventory and entry points).
-- Phase 6 pen-test plan -- `Shipyard/security-engineer/pen-test/test-plan.md` and `Shipyard/security-engineer/pen-test/attack-scenarios/` (the scenarios to execute).
-- Orchestrator settings -- `Shipyard/.orchestrator/settings.md` for the `vapt_authorized` flag and the in-scope allowlist set by the orchestrator's Pentest (VAPT) mode.
+- Phase 1 attack surface -- `Drydock/security-engineer/threat-model/attack-surface.md` (the target inventory and entry points).
+- Phase 6 pen-test plan -- `Drydock/security-engineer/pen-test/test-plan.md` and `Drydock/security-engineer/pen-test/attack-scenarios/` (the scenarios to execute).
+- Orchestrator settings -- `Drydock/.orchestrator/settings.md` for the `vapt_authorized` flag and the in-scope allowlist set by the orchestrator's Pentest (VAPT) mode.
 
 The static findings from Phases 1-6 are LEADS, not confirmed vulnerabilities. This phase exists to confirm or refute them against the running target -- aggregate, do not re-analyze.
 
 ## Inputs
 
-- Authorization state -- `Shipyard/.orchestrator/settings.md` (`vapt_authorized`, allowlist, RoE, testing window)
-- Attack surface map -- `Shipyard/security-engineer/threat-model/attack-surface.md`
-- Pen-test plan + scenarios -- `Shipyard/security-engineer/pen-test/test-plan.md`, `Shipyard/security-engineer/pen-test/attack-scenarios/<service>.md`
-- API fuzzing config -- `Shipyard/security-engineer/pen-test/api-fuzzing-config.yml`
+- Authorization state -- `Drydock/.orchestrator/settings.md` (`vapt_authorized`, allowlist, RoE, testing window)
+- Attack surface map -- `Drydock/security-engineer/threat-model/attack-surface.md`
+- Pen-test plan + scenarios -- `Drydock/security-engineer/pen-test/test-plan.md`, `Drydock/security-engineer/pen-test/attack-scenarios/<service>.md`
+- API fuzzing config -- `Drydock/security-engineer/pen-test/api-fuzzing-config.yml`
 - Dependency manifests / IaC -- `package-lock.json`, `requirements.txt`, `go.mod`, Dockerfiles, Terraform (for static/passive tooling, always safe)
 - The running target -- a local or authorized-staging deployment of the app (required only for active sub-phases)
 
@@ -28,10 +28,10 @@ The static findings from Phases 1-6 are LEADS, not confirmed vulnerabilities. Th
 
 Before ANY active action -- before a single payload, probe, or request reaches a running system -- verify the gate has passed:
 
-1. Confirm explicit written authorization is recorded (`vapt_authorized: true` in `Shipyard/.orchestrator/settings.md`, set by the orchestrator's Pentest (VAPT) mode `AskUserQuestion`).
+1. Confirm explicit written authorization is recorded (`vapt_authorized: true` in `Drydock/.orchestrator/settings.md`, set by the orchestrator's Pentest (VAPT) mode `AskUserQuestion`).
 2. Confirm an in-scope target allowlist (hosts / URLs / API base) is recorded.
 3. Confirm rules of engagement (RoE) and a testing window are recorded.
-4. Write the authorization receipt to `Shipyard/.orchestrator/receipts/` (and mirror it to `vapt/authorization-receipt.json`) for the audit trail.
+4. Write the authorization receipt to `Drydock/.orchestrator/receipts/` (and mirror it to `vapt/authorization-receipt.json`) for the audit trail.
 
 If authorization is absent or unconfirmed: run ONLY static/passive tooling (SAST, SCA, secret scanning, IaC scanning of local files) and STOP before any payload reaches a running system. Do not proceed to enumeration, active scanning, or exploitation.
 
@@ -97,7 +97,7 @@ Reproduction is mandatory for any Critical/High finding. Treat scanner hits as c
 
 ## Output Deliverables
 
-Write all outputs to `Shipyard/security-engineer/vapt/`:
+Write all outputs to `Drydock/security-engineer/vapt/`:
 
 | File | Contents |
 |------|----------|

@@ -2,15 +2,15 @@
 
 ## Objective
 
-Trace every authentication flow end-to-end and verify every authorization decision in the codebase. security-engineer is the SOLE AUTHORITY on auth flow analysis, token security, and RBAC/ABAC policy review. Generate all outputs in `Shipyard/security-engineer/auth-review/`.
+Trace every authentication flow end-to-end and verify every authorization decision in the codebase. security-engineer is the SOLE AUTHORITY on auth flow analysis, token security, and RBAC/ABAC policy review. Generate all outputs in `Drydock/security-engineer/auth-review/`.
 
 ## Context Bridge
 
-Read Phase 2 outputs from `Shipyard/security-engineer/code-audit/`. The OWASP A01:2025 (Broken Access Control) and A07:2025 (Authentication Failures) findings from the code audit provide the starting point. This phase goes deeper with dedicated auth flow tracing.
+Read Phase 2 outputs from `Drydock/security-engineer/code-audit/`. The OWASP A01:2025 (Broken Access Control) and A07:2025 (Authentication Failures) findings from the code audit provide the starting point. This phase goes deeper with dedicated auth flow tracing.
 
 ## Inputs
 
-- Phase 2 code audit -- `Shipyard/security-engineer/code-audit/`
+- Phase 2 code audit -- `Drydock/security-engineer/code-audit/`
 - Implementation code -- auth middleware, session handlers, token generation, RBAC logic
 - API specs -- `api/` (endpoint auth requirements, security schemes)
 - Infrastructure configs -- OAuth provider configs, identity provider setup
@@ -119,7 +119,7 @@ For every endpoint discovered in Phase 1 attack surface mapping:
 
 ## Output Deliverables
 
-Write all outputs to `Shipyard/security-engineer/auth-review/`:
+Write all outputs to `Drydock/security-engineer/auth-review/`:
 
 | File | Contents |
 |------|----------|

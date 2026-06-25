@@ -24,7 +24,7 @@ Required ADRs:
 
 ### Architecture-Style & Layering ADR (REQUIRED — emit `ADR-NNN-architecture-style.md`)
 
-Emit an ADR that documents the Clean/Hexagonal layering and the **dependency-direction rule** per `Shipyard/.protocols/architecture-boundaries.md`. It is the design-time source of truth for the boundary that software-engineer enforces MECHANICALLY (`make arch`, exit non-zero on violation) — the architect declares the law; the engineer wires the fitness function. The ADR MUST state:
+Emit an ADR that documents the Clean/Hexagonal layering and the **dependency-direction rule** per `Drydock/.protocols/architecture-boundaries.md`. It is the design-time source of truth for the boundary that software-engineer enforces MECHANICALLY (`make arch`, exit non-zero on violation) — the architect declares the law; the engineer wires the fitness function. The ADR MUST state:
 
 - The layer stack innermost→outermost: **domain** (entities/value-objects/business rules, zero framework/IO imports) → **application** (use-cases + PORT interfaces) → **infrastructure/adapters** (frameworks, DB drivers, HTTP clients, ORMs, SDKs).
 - **The one law:** source-code dependencies (imports) point INWARD only; a framework/ORM/HTTP/DB import in the domain is a HIGH-severity, build-blocking violation.
@@ -33,7 +33,7 @@ Emit an ADR that documents the Clean/Hexagonal layering and the **dependency-dir
 
 ### Compliance & Controls (REQUIRED subsection — design controls in, do not just name regulations)
 
-Consume `Shipyard/.protocols/compliance-protocol.md`. Run the deterministic **product-signals → frameworks** map against the BRD, the security-engineer PII inventory (if present), and any `compliance:` block in `.shipyard.yaml`. This subsection is ALWAYS produced (see Always-Resolved Defaults) — when no signal scopes a framework, record `out of scope: <framework> — no <signal>` so the empty scope is auditable.
+Consume `Drydock/.protocols/compliance-protocol.md`. Run the deterministic **product-signals → frameworks** map against the BRD, the security-engineer PII inventory (if present), and any `compliance:` block in `.drydock.yaml`. This subsection is ALWAYS produced (see Always-Resolved Defaults) — when no signal scopes a framework, record `out of scope: <framework> — no <signal>` so the empty scope is auditable.
 
 When a signal indicates regulated data, the architect DESIGNS the required CONTROLS into the system design (not advice — concrete architecture) and records them in a control table:
 

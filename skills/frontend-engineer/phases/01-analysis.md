@@ -2,7 +2,7 @@
 
 ## Objective
 
-Read BRD user stories and solution architect artifacts from the project root. Confirm framework, state management, and styling choices with the user. Produce a structured analysis in `Shipyard/frontend-engineer/docs/` (workspace artifacts).
+Read BRD user stories and solution architect artifacts from the project root. Confirm framework, state management, and styling choices with the user. Produce a structured analysis in `Drydock/frontend-engineer/docs/` (workspace artifacts).
 
 ## Phase 0: Framework Selection
 
@@ -41,7 +41,7 @@ Before beginning analysis, confirm the framework with the user via AskUserQuesti
 
 ## 1.1 User Flow Mapping
 
-Create `Shipyard/frontend-engineer/docs/user-flows.md`:
+Create `Drydock/frontend-engineer/docs/user-flows.md`:
 
 - Map every BRD user story to a page or component
 - Identify all distinct user flows (signup, onboarding, core CRUD, settings, admin)
@@ -51,7 +51,7 @@ Create `Shipyard/frontend-engineer/docs/user-flows.md`:
 
 ## 1.2 Page Inventory
 
-Create `Shipyard/frontend-engineer/docs/page-inventory.md`:
+Create `Drydock/frontend-engineer/docs/page-inventory.md`:
 
 ```markdown
 | Page | Route | Layout | Auth Required | Roles | Key Components | API Endpoints |
@@ -63,7 +63,7 @@ Create `Shipyard/frontend-engineer/docs/page-inventory.md`:
 
 ## 1.3 Component Inventory
 
-Create `Shipyard/frontend-engineer/docs/component-inventory.md`:
+Create `Drydock/frontend-engineer/docs/component-inventory.md`:
 
 - Catalog every unique UI element from user stories
 - Classify by atomic design level (atom, molecule, organism)

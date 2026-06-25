@@ -11,7 +11,7 @@ Set up a production-ready Docusaurus documentation site that organizes all docs 
 | All documentation | `docs/` | Pages to organize into sidebar categories |
 | Project metadata | `package.json` or `README.md` | Project name, description, repository URL |
 | Branding assets | `frontend/public/` or project root | Favicon, logo, brand colors (use defaults if absent) |
-| Content inventory | `Shipyard/technical-writer/content-inventory.md` | Sitemap from Phase 1 |
+| Content inventory | `Drydock/technical-writer/content-inventory.md` | Sitemap from Phase 1 |
 
 ## 4.2 — Docusaurus Project Setup
 
@@ -105,7 +105,7 @@ Configure search in one of two modes:
    - Add `@cmfcmf/docusaurus-search-local` as alternative
    - Configure language, index blog (false), index docs (true)
 
-Document the chosen approach in `Shipyard/technical-writer/writing-notes.md`.
+Document the chosen approach in `Drydock/technical-writer/writing-notes.md`.
 
 ## 4.6 — Deployment Configuration
 
@@ -148,7 +148,7 @@ Generate deployment config for the documentation site:
 Configure documentation versioning for API-versioned projects:
 
 1. Set `current` version label in `docusaurus.config.js` as "Next" (development)
-2. Document the versioning workflow in `Shipyard/technical-writer/writing-notes.md`:
+2. Document the versioning workflow in `Drydock/technical-writer/writing-notes.md`:
    - Run `npm run docusaurus docs:version X.Y` to cut a version
    - Cut a docs version for each major API version
    - Default to latest stable, keep previous versions accessible
@@ -175,7 +175,7 @@ The changelog is **bot-driven** (Governance & DX, Phase 3.11). Wire automation, 
 | CI pipeline (build + docs gates) | `.github/workflows/docs-build.yml` |
 | Changelog (automation-driven) | `CHANGELOG.md` + `release-please-config.json`/`.release-please-manifest.json` OR `.changeset/config.json` |
 | Deployment config | `docs/docusaurus/vercel.json` or `netlify.toml` (per user choice) |
-| Writing notes (updated) | `Shipyard/technical-writer/writing-notes.md` |
+| Writing notes (updated) | `Drydock/technical-writer/writing-notes.md` |
 
 ## Validation Loop
 

@@ -1,6 +1,6 @@
 # infrastructure/kubernetes/<SERVICE>/rollout.yaml
 # Argo Rollouts progressive delivery. The AnalysisTemplate CONSUMES SRE's single source of
-# truth — Shipyard/sre/slo/burn-rate-query.yaml — copying its burn_rate_query / latency_query
+# truth — Drydock/sre/slo/burn-rate-query.yaml — copying its burn_rate_query / latency_query
 # (EXACT observability-contract names) and its fail_when / latency_fail_when thresholds verbatim.
 # Canary analysis FAIL -> automatic abort + rollback. There is NO orphan rollback.sh.
 # SRE owns the queries + thresholds; devops only WIRES them into failureCondition. Never re-derive.
@@ -52,7 +52,7 @@ spec:
     - name: service
     - name: namespace
   metrics:
-    # ── Fast-burn guard: COPIED from SRE's Shipyard/sre/slo/burn-rate-query.yaml `burn_rate_query`.
+    # ── Fast-burn guard: COPIED from SRE's Drydock/sre/slo/burn-rate-query.yaml `burn_rate_query`.
     # failureCondition mirrors SRE's `fail_when: "> 14.4"` (>14.4x burn over 2m → abort).
     # failureLimit:0 → first breach aborts the Rollout. Never re-derive the threshold here.
     - name: burn-rate

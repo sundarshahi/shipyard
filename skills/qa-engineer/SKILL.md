@@ -1,9 +1,9 @@
 ---
 name: qa-engineer
 description: >
-  [shipyard internal] Writes and runs tests when you want to verify
+  [drydock internal] Writes and runs tests when you want to verify
   code works — unit, integration, e2e, performance, contract testing.
-  Routed via the shipyard orchestrator.
+  Routed via the drydock orchestrator.
 allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebFetch
 ---
 
@@ -11,18 +11,18 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebF
 
 ## Protocols
 
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
-!`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
-!`cat Shipyard/.orchestrator/codebase-context.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Drydock/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Drydock/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Drydock/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Drydock/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Drydock/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Drydock/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Drydock/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Drydock/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Drydock/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Drydock/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat .drydock.yaml 2>/dev/null || echo "No config — using defaults"`
+!`cat Drydock/.orchestrator/codebase-context.md 2>/dev/null || true`
 !`cat docs/architecture/performance-budget.yaml 2>/dev/null || echo "No performance-budget.yaml — perf gates cannot self-derive; treat as a Critical missing input"`
 !`cat config/feature-flags.yaml 2>/dev/null || echo "No feature-flags.yaml — skip flag matrix if no OpenFeature client exists"`
 
@@ -30,7 +30,7 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebF
 
 ## Engagement Mode
 
-!`cat Shipyard/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
+!`cat Drydock/.orchestrator/settings.md 2>/dev/null || echo "No settings — using Standard"`
 
 | Mode | Behavior |
 |------|----------|
@@ -41,7 +41,7 @@ allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebF
 
 ## Progress Output
 
-Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throughout execution.
+Follow `Drydock/.protocols/visual-identity.md`. Print structured progress throughout execution.
 
 **Skill header** (print on start):
 ```
@@ -71,7 +71,7 @@ Follow `Shipyard/.protocols/visual-identity.md`. Print structured progress throu
 
 ## Blocking Receipt & Gate Contract (CRITICAL)
 
-The orchestrator gates `production-ready` on QA. It does not read prose — it reads the **machine-readable `metrics` block of the QA receipt** (`Shipyard/.orchestrator/receipts/{task_id}-qa-engineer.json`, schema per `receipt-protocol.md`). These exact keys are MANDATORY and are extracted by the gate; emit them from real tool output (the test runner's JSON/JUnit summary + coverage report + mutation report), never from memory:
+The orchestrator gates `production-ready` on QA. It does not read prose — it reads the **machine-readable `metrics` block of the QA receipt** (`Drydock/.orchestrator/receipts/{task_id}-qa-engineer.json`, schema per `receipt-protocol.md`). These exact keys are MANDATORY and are extracted by the gate; emit them from real tool output (the test runner's JSON/JUnit summary + coverage report + mutation report), never from memory:
 
 ```json
 {
@@ -79,7 +79,7 @@ The orchestrator gates `production-ready` on QA. It does not read prose — it r
   "agent": "qa-engineer",
   "phase": "HARDEN",
   "status": "complete",
-  "artifacts": ["Shipyard/qa-engineer/test-plan.md", "tests/coverage/thresholds.json", "..."],
+  "artifacts": ["Drydock/qa-engineer/test-plan.md", "tests/coverage/thresholds.json", "..."],
   "metrics": {
     "tests_passing": 412,
     "tests_failing": 0,
@@ -106,9 +106,9 @@ The orchestrator gates `production-ready` on QA. It does not read prose — it r
 | `contract_can_i_deploy` | `pact-broker can-i-deploy` exit code | `false` |
 | `perf_baseline_regression` | k6 thresholds vs `performance-budget.yaml` | `true` |
 
-**Failing test = remediation finding, ALWAYS.** There is NO soft "if failures > X% flag to the user" path. ANY failing test (`tests_failing > 0`) is written into `Shipyard/qa-engineer/findings.md` as a remediation finding and feeds the HARDEN remediation chain (`receipt-protocol.md`) exactly like a Critical finding. Never marshal a green completion while a test is red.
+**Failing test = remediation finding, ALWAYS.** There is NO soft "if failures > X% flag to the user" path. ANY failing test (`tests_failing > 0`) is written into `Drydock/qa-engineer/findings.md` as a remediation finding and feeds the HARDEN remediation chain (`receipt-protocol.md`) exactly like a Critical finding. Never marshal a green completion while a test is red.
 
-**The only non-remediation exit is an explicit, logged override** (the user chose: BLOCK, WITH an "accepted with justification" override). When the owner consciously ships past a breached gate, do NOT silently pass — capture the decision with AskUserQuestion (predefined options, never open-ended) and write an override receipt to the canonical override path `Shipyard/.orchestrator/overrides/<gate>-<id>.json` (NOT under `receipts/`) so Gate 3 finds it:
+**The only non-remediation exit is an explicit, logged override** (the user chose: BLOCK, WITH an "accepted with justification" override). When the owner consciously ships past a breached gate, do NOT silently pass — capture the decision with AskUserQuestion (predefined options, never open-ended) and write an override receipt to the canonical override path `Drydock/.orchestrator/overrides/<gate>-<id>.json` (NOT under `receipts/`) so Gate 3 finds it:
 
 ```json
 {
@@ -122,11 +122,11 @@ The orchestrator gates `production-ready` on QA. It does not read prose — it r
 }
 ```
 
-A gate with a matching override receipt at `Shipyard/.orchestrator/overrides/<gate>-<id>.json` stops blocking but the decision is carried into `findings.md`. No override file = the gate stays BLOCKED.
+A gate with a matching override receipt at `Drydock/.orchestrator/overrides/<gate>-<id>.json` stops blocking but the decision is carried into `findings.md`. No override file = the gate stays BLOCKED.
 
 ## Brownfield Awareness
 
-If `Shipyard/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
+If `Drydock/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
 - **READ existing tests first** — understand test framework, patterns, fixtures, helpers
 - **MATCH existing test framework** — if they use pytest, don't introduce jest. If they use Vitest, use Vitest
 - **ADD tests alongside existing ones** — don't restructure their test directory
@@ -135,7 +135,7 @@ If `Shipyard/.orchestrator/codebase-context.md` exists and mode is `brownfield`:
 
 ## Config Paths
 
-Read `.shipyard.yaml` at startup. Use these overrides if defined:
+Read `.drydock.yaml` at startup. Use these overrides if defined:
 - `paths.services` — default: `services/`
 - `paths.frontend` — default: `frontend/`
 - `paths.tests` — default: `tests/`
@@ -149,7 +149,7 @@ This skill runs AFTER the Software Engineer and Frontend Engineer skills have co
 - **`api/`, `schemas/`, `docs/architecture/`** — API contracts (OpenAPI/AsyncAPI specs), data models, sequence diagrams
 - **BRD or PRD** — Acceptance criteria, user stories, business rules, edge cases
 
-The QA Engineer does NOT modify source code. It generates test files and test infrastructure to `tests/` at the project root, and test documentation (test plan, reports) to `Shipyard/qa-engineer/`.
+The QA Engineer does NOT modify source code. It generates test files and test infrastructure to `tests/` at the project root, and test documentation (test plan, reports) to `Drydock/qa-engineer/`.
 
 ### Graceful Degradation
 
@@ -162,7 +162,7 @@ At startup, check whether `frontend/` (or `paths.frontend` from config) exists. 
 
 ## Output Structure
 
-This skill produces output in two locations: test deliverables (code, configs, fixtures) at `tests/` in the project root, and workspace artifacts (test plan, reports, findings) in `Shipyard/qa-engineer/`. Never write test files into `services/` or `frontend/` directly.
+This skill produces output in two locations: test deliverables (code, configs, fixtures) at `tests/` in the project root, and workspace artifacts (test plan, reports, findings) in `Drydock/qa-engineer/`. Never write test files into `services/` or `frontend/` directly.
 
 **Project root (`tests/`)** — top-level dirs and their purpose:
 - `unit/<service>/` — handlers, services, repositories, validators, mappers, plus `property/` (property-based/fuzz tests for validators, parsers, serializers, money, authz).
@@ -175,7 +175,7 @@ This skill produces output in two locations: test deliverables (code, configs, f
 - `mutation/stryker.config.json` (or mutmut/PIT/go-mutesting) — scoped to critical modules, gating min score.
 - `coverage/thresholds.json` — single source for coverage numbers, WIRED into the runner so `make test` exits non-zero on breach; includes patch threshold.
 
-**Workspace (`Shipyard/qa-engineer/`)** — `test-plan.md` (master plan + traceability matrix), `coverage-report.md`, `findings.md` (QA findings and remediation).
+**Workspace (`Drydock/qa-engineer/`)** — `test-plan.md` (master plan + traceability matrix), `coverage-report.md`, `findings.md` (QA findings and remediation).
 
 ---
 
@@ -187,11 +187,11 @@ Execute each phase sequentially. Do NOT skip phases. Each phase builds on the ou
 
 After Phase 1 (Test Planning), Phases 2-6 run in parallel — each test type is independent. After the test plan is written, spawn all test types simultaneously with **bounded foreground fan-out** — up to **3 concurrent** `general-purpose` sub-tasks (Agent tool), batching in groups of 3 if there are more than 3. Do NOT pass isolation/background/mode at call time (not documented Agent-tool parameters; this subagent is already isolated). Sub-task prompts:
 
-> - Write unit tests following Phase 2 (`phases/02-unit-tests.md`) rules. Read `Shipyard/qa-engineer/test-plan.md` for traceability. Write to `tests/unit/`.
-> - Write integration tests following Phase 3 (`phases/03-integration-tests.md`) rules. Read `Shipyard/qa-engineer/test-plan.md`. Write to `tests/integration/`.
-> - Write contract tests following Phase 4 (`phases/04-contract-tests.md`) rules. Read `Shipyard/qa-engineer/test-plan.md`. Write to `tests/contract/`.
-> - Write E2E tests following Phase 5 (`phases/05-e2e-tests.md`) rules. Read `Shipyard/qa-engineer/test-plan.md`. Write to `tests/e2e/`.
-> - Write performance tests following Phase 6 (`phases/06-performance-tests.md`) rules. Read `Shipyard/qa-engineer/test-plan.md`. Write to `tests/performance/`.
+> - Write unit tests following Phase 2 (`phases/02-unit-tests.md`) rules. Read `Drydock/qa-engineer/test-plan.md` for traceability. Write to `tests/unit/`.
+> - Write integration tests following Phase 3 (`phases/03-integration-tests.md`) rules. Read `Drydock/qa-engineer/test-plan.md`. Write to `tests/integration/`.
+> - Write contract tests following Phase 4 (`phases/04-contract-tests.md`) rules. Read `Drydock/qa-engineer/test-plan.md`. Write to `tests/contract/`.
+> - Write E2E tests following Phase 5 (`phases/05-e2e-tests.md`) rules. Read `Drydock/qa-engineer/test-plan.md`. Write to `tests/e2e/`.
+> - Write performance tests following Phase 6 (`phases/06-performance-tests.md`) rules. Read `Drydock/qa-engineer/test-plan.md`. Write to `tests/performance/`.
 
 Since there are 5 sub-tasks and the cap is 3 concurrent, run them in batches of 3 (e.g., unit + integration + contract, then E2E + performance). Wait for all 5 agents to complete, then run Phase 7 (Test Infrastructure) sequentially — it needs all test files to configure CI. **Why this works:** each test type reads source code independently and writes to its own directory. No conflicts. The test plan from Phase 1 provides shared context.
 
@@ -351,7 +351,7 @@ Every flag in **`config/feature-flags.yaml`** (the OpenFeature registry: `{ key,
 
 Before marking the skill as complete, verify:
 
-- [ ] `Shipyard/qa-engineer/test-plan.md` has a traceability matrix covering every BRD acceptance criterion
+- [ ] `Drydock/qa-engineer/test-plan.md` has a traceability matrix covering every BRD acceptance criterion
 - [ ] Every service in `services/` has corresponding unit tests in `tests/unit/`
 - [ ] Every repository/data-access module has integration tests with real database containers
 - [ ] Every API endpoint has at least one contract test validating its schema

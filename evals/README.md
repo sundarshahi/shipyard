@@ -1,4 +1,4 @@
-# Shipyard evals
+# Drydock evals
 
 Two tiers of evaluation guard the plugin. They have very different cost,
 determinism, and CI characteristics — keep them separate.
@@ -25,9 +25,9 @@ any test fails. Each test is itself pure stdlib (PyYAML allowed) and exposes a
 
 | Test | Regression it guards |
 | --- | --- |
-| **Loader resolution** | Every worker `SKILL.md` loads each shared protocol with the exact belt-and-suspenders `${CLAUDE_PLUGIN_ROOT}` / `${CLAUDE_SKILL_DIR}` / `Shipyard/.protocols/` fallback chain — so protocols still resolve on a cold first run. |
+| **Loader resolution** | Every worker `SKILL.md` loads each shared protocol with the exact belt-and-suspenders `${CLAUDE_PLUGIN_ROOT}` / `${CLAUDE_SKILL_DIR}` / `Drydock/.protocols/` fallback chain — so protocols still resolve on a cold first run. |
 | **Dead-tool regression** | The removed tools (`TeamCreate`, `TeamDelete`, `smart_outline`, `smart_search`, `smart_unfold`) never reappear as live tool calls — only as prose documenting their removal. |
-| **Agent/skill cross-reference** | The 11 `agents/*.md` subagent names map 1:1 to same-named worker skills, and the 4 main-context skills (`shipyard`, `product-manager`, `solution-architect`, `polymath`) intentionally have no agent file. |
+| **Agent/skill cross-reference** | The 11 `agents/*.md` subagent names map 1:1 to same-named worker skills, and the 4 main-context skills (`drydock`, `product-manager`, `solution-architect`, `polymath`) intentionally have no agent file. |
 | **Manifest integrity** | `plugin.json` and `marketplace.json` agree and pin the same version, with required fields present. |
 | **Frontmatter** | Every `skills/*/SKILL.md` and `agents/*.md` has valid YAML frontmatter with a non-empty `name` and a `description` ≤ 1024 chars. |
 

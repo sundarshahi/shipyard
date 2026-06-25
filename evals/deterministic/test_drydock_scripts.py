@@ -5,7 +5,7 @@ WHAT THIS GUARDS / WHY IT MATTERS
 ---------------------------------
 The orchestrator delegates two deterministic procedures to bundled scripts
 instead of re-deriving them in prose every run:
-  - scripts/bootstrap-workspace.sh : scaffold Shipyard/ + deploy shared protocols
+  - scripts/bootstrap-workspace.sh : scaffold Drydock/ + deploy shared protocols
   - scripts/aggregate-cost.py       : sum effort/cost metrics across receipts
 
 If either script silently breaks (bad path resolution, a botched copy, an
@@ -23,7 +23,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPTS = ROOT / "skills" / "shipyard" / "scripts"
+SCRIPTS = ROOT / "skills" / "drydock" / "scripts"
 BOOTSTRAP = SCRIPTS / "bootstrap-workspace.sh"
 AGGREGATE = SCRIPTS / "aggregate-cost.py"
 PROTOCOLS_DIR = ROOT / "skills" / "_shared" / "protocols"
@@ -47,10 +47,10 @@ def _check_bootstrap(failures: list[str]) -> None:
         if proc.returncode != 0:
             failures.append(f"bootstrap exited {proc.returncode}: {proc.stderr.strip()}")
             return
-        base = Path(tmp) / "Shipyard"
+        base = Path(tmp) / "Drydock"
         for d in (".protocols", ".orchestrator/receipts", ".orchestrator/overrides"):
             if not (base / d).is_dir():
-                failures.append(f"bootstrap did not create Shipyard/{d}")
+                failures.append(f"bootstrap did not create Drydock/{d}")
         deployed = sorted(p.name for p in (base / ".protocols").glob("*.md"))
         if deployed != expected:
             failures.append(
@@ -64,7 +64,7 @@ def _check_aggregate(failures: list[str]) -> None:
         failures.append(f"missing script: {AGGREGATE.relative_to(ROOT)}")
         return
     with tempfile.TemporaryDirectory() as tmp:
-        receipts = Path(tmp) / "Shipyard" / ".orchestrator" / "receipts"
+        receipts = Path(tmp) / "Drydock" / ".orchestrator" / "receipts"
         receipts.mkdir(parents=True)
         (receipts / "T1.json").write_text(json.dumps(
             {"effort": {"tool_calls": 10, "files_read": 5, "files_written": 3},
@@ -73,11 +73,11 @@ def _check_aggregate(failures: list[str]) -> None:
             {"effort": {"tool_calls": 7, "files_read": 2, "files_written": 4},
              "artifacts": ["b.md", "c.md"]}))  # b.md duplicates T1 -> dedup to 3
         (receipts / "T3.json").write_text("not valid json")  # must be ignored
-        (Path(tmp) / "Shipyard" / ".orchestrator" / "rework-log.md").write_text(
+        (Path(tmp) / "Drydock" / ".orchestrator" / "rework-log.md").write_text(
             "## Gate 2 — Rework 1\n## Gate 3 — Rework 1\n")
 
         proc = subprocess.run(
-            [sys.executable, str(AGGREGATE), str(Path(tmp) / "Shipyard")],
+            [sys.executable, str(AGGREGATE), str(Path(tmp) / "Drydock")],
             capture_output=True, text=True,
         )
         if proc.returncode != 0:

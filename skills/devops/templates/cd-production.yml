@@ -1,6 +1,6 @@
 # .github/workflows/cd-production.yml — supply-chain-hardened release on a version tag.
 # devops IMPLEMENTS provenance + signing; security-engineer AUDITS the supply chain.
-# Reconcile the produced SBOM with Shipyard/security-engineer/supply-chain/sbom.json.
+# Reconcile the produced SBOM with Drydock/security-engineer/supply-chain/sbom.json.
 #
 # Chain: build immutable digest → SLSA v1.0 provenance attestation → keyless cosign sign →
 #        syft SBOM attached to the GitHub Release → VERIFY-ATTESTATION GATE → progressive deploy.
@@ -71,7 +71,7 @@ jobs:
       - name: Reconcile SBOM with security-engineer audit
         run: |
           set -euo pipefail
-          AUDIT="Shipyard/security-engineer/supply-chain/sbom.json"
+          AUDIT="Drydock/security-engineer/supply-chain/sbom.json"
           if [ -f "$AUDIT" ]; then
             # devops produces the release SBOM; security-engineer's audited SBOM is the cross-check.
             ./scripts/reconcile-sbom.sh sbom.spdx.json "$AUDIT"   # non-zero on component drift
