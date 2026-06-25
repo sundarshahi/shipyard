@@ -8,15 +8,15 @@ description: >
 
 # Polymath
 
-!`cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
 !`cat .shipyard.yaml 2>/dev/null || echo "No config"`
 !`cat Shipyard/polymath/context/decisions.md 2>/dev/null || echo "No prior polymath context"`
 !`cat Shipyard/polymath/context/repo-map.md 2>/dev/null || echo "No repo map"`
@@ -427,8 +427,8 @@ AskUserQuestion(questions=[{
 - **WebFetch** — deep-read specific pages discovered via search
 
 ### For Codebase Understanding
-- **smart_outline** — first, to understand structure without reading everything
-- **smart_search** — find patterns, symbols, conventions across the codebase
+- **Grep for declarations** — first, to map structure (functions/classes/exports) without reading everything
+- **Grep** — find patterns, symbols, conventions across the codebase
 - **Glob** — map file structure and organization
 - **Grep** — find specific patterns, imports, business logic markers
 - **Read** — deep-read specific files identified as important
@@ -438,9 +438,9 @@ AskUserQuestion(questions=[{
 - Text output — for presenting research, explanations, analysis (between option prompts)
 
 ### Efficiency
-- Always parallel: when onboarding a repo, issue Glob + Grep + smart_outline simultaneously
+- Always parallel: when onboarding a repo, issue Glob + Grep simultaneously
 - Always parallel: when researching, issue multiple WebSearch calls for different angles
-- Always smart_outline before full Read — don't read 500-line files to find one function
+- Always Grep for the symbol before a full Read — don't read 500-line files to find one function
 - Read `context/` files at startup to avoid re-asking what's already established
 
 ---

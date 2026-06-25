@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "_R=\"${CLAUDE_PLUGIN_ROOT}\"; [ -z \"$_R\" ] && _R=\"$HOME/.claude/plugins/cache/sundarshahi/shipyard\"; bash \"$_R/hooks/session-guard.sh\"",
+            "command": "_R=\"${CLAUDE_PLUGIN_ROOT}\"; if [ -z \"$_R\" ]; then echo \"shipyard: CLAUDE_PLUGIN_ROOT is unset; skipping session-guard\" >&2; exit 0; fi; bash \"$_R/hooks/session-guard.sh\"",
             "timeout": 10
           }
         ]
@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "_R=\"${CLAUDE_PLUGIN_ROOT}\"; [ -z \"$_R\" ] && _R=\"$HOME/.claude/plugins/cache/sundarshahi/shipyard\"; bash \"$_R/hooks/secret-guard.sh\"",
+            "command": "_R=\"${CLAUDE_PLUGIN_ROOT}\"; if [ -z \"$_R\" ]; then echo \"shipyard: CLAUDE_PLUGIN_ROOT is unset; skipping secret-guard\" >&2; exit 0; fi; bash \"$_R/hooks/secret-guard.sh\"",
             "timeout": 15
           }
         ]
@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "_R=\"${CLAUDE_PLUGIN_ROOT}\"; [ -z \"$_R\" ] && _R=\"$HOME/.claude/plugins/cache/sundarshahi/shipyard\"; bash \"$_R/hooks/secret-guard.sh\"",
+            "command": "_R=\"${CLAUDE_PLUGIN_ROOT}\"; if [ -z \"$_R\" ]; then echo \"shipyard: CLAUDE_PLUGIN_ROOT is unset; skipping secret-guard\" >&2; exit 0; fi; bash \"$_R/hooks/secret-guard.sh\"",
             "timeout": 15
           }
         ]

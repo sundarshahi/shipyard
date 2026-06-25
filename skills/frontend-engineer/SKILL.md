@@ -4,21 +4,22 @@ description: >
   [shipyard internal] Builds web frontends — React/Next.js components,
   pages, design systems, state management, typed API clients.
   Routed via the shipyard orchestrator.
+allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebFetch
 ---
 
 # Frontend Engineer
 
-!`cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/security-defaults.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-defaults.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-defaults.md" 2>/dev/null || cat Shipyard/.protocols/security-defaults.md 2>/dev/null || true`
 !`cat docs/architecture/performance-budget.yaml 2>/dev/null || true`
 !`cat config/feature-flags.yaml 2>/dev/null || true`
 !`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
@@ -142,35 +143,17 @@ When the BRD defines multiple page groups, components and pages use targeted par
 # Write to frontend/app/components/ui/
 ```
 
-4. Phase 3b (Layout + Feature Components) runs in parallel — both read from completed primitives:
+4. Phase 3b (Layout + Feature Components) parallelizes with **bounded foreground fan-out** — spawn up to **3 concurrent** `general-purpose` sub-tasks (Agent tool), both reading from completed primitives. Do NOT pass `isolation`/`background`/`mode` at call time (not documented Agent-tool parameters; this subagent is already isolated). Sub-task prompts:
 
-```python
-Agent(
-  prompt="Build layout components (Sidebar, Header, PageLayout, etc.) following phases/03-components.md. "
-    "IMPORT from frontend/app/components/ui/ for all primitives — do NOT create your own Button, Input, etc. "
-    "Write to frontend/app/components/layout/.",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True
-)
-Agent(
-  prompt="Build feature components (DataTable, FileUpload, RichEditor, etc.) following phases/03-components.md. "
-    "IMPORT from frontend/app/components/ui/ for all primitives — do NOT create your own Button, Input, etc. "
-    "Write to frontend/app/components/features/.",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True
-)
-```
+   > Build layout components (Sidebar, Header, PageLayout, etc.) following `${CLAUDE_PLUGIN_ROOT}/skills/frontend-engineer/phases/03-components.md`. IMPORT from `frontend/app/components/ui/` for all primitives — do NOT create your own Button, Input, etc. Write to `frontend/app/components/layout/`.
 
-5. Phase 4 (Pages) runs in parallel by route group — all components are available:
+   > Build feature components (DataTable, FileUpload, RichEditor, etc.) following the same phase. IMPORT from `frontend/app/components/ui/`. Write to `frontend/app/components/features/`.
 
-```python
-# Example: BRD defines auth pages, dashboard, settings, onboarding
-Agent(prompt="Build auth pages (login, register, forgot-password). Use components from frontend/app/components/. Write to frontend/app/pages/auth/.", ...)
-Agent(prompt="Build dashboard pages (overview, analytics, activity). Use components from frontend/app/components/. Write to frontend/app/pages/dashboard/.", ...)
-Agent(prompt="Build settings pages (profile, billing, team, integrations). Use components from frontend/app/components/. Write to frontend/app/pages/settings/.", ...)
-```
+5. Phase 4 (Pages) parallelizes by route group with the same bounded foreground fan-out (≤3 concurrent sub-tasks, batched) — all components are available. Example sub-task prompts:
+
+   > Build auth pages (login, register, forgot-password). Use components from `frontend/app/components/`. Write to `frontend/app/pages/auth/`.
+   > Build dashboard pages (overview, analytics, activity). Write to `frontend/app/pages/dashboard/`.
+   > Build settings pages (profile, billing, team, integrations). Write to `frontend/app/pages/settings/`.
 
 6. Phase 5 (Design & Polish) runs sequentially — needs all pages verified, uses WebSearch for domain research
 7. Phase 6 (Testing + A11y) runs sequentially — tests the final polished version

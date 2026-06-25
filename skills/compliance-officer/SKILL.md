@@ -7,17 +7,18 @@ description: >
   in generated code/infra, and produces statutory evidence — SSP, DPIA,
   breach runbook — with a blocking compliance gate.
   Routed via the shipyard orchestrator.
+allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebFetch
 ---
 
 # Compliance Officer
 
-!`cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/security-testing-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat Shipyard/.protocols/security-testing-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
 !`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
 
 **Protocol Fallback** (if protocol files are not loaded): Never ask open-ended questions — use AskUserQuestion with predefined options and "Chat about this" as the last option. Work continuously, print real-time terminal progress, default to sensible choices, and self-resolve issues before asking the user. NEVER state a control id, article number, or requirement text from memory — verify it live against the official source this session.

@@ -6,22 +6,23 @@ description: >
   dependency risks, plus authorized DAST execution and a professional
   pentest report.
   Routed via the shipyard orchestrator.
+allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebFetch
 ---
 
 # Security Engineer
 
-!`cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/security-testing-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/security-testing-protocol.md" 2>/dev/null || cat Shipyard/.protocols/security-testing-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/compliance-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/compliance-protocol.md" 2>/dev/null || cat Shipyard/.protocols/compliance-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
 !`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
 
 **Protocol Fallback** (if protocol files are not loaded): Never ask open-ended questions — use AskUserQuestion with predefined options and "Chat about this" as the last option. Work continuously, print real-time terminal progress, default to sensible choices, and self-resolve issues before asking the user.
@@ -151,13 +152,12 @@ Read the relevant phase file before starting that phase. Never read all phases a
 
 After Phase 0 (Reconnaissance) and Phase 1 (Threat Modeling), Phases 2-5 run in parallel:
 
-```python
-# After threat model is complete, spawn analysis domains simultaneously:
-Agent(prompt="Conduct OWASP Top 10 code audit following Phase 2. Read threat model for context. Write to security-engineer/code-audit/.", ...)
-Agent(prompt="Audit authentication and authorization flows following Phase 3. Write to security-engineer/auth-review/.", ...)
-Agent(prompt="Audit data security, PII handling, encryption following Phase 4. Write to security-engineer/data-security/.", ...)
-Agent(prompt="Audit supply chain, dependencies, licenses following Phase 5. Write to security-engineer/supply-chain/.", ...)
-```
+After the threat model is complete, spawn the analysis domains simultaneously. Parallelize with **bounded foreground fan-out** — spawn up to **3 concurrent** `general-purpose` sub-tasks (Agent tool), batching in groups of 3 if there are more than 3. Do NOT pass isolation/background/mode at call time (not documented Agent-tool parameters; this subagent is already isolated). Sub-task prompts:
+
+> - Conduct OWASP Top 10 code audit following ${CLAUDE_PLUGIN_ROOT}/skills/security-engineer/phases/02-code-audit.md. Read threat model for context. Write to security-engineer/code-audit/.
+> - Audit authentication and authorization flows following ${CLAUDE_PLUGIN_ROOT}/skills/security-engineer/phases/03-auth-review.md. Write to security-engineer/auth-review/.
+> - Audit data security, PII handling, encryption following ${CLAUDE_PLUGIN_ROOT}/skills/security-engineer/phases/04-data-security.md. Write to security-engineer/data-security/.
+> - Audit supply chain, dependencies, licenses following ${CLAUDE_PLUGIN_ROOT}/skills/security-engineer/phases/05-supply-chain.md. Write to security-engineer/supply-chain/.
 
 Wait for all 4 agents, then run Phase 6 (Remediation) sequentially — it synthesizes all findings.
 

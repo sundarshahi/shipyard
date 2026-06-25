@@ -32,50 +32,20 @@ Before creating SUSTAIN agent tasks, re-read from disk:
 
 ## PARALLEL #7: T11 + T12
 
-Read `Shipyard/.orchestrator/settings.md` to check if `Worktrees: enabled`. If enabled, add `isolation="worktree"` to each Agent call below.
+Delegate the following to their subagents to run CONCURRENTLY (each is backgrounded + isolated in its own worktree per its definition):
 
 ```python
-# T11: Technical Writer
 TaskUpdate(taskId=t11_id, status="in_progress")
-Agent(
-  prompt="""You are the Technical Writer.
-Use the Skill tool to invoke 'shipyard:technical-writer' to load your complete methodology and follow it.
-Read ALL workspace folders at Shipyard/ for full project context.
-Read all project deliverables: api/, services/, frontend/, infrastructure/, tests/, docs/.
-Read protocols from: Shipyard/.protocols/
-Read .shipyard.yaml for paths and preferences.
-Generate: API reference (from OpenAPI specs), developer guides, operational guide, architecture guide, contributing guide.
-If features.documentation_site is true: scaffold Docusaurus site.
-Write docs to project root: docs/
-Write workspace artifacts to: Shipyard/technical-writer/
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T11-technical-writer.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Omit if Worktrees: disabled
-)
-
-# T12: Skill Maker
 TaskUpdate(taskId=t12_id, status="in_progress")
-Agent(
-  prompt="""You are the Skill Maker.
-Use the Skill tool to invoke 'shipyard:skill-maker' to load your complete methodology and follow it.
-Analyze the completed project for recurring patterns: API routes, DB queries, auth checks, deployment procedures, testing patterns, domain-specific workflows.
-Read protocols from: Shipyard/.protocols/
-Generate 3-5 project-specific skills as SKILL.md files.
-Install skills to: .claude/skills/
-Write workspace artifacts to: Shipyard/skill-maker/
-When complete, write a receipt JSON to Shipyard/.orchestrator/receipts/T12-skill-maker.json with task, agent, phase, status, artifacts, metrics, effort, verification. Then mark your task as completed.""",
-  subagent_type="general-purpose",
-  mode="bypassPermissions",
-  run_in_background=True,
-  isolation="worktree"  # Omit if Worktrees: disabled
-)
 ```
+
+- **`technical-writer` (T11)** — Delegate to the `technical-writer` subagent (agents/technical-writer.md — runs backgrounded in its own worktree per its definition). Task context: read ALL workspace folders at `Shipyard/` for full project context; read all project deliverables (`api/`, `services/`, `frontend/`, `infrastructure/`, `tests/`, `docs/`); read protocols from `Shipyard/.protocols/`; read `.shipyard.yaml` for paths and preferences. Produce: API reference (from OpenAPI specs), developer guides, operational guide, architecture guide, contributing guide; if `features.documentation_site` is true, scaffold a Docusaurus site. Write docs to project root `docs/` and workspace artifacts to `Shipyard/technical-writer/`. When complete, write a receipt JSON to `Shipyard/.orchestrator/receipts/T11-technical-writer.json` with task, agent, phase, status, artifacts, metrics, effort, verification, then mark its task complete.
+
+- **`skill-maker` (T12)** — Delegate to the `skill-maker` subagent (agents/skill-maker.md — runs backgrounded in its own worktree per its definition). Task context: analyze the completed project for recurring patterns (API routes, DB queries, auth checks, deployment procedures, testing patterns, domain-specific workflows); read protocols from `Shipyard/.protocols/`. Produce 3-5 project-specific skills as `SKILL.md` files; install them to `.claude/skills/` and write workspace artifacts to `Shipyard/skill-maker/`. When complete, write a receipt JSON to `Shipyard/.orchestrator/receipts/T12-skill-maker.json` with task, agent, phase, status, artifacts, metrics, effort, verification, then mark its task complete.
 
 ## Worktree Merge-Back
 
-If worktrees were used, merge SUSTAIN agent branches back:
+The SUSTAIN subagents (`technical-writer`, `skill-maker`) edit isolated `worktree` branches per their definitions. After the wave completes, merge those subagent worktree branches back:
 
 ```python
 for branch in sustain_worktree_branches:
@@ -174,11 +144,11 @@ AskUserQuestion(questions=[{
 
 3. **Present final summary** using the orchestrator's template.
 
-4. **Clean up team:**
+4. **Finalize:**
 ```python
 TaskUpdate(taskId=t13_id, status="completed")
-TeamDelete()
 ```
+Delegated subagents finish on their own and their worktrees auto-clean — no team teardown is needed.
 
 ## Pipeline Complete
 

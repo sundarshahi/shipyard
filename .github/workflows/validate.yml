@@ -46,40 +46,64 @@ jobs:
           print(f"hooks.json OK — {len(data['hooks'])} event group(s)")
           PY
 
-      - name: Verify every skill has YAML frontmatter with name + description
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Verify skill and agent YAML frontmatter (real parse)
         run: |
           python3 - <<'PY'
-          import glob, sys
+          import glob, sys, yaml
           failures = []
-          skills = sorted(glob.glob("skills/*/SKILL.md"))
-          if not skills:
-              print("::error::no skills/*/SKILL.md files found")
+          targets = sorted(glob.glob("skills/*/SKILL.md")) + sorted(glob.glob("agents/*.md"))
+          if not targets:
+              print("::error::no skills/*/SKILL.md or agents/*.md files found")
               sys.exit(1)
-          for path in skills:
-              with open(path) as f:
+          for path in targets:
+              with open(path, encoding="utf-8") as f:
                   text = f.read()
               if not text.startswith("---"):
                   failures.append(f"{path}: missing YAML frontmatter")
                   continue
-              end = text.find("---", 3)
+              end = text.find("\n---", 3)
               if end == -1:
                   failures.append(f"{path}: unterminated frontmatter")
                   continue
-              front = text[3:end]
-              for key in ("name:", "description:"):
-                  if key not in front:
-                      failures.append(f"{path}: frontmatter missing '{key}'")
+              raw = text[3:end]
+              try:
+                  front = yaml.safe_load(raw)
+              except yaml.YAMLError as e:
+                  failures.append(f"{path}: invalid YAML frontmatter: {e}")
+                  continue
+              if not isinstance(front, dict):
+                  failures.append(f"{path}: frontmatter is not a mapping")
+                  continue
+              name = front.get("name")
+              if not name or not str(name).strip():
+                  failures.append(f"{path}: frontmatter missing non-empty 'name'")
+              desc = front.get("description")
+              if not desc or not str(desc).strip():
+                  failures.append(f"{path}: frontmatter missing non-empty 'description'")
+              elif len(str(desc)) > 1024:
+                  failures.append(f"{path}: description is {len(str(desc))} chars (max 1024)")
           for f in failures:
               print(f"::error::{f}")
           if failures:
               sys.exit(1)
-          print(f"All {len(skills)} skills have valid frontmatter")
+          print(f"All {len(targets)} skill/agent frontmatter blocks are valid")
           PY
 
-      - name: Run claude plugin validate (best-effort)
-        run: |
-          if command -v claude >/dev/null 2>&1; then
-            claude plugin validate . || echo "::warning::claude plugin validate reported issues"
-          else
-            echo "claude CLI not available — skipping plugin validate"
-          fi
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run claude plugin validate (strict)
+        run: claude plugin validate . --strict

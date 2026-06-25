@@ -4,28 +4,29 @@ description: >
   [shipyard internal] Writes and runs tests when you want to verify
   code works — unit, integration, e2e, performance, contract testing.
   Routed via the shipyard orchestrator.
+allowed-tools: Bash, Read, Write, Edit, Grep, Glob, Task, Skill, WebSearch, WebFetch
 ---
 
 # QA Engineer Skill
 
 ## Protocols
 
-!`cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
-!`cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/ux-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/ux-protocol.md" 2>/dev/null || cat Shipyard/.protocols/ux-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/input-validation.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/input-validation.md" 2>/dev/null || cat Shipyard/.protocols/input-validation.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/tool-efficiency.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/tool-efficiency.md" 2>/dev/null || cat Shipyard/.protocols/tool-efficiency.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/visual-identity.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/visual-identity.md" 2>/dev/null || cat Shipyard/.protocols/visual-identity.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/freshness-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/freshness-protocol.md" 2>/dev/null || cat Shipyard/.protocols/freshness-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/receipt-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/receipt-protocol.md" 2>/dev/null || cat Shipyard/.protocols/receipt-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/boundary-safety.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/boundary-safety.md" 2>/dev/null || cat Shipyard/.protocols/boundary-safety.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/conflict-resolution.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/conflict-resolution.md" 2>/dev/null || cat Shipyard/.protocols/conflict-resolution.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/grounding-protocol.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/grounding-protocol.md" 2>/dev/null || cat Shipyard/.protocols/grounding-protocol.md 2>/dev/null || true`
+!`cat "${CLAUDE_PLUGIN_ROOT}/skills/_shared/protocols/observability-contract.md" 2>/dev/null || cat "${CLAUDE_SKILL_DIR}/../_shared/protocols/observability-contract.md" 2>/dev/null || cat Shipyard/.protocols/observability-contract.md 2>/dev/null || true`
 !`cat .shipyard.yaml 2>/dev/null || echo "No config — using defaults"`
 !`cat Shipyard/.orchestrator/codebase-context.md 2>/dev/null || true`
 !`cat docs/architecture/performance-budget.yaml 2>/dev/null || echo "No performance-budget.yaml — perf gates cannot self-derive; treat as a Critical missing input"`
 !`cat config/feature-flags.yaml 2>/dev/null || echo "No feature-flags.yaml — skip flag matrix if no OpenFeature client exists"`
 
-**Fallback (if protocols not loaded):** Use AskUserQuestion with options (never open-ended), "Chat about this" last, recommended first. Work continuously. Print progress constantly. Validate inputs before starting — classify missing as Critical (stop), Degraded (warn, continue partial), or Optional (skip silently). Use parallel tool calls for independent reads. Use smart_outline before full Read.
+**Fallback (if protocols not loaded):** Use AskUserQuestion with options (never open-ended), "Chat about this" last, recommended first. Work continuously. Print progress constantly. Validate inputs before starting — classify missing as Critical (stop), Degraded (warn, continue partial), or Optional (skip silently). Use parallel tool calls for independent reads. Use Grep to find the relevant lines, then Read with offset/limit.
 
 ## Engagement Mode
 
@@ -264,14 +265,15 @@ Execute each phase sequentially. Do NOT skip phases. Each phase builds on the ou
 
 After Phase 1 (Test Planning), Phases 2-6 run in parallel — each test type is independent:
 
-```python
-# After test plan is written, spawn all test types simultaneously:
-Agent(prompt="Write unit tests following Phase 2 rules. Read test-plan.md for traceability. Write to tests/unit/.", ...)
-Agent(prompt="Write integration tests following Phase 3 rules. Read test-plan.md. Write to tests/integration/.", ...)
-Agent(prompt="Write contract tests following Phase 4 rules. Read test-plan.md. Write to tests/contract/.", ...)
-Agent(prompt="Write E2E tests following Phase 5 rules. Read test-plan.md. Write to tests/e2e/.", ...)
-Agent(prompt="Write performance tests following Phase 6 rules. Read test-plan.md. Write to tests/performance/.", ...)
-```
+After the test plan is written, spawn all test types simultaneously. Parallelize with **bounded foreground fan-out** — spawn up to **3 concurrent** `general-purpose` sub-tasks (Agent tool), batching in groups of 3 if there are more than 3. Do NOT pass isolation/background/mode at call time (not documented Agent-tool parameters; this subagent is already isolated). Sub-task prompts:
+
+> - Write unit tests following Phase 2 (see this skill's phases/) rules. Read `Shipyard/qa-engineer/test-plan.md` for traceability. Write to `tests/unit/`.
+> - Write integration tests following Phase 3 (see this skill's phases/) rules. Read `Shipyard/qa-engineer/test-plan.md`. Write to `tests/integration/`.
+> - Write contract tests following Phase 4 (see this skill's phases/) rules. Read `Shipyard/qa-engineer/test-plan.md`. Write to `tests/contract/`.
+> - Write E2E tests following Phase 5 (see this skill's phases/) rules. Read `Shipyard/qa-engineer/test-plan.md`. Write to `tests/e2e/`.
+> - Write performance tests following Phase 6 (see this skill's phases/) rules. Read `Shipyard/qa-engineer/test-plan.md`. Write to `tests/performance/`.
+
+Since there are 5 sub-tasks and the cap is 3 concurrent, run them in batches of 3 (e.g., unit + integration + contract, then E2E + performance).
 
 Wait for all 5 agents to complete, then run Phase 7 (Test Infrastructure) sequentially — it needs all test files to configure CI.
 
