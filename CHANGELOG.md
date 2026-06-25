@@ -27,7 +27,10 @@ All notable changes to **Drydock**.
   capability-focused language (no named third-party products), and stale
   original-project references removed. `SECURITY.md` supported-versions table
   aligned to `2.1.x`. `README.md` "Autonomy Levels" section rewritten with clearer
-  selection guidance. `VISION.md` updated to the new autonomy-level terminology.
+  selection guidance. `VISION.md` rephrased for clarity — goal-first framing, the
+  three gates named consistently (Requirements / Architecture / Production
+  Readiness), and the autonomy-level terminology applied; all eleven principles and
+  their hard rules are preserved.
 - **README rewritten for first-time readers** — a plain-language intro, a
   quick-start with a concrete example, and a clearer pipeline diagram (the three
   gates shown as explicit approval points, parallel phases marked). `SECURITY.md`
