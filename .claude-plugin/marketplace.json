@@ -1,6 +1,6 @@
 {
   "name": "drydock",
-  "description": "Idea-to-production engineering pipeline for Claude Code. 15 specialized agents take a product from architecture and API-first contracts through tested code, security, observability, CI/CD, and compliance — to ship.",
+  "description": "Idea-to-production engineering pipeline for Claude Code — 15 agents take a product from architecture and API contracts through tested code, security, CI/CD, and compliance to ship.",
   "owner": {
     "name": "sundarshahi",
     "url": "https://github.com/sundarshahi/drydock"
